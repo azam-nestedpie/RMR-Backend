@@ -17,8 +17,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     && docker-php-ext-install -j$(nproc) pdo_mysql zip bcmath pcntl \
-    && a2dismod mpm_event \
-    && a2enmod mpm_prefork rewrite \
+    && a2enmod rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
