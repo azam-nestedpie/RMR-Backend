@@ -23,13 +23,17 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 WORKDIR /var/www/html
 
 COPY . .
 
 COPY --from=frontend /app/public/build public/build
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
+# Install with dev deps first so package:discover succeeds (scribe config requires dev classes)
+RUN composer install --no-interaction \
+    && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
