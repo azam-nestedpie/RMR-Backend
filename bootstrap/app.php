@@ -50,9 +50,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $exceptions->report(function (Throwable $e): void {
+            if (! app()->resolved('request')) {
+                return;
+            }
+
             $request = request();
 
-            if (! $request instanceof Request || ! $request->is('api/*')) {
+            if (! $request->is('api/*')) {
                 return;
             }
 
