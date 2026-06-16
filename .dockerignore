@@ -7,6 +7,7 @@ storage/framework/cache/data
 storage/framework/sessions
 storage/framework/views
 storage/logs
+storage/servicesAccountKeyFile.json
 bootstrap/cache/config.php
 bootstrap/cache/packages.php
 bootstrap/cache/routes.php

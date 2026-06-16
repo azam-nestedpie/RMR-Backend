@@ -15,11 +15,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     libpq-dev \
+    && docker-php-ext-install -j$(nproc) pdo_mysql zip bcmath pcntl \
+    && a2enmod rewrite \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-install pdo_mysql zip bcmath pcntl
-
-RUN a2enmod rewrite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -29,9 +28,8 @@ COPY . .
 
 COPY --from=frontend /app/public/build public/build
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-RUN chown -R www-data:www-data storage bootstrap/cache \
+RUN composer install --no-dev --optimize-autoloader --no-interaction \
+    && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
