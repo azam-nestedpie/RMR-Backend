@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     && docker-php-ext-install -j$(nproc) pdo_mysql zip bcmath pcntl \
-    && a2enmod rewrite \
+    && a2dismod mpm_event \
+    && a2enmod mpm_prefork rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,9 +32,7 @@ COPY . .
 
 COPY --from=frontend /app/public/build public/build
 
-# Install with dev deps first so package:discover succeeds (scribe config requires dev classes)
-RUN composer install --no-interaction \
-    && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
+RUN composer install --no-dev --optimize-autoloader --no-interaction \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
