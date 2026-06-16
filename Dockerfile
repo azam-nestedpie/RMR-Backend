@@ -5,7 +5,8 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install
 
-COPY vite.config.js resources/ ./
+COPY vite.config.js ./
+COPY resources resources/
 RUN npm run build
 
 FROM php:8.4-apache
