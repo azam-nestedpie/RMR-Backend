@@ -43,6 +43,5 @@ jobs:
 
             php artisan route:cache
 
-            sudo systemctl restart php8.4-fpm
-
+            sudo systemctl restart php8.5-fpm
             sudo systemctl restart nginx
