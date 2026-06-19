@@ -1,0 +1,48 @@
+name: Laravel Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+
+        with:
+
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+
+            cd /var/www/RMR-Backend
+
+            git pull origin main
+
+            composer install --no-dev --optimize-autoloader
+
+            php artisan migrate --force
+
+            php artisan optimize:clear
+
+            php artisan config:cache
+
+            php artisan route:cache
+
+            sudo systemctl restart php8.4-fpm
+
+            sudo systemctl restart nginx
