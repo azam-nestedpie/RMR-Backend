@@ -39,7 +39,7 @@ class RepProfileTest extends V1TestCase
             ->assertJsonPath('data.position', 'Medical Representative')
             ->assertJsonPath('data.bio', 'Experienced Medical Rep')
             ->assertJsonPath('data.email', 'john@example.com')
-            ->assertJsonPath('data.connection_status', 'not_connected')
+            ->assertJsonPath('data.connection_status', 'connect')
             ->assertJsonStructure([
                 'data' => [
                     'firebase_uuid',
@@ -117,7 +117,7 @@ class RepProfileTest extends V1TestCase
 
         $this->getJson('/api/v1/reps/'.$rep->firebase_uid)
             ->assertOk()
-            ->assertJsonPath('data.connection_status', 'pending');
+            ->assertJsonPath('data.connection_status', 'request_sent');
     }
 
     public function test_returns_connection_status_rejected(): void
@@ -137,7 +137,7 @@ class RepProfileTest extends V1TestCase
 
         $this->getJson('/api/v1/reps/'.$rep->firebase_uid)
             ->assertOk()
-            ->assertJsonPath('data.connection_status', 'rejected');
+            ->assertJsonPath('data.connection_status', 'connect');
     }
 
     public function test_ratings_are_ordered_by_latest_first(): void

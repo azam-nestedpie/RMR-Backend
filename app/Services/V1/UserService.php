@@ -2,6 +2,9 @@
 
 namespace App\Services\V1;
 
+use App\Models\Connection;
+use App\Models\ConnectionRequest;
+use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -162,16 +165,15 @@ class UserService
     /**
      * SEARCH USERS
      */
-    public function search(array $filters, string $excludeUid, ?string $currentUserRole, bool $bulkConnection = false): LengthAwarePaginator
+    public function search(array $filters, string $excludeUid, ?string $currentUserRole): LengthAwarePaginator
     {
         Log::info('User search requested', [
             'filters' => $filters,
             'exclude_uid' => $excludeUid,
             'current_user_role' => $currentUserRole,
-            'bulk_connection' => $bulkConnection,
         ]);
 
-        return $this->users->search($filters, $excludeUid, $currentUserRole, $bulkConnection);
+        return $this->users->search($filters, $excludeUid, $currentUserRole);
     }
 
     /**
@@ -192,5 +194,45 @@ class UserService
         ]);
 
         $this->users->markDeleted($user);
+    }
+
+    /**
+     * Get a team member's network (connections, sent requests, received requests).
+     *
+     * @return array{connections: Collection, sentRequests: Collection, receivedRequests: Collection}
+     */
+    public function teamMemberNetwork(User $member): array
+    {
+        $pendingStatusId = Status::idByName('pending');
+
+        $connections = Connection::forUser($member->firebase_uid)
+            ->active()
+            ->with(['userA', 'userB'])
+            ->get()
+            ->map(fn (Connection $c) => $c->user_a_firebase_uid === $member->firebase_uid
+                ? $c->userB
+                : $c->userA
+            )
+            ->filter();
+
+        $sentRequests = ConnectionRequest::forRequester($member->firebase_uid)
+            ->when($pendingStatusId, fn ($q) => $q->where('status_id', $pendingStatusId))
+            ->with(['target'])
+            ->get()
+            ->pluck('target')
+            ->filter();
+
+        $receivedRequests = ConnectionRequest::forTarget($member->firebase_uid)
+            ->when($pendingStatusId, fn ($q) => $q->where('status_id', $pendingStatusId))
+            ->with(['requester'])
+            ->get()
+            ->pluck('requester')
+            ->filter();
+
+        return [
+            'connections' => $connections,
+            'sentRequests' => $sentRequests,
+            'receivedRequests' => $receivedRequests,
+        ];
     }
 }

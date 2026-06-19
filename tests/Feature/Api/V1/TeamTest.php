@@ -232,7 +232,7 @@ class TeamTest extends V1TestCase
 
         $this->getJson('/api/v1/team')
             ->assertOk()
-            ->assertJsonPath('data.0.firebase_uid', $rep->firebase_uid);
+            ->assertJsonPath('data.0.id', $rep->firebase_uid);
 
         $this->deleteJson('/api/v1/team/'.$rep->firebase_uid)
             ->assertOk()

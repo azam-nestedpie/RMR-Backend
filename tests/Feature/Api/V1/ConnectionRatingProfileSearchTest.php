@@ -571,9 +571,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
         $this->getJson('/api/v1/team')
             ->assertOk()
             ->assertJsonPath('success', true)
-            ->assertJsonPath('data.0.firebase_uid', $member->firebase_uid)
-            ->assertJsonPath('data.0.first_name', 'Linked')
-            ->assertJsonMissing(['firebase_uid' => $otherRep->firebase_uid]);
+            ->assertJsonPath('data.0.id', $member->firebase_uid)
+            ->assertJsonPath('data.0.name', 'Linked Member')
+            ->assertJsonMissing(['id' => $otherRep->firebase_uid]);
     }
 
     private function createActiveConnection(string $repUid, string $raterUid, string $createdByUid): void

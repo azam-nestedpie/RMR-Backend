@@ -550,4 +550,53 @@ class RatingService
 
         return $requestUuid;
     }
+
+    /**
+     * Get a team member's rating activity (completed ratings + relevant requests).
+     *
+     * @return array{completedRatings: Collection, sentRequests: Collection, receivedRequests: Collection}
+     */
+    public function teamMemberRatings(User $member): array
+    {
+        $role = $member->roles->pluck('name')->first();
+
+        $completedRatings = Rating::query()
+            ->where(function ($query) use ($member) {
+                $query->where('rater_firebase_uid', $member->firebase_uid)
+                    ->orWhere('rep_firebase_uid', $member->firebase_uid);
+            })
+            ->with(['rater', 'rep'])
+            ->orderByDesc('rated_at')
+            ->get();
+
+        $relations = ['requester.roles', 'target.roles', 'manager.roles', 'behalfUser.roles', 'rater.roles', 'subjectRep.roles', 'status'];
+        $pendingStatusId = Status::idByName('pending');
+
+        $sentRequests = collect();
+        $receivedRequests = collect();
+
+        if ($role === 'rep') {
+            $sentRequests = RatingRequest::query()
+                ->where('requester_firebase_uid', $member->firebase_uid)
+                ->when($pendingStatusId, fn ($query) => $query->where('status_id', $pendingStatusId))
+                ->with($relations)
+                ->orderByDesc('requested_at')
+                ->get();
+        }
+
+        if ($role === 'rater') {
+            $receivedRequests = RatingRequest::query()
+                ->where('target_user_firebase_uid', $member->firebase_uid)
+                ->when($pendingStatusId, fn ($query) => $query->where('status_id', $pendingStatusId))
+                ->with($relations)
+                ->orderByDesc('requested_at')
+                ->get();
+        }
+
+        return [
+            'completedRatings' => $completedRatings,
+            'sentRequests' => $sentRequests,
+            'receivedRequests' => $receivedRequests,
+        ];
+    }
 }

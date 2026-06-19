@@ -25,7 +25,7 @@ class UserRepository implements UserRepositoryInterface
         return User::where('firebase_uid', $firebaseUid)->first();
     }
 
-    public function search(array $filters, string $excludeUid, ?string $currentUserRole, bool $bulkConnection = false): LengthAwarePaginator
+    public function search(array $filters, string $excludeUid, ?string $currentUserRole): LengthAwarePaginator
     {
         $query = User::where('firebase_uid', '!=', $excludeUid)
             ->where('is_blocked', false);
@@ -59,37 +59,6 @@ class UserRepository implements UserRepositoryInterface
             $query->whereHas('industries', fn ($q) => $q->where('name', 'like', '%'.$filters['industry'].'%'));
         }
 
-        if ($bulkConnection) {
-            $pendingStatusId = Status::idByName('pending');
-
-            $connectedUids = Connection::forUser($excludeUid)
-                ->active()
-                ->get()
-                ->map(fn (Connection $c) => $c->user_a_firebase_uid === $excludeUid
-                    ? $c->user_b_firebase_uid
-                    : $c->user_a_firebase_uid)
-                ->unique()
-                ->values()
-                ->toArray();
-
-            $pendingUids = ConnectionRequest::where(function ($q) use ($excludeUid) {
-                $q->where('requester_firebase_uid', $excludeUid)
-                    ->orWhere('target_user_firebase_uid', $excludeUid);
-            })
-                ->where('status_id', $pendingStatusId)
-                ->get()
-                ->map(fn (ConnectionRequest $r) => $r->requester_firebase_uid === $excludeUid
-                    ? $r->target_user_firebase_uid
-                    : $r->requester_firebase_uid)
-                ->unique()
-                ->values()
-                ->toArray();
-
-            $excludeUids = array_unique(array_merge($connectedUids, $pendingUids));
-
-            $query->whereNotIn('firebase_uid', $excludeUids);
-        }
-
         // Cross-role search restriction
         $allowedRoles = [
             'rater' => ['rep'],
@@ -119,8 +88,39 @@ class UserRepository implements UserRepositoryInterface
             ->with(['roles', 'address', 'industries'])
             ->paginate(20);
 
-        // ✅ Attach salesRepProfile ONLY for reps
+        $connectedMap = Connection::forUser($excludeUid)
+            ->active()
+            ->get()
+            ->mapWithKeys(fn (Connection $c) => [
+                $c->user_a_firebase_uid === $excludeUid
+                    ? $c->user_b_firebase_uid
+                    : $c->user_a_firebase_uid => true,
+            ])
+            ->all();
+
+        $pendingStatusId = Status::idByName('pending');
+
+        $pendingSentMap = ConnectionRequest::where('requester_firebase_uid', $excludeUid)
+            ->where('status_id', $pendingStatusId)
+            ->pluck('requester_firebase_uid', 'target_user_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
+        $pendingReceivedMap = ConnectionRequest::where('target_user_firebase_uid', $excludeUid)
+            ->where('status_id', $pendingStatusId)
+            ->pluck('target_user_firebase_uid', 'requester_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
         foreach ($result->getCollection() as $user) {
+            $uid = $user->firebase_uid;
+
+            $user->connection_status = match (true) {
+                isset($connectedMap[$uid]) => 'connected',
+                isset($pendingSentMap[$uid]) => 'pending',
+                isset($pendingReceivedMap[$uid]) => 'pending',
+                default => 'not_connected',
+            };
 
             $role = $user->roles->pluck('name')->first();
 

@@ -13,6 +13,14 @@ Route::middleware(['auth:sanctum', 'password.set'])->prefix('team')->name('team.
     Route::delete('{memberUid}', [TeamController::class, 'destroy'])->name('destroy');
 });
 
+Route::middleware(['auth:sanctum', 'password.set', 'role:manager_of_reps,manager_of_raters'])
+    ->prefix('team-members')
+    ->name('team-members.')
+    ->group(function () {
+        Route::get('{userUid}/network', [TeamController::class, 'network'])->name('network');
+        Route::get('{userUid}/ratings', [TeamController::class, 'ratings'])->name('ratings');
+    });
+
 Route::middleware(['auth:sanctum', 'password.set'])->prefix('team-requests')->name('team-requests.')->group(function () {
     Route::post('accept', [TeamController::class, 'accept'])->name('accept');
     Route::post('reject', [TeamController::class, 'reject'])->name('reject');

@@ -12,7 +12,7 @@ interface UserRepositoryInterface
 
     public function findByFirebaseUid(string $firebaseUid): ?User;
 
-    public function search(array $filters, string $excludeUid, ?string $currentUserRole, bool $bulkConnection = false): LengthAwarePaginator;
+    public function search(array $filters, string $excludeUid, ?string $currentUserRole): LengthAwarePaginator;
 
     public function searchForTeamInvite(array $filters, string $excludeUid, string $managerUid, array $managerRoles): LengthAwarePaginator;
 

@@ -101,7 +101,6 @@ class UserController extends Controller
                 $request->validated(),
                 $user->firebase_uid,
                 $currentRole,
-                $request->boolean('bulk_connection'),
             );
 
             if ($results->total() === 0) {

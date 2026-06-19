@@ -13,7 +13,6 @@ class SearchRequest extends V1Request
     private array $allowed = [
         'first_name', 'last_name', 'email', 'company_name',
         'position', 'address', 'industry', 'role', 'q',
-        'bulk_connection',
     ];
 
     private array $searchable = [

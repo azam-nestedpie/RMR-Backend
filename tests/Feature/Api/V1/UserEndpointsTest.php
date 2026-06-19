@@ -115,7 +115,7 @@ class UserEndpointsTest extends V1TestCase
         $service = Mockery::mock(UserService::class);
         $service->shouldReceive('search')
             ->once()
-            ->with(Mockery::subset(['first_name' => 'john', 'role' => 'rep']), $authUser->firebase_uid, $currentRole, Mockery::any())
+            ->with(Mockery::subset(['first_name' => 'john', 'role' => 'rep']), $authUser->firebase_uid, $currentRole)
             ->andReturn(new LengthAwarePaginator([$result], 1, 20, 1));
         $this->instance(UserService::class, $service);
 
@@ -133,7 +133,7 @@ class UserEndpointsTest extends V1TestCase
         $service = Mockery::mock(UserService::class);
         $service->shouldReceive('search')
             ->once()
-            ->with(Mockery::subset(['first_name' => 'missing']), $authUser->firebase_uid, $currentRole, Mockery::any())
+            ->with(Mockery::subset(['first_name' => 'missing']), $authUser->firebase_uid, $currentRole)
             ->andReturn(new LengthAwarePaginator([], 0, 20, 1));
         $this->instance(UserService::class, $service);
 

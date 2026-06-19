@@ -23,6 +23,13 @@ class StatusesSeeder extends Seeder
             'expired',
             'used',
             'failed',
+            'connected',
+            'not_connected',
+            'connect',
+            'request_sent',
+            'rating_request',
+            'send_rating_request',
+            'send_connection_request',
         ];
 
         foreach ($statuses as $name) {

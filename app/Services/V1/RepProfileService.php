@@ -42,52 +42,39 @@ class RepProfileService
         ];
     }
 
-    private function determineConnectionStatus(string $raterUid, string $repUid): string
+    private function determineConnectionStatus(string $viewerUid, string $repUid): string
     {
-        $activeConnectionExists = Connection::between($raterUid, $repUid)->active()->exists();
+        $activeConnectionExists = Connection::between($viewerUid, $repUid)->active()->exists();
 
         if ($activeConnectionExists) {
             return 'connected';
         }
 
         $pendingStatusId = Status::idByName('pending');
+
+        $viewerSentRequest = ConnectionRequest::query()
+            ->where('requester_firebase_uid', $viewerUid)
+            ->where('target_user_firebase_uid', $repUid)
+            ->when($pendingStatusId, fn ($q) => $q->where('status_id', $pendingStatusId))
+            ->exists();
+
+        if ($viewerSentRequest) {
+            return 'request_sent';
+        }
+
         $rejectedStatusId = Status::idByName('rejected');
 
-        $pendingRequestExists = ConnectionRequest::query()
-            ->where(function ($query) use ($raterUid, $repUid) {
-                $query->where(function ($q) use ($raterUid, $repUid) {
-                    $q->where('requester_firebase_uid', $raterUid)
-                        ->where('target_user_firebase_uid', $repUid);
-                })->orWhere(function ($q) use ($raterUid, $repUid) {
-                    $q->where('requester_firebase_uid', $repUid)
-                        ->where('target_user_firebase_uid', $raterUid);
-                });
-            })
-            ->when($pendingStatusId, fn ($query) => $query->where('status_id', $pendingStatusId))
+        $viewerRequestRejected = ConnectionRequest::query()
+            ->where('requester_firebase_uid', $viewerUid)
+            ->where('target_user_firebase_uid', $repUid)
+            ->when($rejectedStatusId, fn ($q) => $q->where('status_id', $rejectedStatusId))
             ->exists();
 
-        if ($pendingRequestExists) {
-            return 'pending';
+        if ($viewerRequestRejected) {
+            return 'connect';
         }
 
-        $rejectedRequestExists = ConnectionRequest::query()
-            ->where(function ($query) use ($raterUid, $repUid) {
-                $query->where(function ($q) use ($raterUid, $repUid) {
-                    $q->where('requester_firebase_uid', $raterUid)
-                        ->where('target_user_firebase_uid', $repUid);
-                })->orWhere(function ($q) use ($raterUid, $repUid) {
-                    $q->where('requester_firebase_uid', $repUid)
-                        ->where('target_user_firebase_uid', $raterUid);
-                });
-            })
-            ->when($rejectedStatusId, fn ($query) => $query->where('status_id', $rejectedStatusId))
-            ->exists();
-
-        if ($rejectedRequestExists) {
-            return 'rejected';
-        }
-
-        return 'not_connected';
+        return 'connect';
     }
 
     private function getRatingsForRep(string $repUid): LengthAwarePaginator

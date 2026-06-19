@@ -6,8 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Team\ActionRequest;
 use App\Http\Requests\Api\V1\Team\SendRequest;
 use App\Http\Requests\Api\V1\User\SearchRequest;
+use App\Http\Resources\Api\V1\CompletedRatingResource;
 use App\Http\Resources\Api\V1\ConnectableUserResource;
+use App\Http\Resources\Api\V1\RatingRequestResource;
+use App\Http\Resources\Api\V1\TeamMemberNetworkResource;
+use App\Http\Resources\Api\V1\TeamMemberResource;
+use App\Models\User;
+use App\Services\V1\RatingService;
 use App\Services\V1\TeamService;
+use App\Services\V1\UserService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,6 +25,8 @@ class TeamController extends Controller
 
     public function __construct(
         private readonly TeamService $team,
+        private readonly UserService $users,
+        private readonly RatingService $ratings,
     ) {}
 
     public function store(SendRequest $request): JsonResponse
@@ -78,7 +87,7 @@ class TeamController extends Controller
 
     public function members(Request $request): JsonResponse
     {
-        return ConnectableUserResource::collection($this->team->members($request->user()))
+        return TeamMemberResource::collection($this->team->members($request->user()))
             ->additional(['success' => true])
             ->response();
     }
@@ -116,5 +125,67 @@ class TeamController extends Controller
         $this->team->leave($request->user(), $managerUid);
 
         return response()->json(['success' => true, 'message' => 'You left the team.']);
+    }
+
+    /**
+     * Get a team member's network (connections, sent/received requests).
+     */
+    public function network(Request $request, string $userUid): JsonResponse
+    {
+        $manager = $request->user();
+
+        $member = User::where('firebase_uid', $userUid)->first();
+
+        if (! $member) {
+            return $this->notFound('User not found.');
+        }
+
+        if (! $manager->manages($member->firebase_uid)) {
+            return $this->forbidden('This user is not a member of your team.');
+        }
+
+        $network = $this->users->teamMemberNetwork($member);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'connections' => TeamMemberNetworkResource::collection($network['connections']),
+                'requests' => [
+                    'sent' => TeamMemberNetworkResource::collection($network['sentRequests']),
+                    'received' => TeamMemberNetworkResource::collection($network['receivedRequests']),
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Get a team member's rating activity (completed ratings + pending requests).
+     */
+    public function ratings(Request $request, string $userUid): JsonResponse
+    {
+        $manager = $request->user();
+
+        $member = User::where('firebase_uid', $userUid)->first();
+
+        if (! $member) {
+            return $this->notFound('User not found.');
+        }
+
+        if (! $manager->manages($member->firebase_uid)) {
+            return $this->forbidden('This user is not a member of your team.');
+        }
+
+        $ratingActivity = $this->ratings->teamMemberRatings($member);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'completed_ratings' => CompletedRatingResource::collection($ratingActivity['completedRatings']),
+                'requests' => [
+                    'sent' => RatingRequestResource::collection($ratingActivity['sentRequests']),
+                    'received' => RatingRequestResource::collection($ratingActivity['receivedRequests']),
+                ],
+            ],
+        ]);
     }
 }

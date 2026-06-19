@@ -36,7 +36,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 67970c67-ab3d-40a5-8729-5bc9d39a1530
+          x-request-id: 9ba5455d-4ae0-4c35-b8bf-98046fe230fc
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -77,60 +77,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: bef70577-5066-4c8d-a876-7d8c7d9b623f
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/industries/{industry_id}/rating-questions'
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      industry_id:
-        custom: []
-        name: industry_id
-        description: 'The ID of the industry.'
-        required: true
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      industry_id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"success":true,"data":[{"id":11,"question_code":"10","title":"Is Professional","display_order":1,"is_required":true},{"id":12,"question_code":"20","title":"Actively Listens","display_order":2,"is_required":true},{"id":1,"question_code":"30","title":"Effectively Communicates","display_order":3,"is_required":true},{"id":2,"question_code":"40","title":"Is Responsive","display_order":4,"is_required":true},{"id":15,"question_code":"150","title":"Respects My Time","display_order":5,"is_required":true},{"id":16,"question_code":"160","title":"Offers Relevant Solutions","display_order":6,"is_required":true},{"id":14,"question_code":"70","title":"Is Knowledgeable","display_order":7,"is_required":true},{"id":17,"question_code":"210","title":"Is Accountable","display_order":8,"is_required":true},{"id":18,"question_code":"170","title":"Meets Deadlines","display_order":9,"is_required":true},{"id":20,"question_code":"190","title":"Adheres to Protocols and Safety Procedures","display_order":10,"is_required":true}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-request-id: c6fde9dc-f1d3-4f57-bda7-12c8fe1e3d12
+          x-request-id: 921a1282-8db2-4b36-8e99-0fe187db9872
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -210,7 +157,7 @@ endpoints:
         name: role
         description: ''
         required: true
-        example: '1'
+        example: rater
         type: string
         enumValues:
           - '1'
@@ -275,7 +222,7 @@ endpoints:
       industry:
         custom: []
         name: industry
-        description: 'The <code>id</code> of an existing record in the industries table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: 16
         type: integer
@@ -354,7 +301,7 @@ endpoints:
       last_name: 'n'
       email: ashly64@example.com
       password: pBNvYg
-      role: '1'
+      role: rater
       fcm_token: architecto
       bio: architecto
       company_name: architecto
@@ -523,7 +470,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: bd6829e9-c9e7-41bf-ada4-c6312a79b57d
+          x-request-id: 48d55fb5-47f5-487f-b56e-65f0bee6a947
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -851,7 +798,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 9415ff41-8b47-43a3-b78e-928e75775e79
+          x-request-id: 76826551-52cb-42c1-b71a-5bbbb8e592e9
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -995,7 +942,7 @@ endpoints:
       industry:
         custom: []
         name: industry
-        description: 'The <code>id</code> of an existing record in the industries table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: 16
         type: integer
@@ -1055,7 +1002,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: fef3fd79-ad80-4a9b-bab0-3b7af6188e70
+          x-request-id: 12f7379f-9ae5-4a30-aa06-1546e72a9b49
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1210,7 +1157,7 @@ endpoints:
         name: role
         description: ''
         required: false
-        example: rep
+        example: manager_of_raters
         type: string
         enumValues:
           - rater
@@ -1228,7 +1175,7 @@ endpoints:
       position: d
       address: l
       industry: j
-      role: rep
+      role: manager_of_raters
     fileParameters: []
     responses: []
     responseFields: []
@@ -1264,7 +1211,7 @@ endpoints:
         name: locale
         description: ''
         required: true
-        example: pt
+        example: en
         type: string
         enumValues:
           - en
@@ -1274,7 +1221,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      locale: pt
+      locale: en
     fileParameters: []
     responses: []
     responseFields: []
@@ -1327,7 +1274,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 8c42a9f3-235d-4703-874b-83913875cb67
+          x-request-id: 0de435ed-69d9-4956-9a46-93fb5fe54fc8
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1368,7 +1315,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 5c641180-cd49-4c9b-8467-b6a249bab8be
+          x-request-id: 176d3a93-4677-4803-8d22-b7178bab6642
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1402,7 +1349,7 @@ endpoints:
       firebase_uid:
         custom: []
         name: firebase_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -1495,7 +1442,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: c62d647a-cc19-4b64-bcd3-2211864c332b
+          x-request-id: c0d1d929-e90b-4773-968d-b72ca932b0b4
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1536,7 +1483,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: bfe04340-63a0-4336-9f5c-9f7163fc70a2
+          x-request-id: 395299e0-55fd-42ba-b94b-eebea9d8593e
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1577,7 +1524,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 055744c2-5eaa-41f2-b334-fec125b941d0
+          x-request-id: fa36b4a2-445a-410c-9793-44c7b1fb93ee
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1618,48 +1565,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 0e2d2ead-3748-45b8-8772-8b1e83503399
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/connections/connectable
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'GET /api/v1/connections/connectable'
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"success":false,"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-request-id: c23e3156-d1a4-49c6-a868-9eda8209ad7c
+          x-request-id: a05e05e4-fbf3-4f50-b414-e4473126a90c
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1693,7 +1599,7 @@ endpoints:
       target_uid:
         custom: []
         name: target_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: architecto
         type: string
@@ -1704,7 +1610,7 @@ endpoints:
       target_uids:
         custom: []
         name: target_uids
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example:
           - architecto
@@ -1750,7 +1656,7 @@ endpoints:
       target_uids:
         custom: []
         name: target_uids
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example:
           - architecto
@@ -1795,7 +1701,7 @@ endpoints:
       behalf_uid:
         custom: []
         name: behalf_uid
-        description: 'The value and <code>target_uid</code> must be different. The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'The value and <code>target_uid</code> must be different. Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -1806,7 +1712,7 @@ endpoints:
       target_uid:
         custom: []
         name: target_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -2029,7 +1935,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: ff78e012-0b60-4ca9-972e-c4ed54d8d13e
+          x-request-id: 95edf0df-63ff-44db-96dc-a75ddd37aa8b
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2063,7 +1969,7 @@ endpoints:
       target_uid:
         custom: []
         name: target_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: architecto
         type: string
@@ -2074,7 +1980,7 @@ endpoints:
       target_uids:
         custom: []
         name: target_uids
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example:
           - architecto
@@ -2269,7 +2175,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 281dad02-75fd-4b1f-bce8-54b47e678458
+          x-request-id: d575dd3e-1ef7-436a-8e07-c27ab1cbcc5c
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2310,7 +2216,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 9fb921af-d7bd-4d5c-ad89-41301c18da14
+          x-request-id: 38af3e40-2e3c-47b3-aa08-d344749cd8fb
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2407,6 +2313,112 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - GET
+    uri: 'api/v1/team-members/{userUid}/network'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get a team member's network (connections, sent/received requests)."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      userUid:
+        custom: []
+        name: userUid
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      userUid: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"success":false,"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-request-id: 1e1936d0-94c8-4da3-b0ff-76f75d6ef4c1
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/team-members/{userUid}/ratings'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Get a team member's rating activity (completed ratings + pending requests)."
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      userUid:
+        custom: []
+        name: userUid
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      userUid: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"success":false,"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-request-id: 32b1f0f1-5e52-4905-a2f2-2b03bc323b59
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - POST
     uri: api/v1/team-requests/accept
     metadata:
@@ -2430,7 +2442,7 @@ endpoints:
       request_uuid:
         custom: []
         name: request_uuid
-        description: 'The <code>firebase_uuid</code> of an existing record in the team_requests table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
         type: string
@@ -2473,7 +2485,7 @@ endpoints:
       request_uuid:
         custom: []
         name: request_uuid
-        description: 'The <code>firebase_uuid</code> of an existing record in the team_requests table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
         type: string
@@ -2516,7 +2528,7 @@ endpoints:
       request_uuid:
         custom: []
         name: request_uuid
-        description: 'The <code>firebase_uuid</code> of an existing record in the team_requests table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 6ff8f7f6-1eb3-3525-be4a-3932c805afed
         type: string
@@ -2561,7 +2573,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-12T06:22:39'
+        example: '2026-06-18T09:20:57'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2572,15 +2584,15 @@ endpoints:
         name: date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
         required: false
-        example: '2052-07-05'
+        example: '2052-07-11'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      date_from: '2026-06-12T06:22:39'
-      date_to: '2052-07-05'
+      date_from: '2026-06-18T09:20:57'
+      date_to: '2052-07-11'
     fileParameters: []
     responses:
       -
@@ -2590,7 +2602,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 8b41eaa3-f4fe-46c1-a09d-ad45306167a6
+          x-request-id: 51ea12e7-c632-4610-9eff-a37229204686
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2643,7 +2655,60 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 5c8e446b-7d0c-4ece-9d5a-5a17ac687d2e
+          x-request-id: 7fb3271b-b0ab-4d2f-be55-39ebb9ac9609
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/ratings/user/{userUid}/questions'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'GET /api/v1/ratings/user/{userUid}/questions'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      userUid:
+        custom: []
+        name: userUid
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      userUid: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"success":false,"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-request-id: bf0c9a50-8548-49b1-9c29-15b6af6e6713
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2696,7 +2761,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 3b90710a-3eb8-476c-94a3-7cad06d4f004
+          x-request-id: 95ad702e-5d9a-4765-9d07-3b5560554a9b
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2737,7 +2802,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: d10235f8-b97f-4581-8ac4-ff001b88e30d
+          x-request-id: 8d6248c3-2ac3-4f31-ac2e-17e81eb14ec7
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2771,7 +2836,7 @@ endpoints:
       behalf_uid:
         custom: []
         name: behalf_uid
-        description: 'The value and <code>target_uid</code> must be different. The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'The value and <code>target_uid</code> must be different. Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -2782,7 +2847,7 @@ endpoints:
       target_uid:
         custom: []
         name: target_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -2833,7 +2898,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 9765f523-765d-4836-a27e-bc78ade273ed
+          x-request-id: 1d9ff001-6eb7-44ff-b6ab-47bde3204d71
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2874,7 +2939,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 7bb9a587-ab3d-4a85-825c-2840b2be2a71
+          x-request-id: 81258009-fb1e-4726-a9ef-bf188102da96
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2908,7 +2973,7 @@ endpoints:
       target_uid:
         custom: []
         name: target_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -2951,7 +3016,7 @@ endpoints:
       rated_user_uid:
         custom: []
         name: rated_user_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: architecto
         type: string
@@ -2962,7 +3027,7 @@ endpoints:
       rep_uid:
         custom: []
         name: rep_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: architecto
         type: string
@@ -2973,7 +3038,7 @@ endpoints:
       rater_uid:
         custom: []
         name: rater_uid
-        description: 'The <code>firebase_uid</code> of an existing record in the users table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: architecto
         type: string
@@ -2996,7 +3061,7 @@ endpoints:
       rating_request_id:
         custom: []
         name: rating_request_id
-        description: 'The <code>firebase_uuid</code> of an existing record in the rating_requests table.'
+        description: 'Must match an existing stored value.'
         required: false
         example: architecto
         type: string
@@ -3007,7 +3072,7 @@ endpoints:
       'items[].question_id':
         custom: []
         name: 'items[].question_id'
-        description: 'The <code>id</code> of an existing record in the rating_questions table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 16
         type: integer
@@ -3031,8 +3096,7 @@ endpoints:
       rep_uid: architecto
       rater_uid: architecto
       items:
-        -
-          question_id: 16
+        - question_id: 16
           score: 2
       rating_request_id: architecto
     fileParameters: []
@@ -3093,7 +3157,7 @@ endpoints:
       'items[].question_id':
         custom: []
         name: 'items[].question_id'
-        description: 'The <code>id</code> of an existing record in the rating_questions table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 16
         type: integer
@@ -3114,8 +3178,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       items:
-        -
-          question_id: 16
+        - question_id: 16
           score: 2
     fileParameters: []
     responses: []
@@ -3243,7 +3306,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: e9509e5e-b96f-4607-9e9a-aa0dcc4602e7
+          x-request-id: ede700dc-0c7d-463e-ae74-0b7e92b3768f
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3315,7 +3378,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 375f698a-e81b-443c-bbed-99124e8d4386
+          x-request-id: 3fefa98c-df02-403e-82d0-f45043f4213d
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3356,7 +3419,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: e2cab27d-6c3d-4e97-93eb-12eaba6bb498
+          x-request-id: 9bb495a6-54e2-4c3a-b180-253ac40a4c45
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3397,7 +3460,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 1a084a4e-6a38-402c-9345-05d86f1debf3
+          x-request-id: 11328663-4f71-4929-b755-23ca65118c85
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3517,7 +3580,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: f96e1702-6a65-4bb1-b1ee-9ea89dae8ae9
+          x-request-id: 5a4eb21d-a5ee-491e-889e-971af833eadb
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3631,7 +3694,7 @@ endpoints:
       'ratings[].question_id':
         custom: []
         name: 'ratings[].question_id'
-        description: 'The <code>id</code> of an existing record in the rating_questions table.'
+        description: 'Must match an existing stored value.'
         required: true
         example: 16
         type: integer
@@ -3657,8 +3720,7 @@ endpoints:
       company_name: v
       position: d
       ratings:
-        -
-          question_id: 16
+        - question_id: 16
           score: 2
     fileParameters: []
     responses: []
@@ -3700,7 +3762,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 89866a75-3507-42d2-8bef-cab8f3281676
+          x-request-id: 53c0fd38-73eb-4d2d-8471-341399f27f4f
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -4168,7 +4230,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 344dde0c-d7ad-41b7-a0cb-caa9fa5b12c5
+          x-request-id: 569e0df4-6dcd-455a-826c-1be42a737834
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -4232,7 +4294,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 7a320be7-1c52-4ec7-b362-635376faaf9f
+          x-request-id: 25e6ac88-4b8e-4e1e-a509-ecac998787aa
           access-control-allow-origin: '*'
         description: null
     responseFields: []

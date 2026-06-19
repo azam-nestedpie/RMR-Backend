@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="{{ asset("/vendor/scribe/js/tryitout-5.9.0.js") }}"></script>
+    <script src="{{ asset("/vendor/scribe/js/tryitout-5.11.0.js") }}"></script>
 
-    <script src="{{ asset("/vendor/scribe/js/theme-default-5.9.0.js") }}"></script>
+    <script src="{{ asset("/vendor/scribe/js/theme-default-5.11.0.js") }}"></script>
 
 </head>
 
@@ -76,9 +76,6 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-industries">
                                 <a href="#endpoints-GETapi-v1-industries">GET api/v1/industries</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-industries--industry_id--rating-questions">
-                                <a href="#endpoints-GETapi-v1-industries--industry_id--rating-questions">GET api/v1/industries/{industry_id}/rating-questions</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-auth-register">
                                 <a href="#endpoints-POSTapi-v1-auth-register">POST /api/v1/auth/register</a>
@@ -152,9 +149,6 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-connections-pending">
                                 <a href="#endpoints-GETapi-v1-connections-pending">GET /api/v1/connections/requests/pending</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-connections-connectable">
-                                <a href="#endpoints-GETapi-v1-connections-connectable">GET /api/v1/connections/connectable</a>
-                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-connections-request">
                                 <a href="#endpoints-POSTapi-v1-connections-request">POST /api/v1/connections/request</a>
                             </li>
@@ -197,6 +191,12 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-team--memberUid-">
                                 <a href="#endpoints-DELETEapi-v1-team--memberUid-">DELETE api/v1/team/{memberUid}</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-team-members--userUid--network">
+                                <a href="#endpoints-GETapi-v1-team-members--userUid--network">Get a team member's network (connections, sent/received requests).</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-team-members--userUid--ratings">
+                                <a href="#endpoints-GETapi-v1-team-members--userUid--ratings">Get a team member's rating activity (completed ratings + pending requests).</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-v1-team-requests-accept">
                                 <a href="#endpoints-POSTapi-v1-team-requests-accept">POST api/v1/team-requests/accept</a>
                             </li>
@@ -211,6 +211,9 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-ratings-user--userUid-">
                                 <a href="#endpoints-GETapi-v1-ratings-user--userUid-">GET /api/v1/ratings/user/{userUid}</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-ratings-user--userUid--questions">
+                                <a href="#endpoints-GETapi-v1-ratings-user--userUid--questions">GET /api/v1/ratings/user/{userUid}/questions</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-ratings-user--userUid--average-by-question">
                                 <a href="#endpoints-GETapi-v1-ratings-user--userUid--average-by-question">GET /api/v1/ratings/user/{userUid}/average-by-question</a>
@@ -310,7 +313,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: June 12, 2026</li>
+        <li>Last updated: June 18, 2026</li>
     </ul>
 </div>
 
@@ -379,7 +382,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 67970c67-ab3d-40a5-8729-5bc9d39a1530
+x-request-id: 9ba5455d-4ae0-4c35-b8bf-98046fe230fc
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -530,7 +533,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: bef70577-5066-4c8d-a876-7d8c7d9b623f
+x-request-id: 921a1282-8db2-4b36-8e99-0fe187db9872
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -702,219 +705,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-GETapi-v1-industries--industry_id--rating-questions">GET api/v1/industries/{industry_id}/rating-questions</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-industries--industry_id--rating-questions">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/industries/1/rating-questions" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/industries/1/rating-questions"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-industries--industry_id--rating-questions">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-request-id: c6fde9dc-f1d3-4f57-bda7-12c8fe1e3d12
-access-control-allow-origin: *
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;success&quot;: true,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 11,
-            &quot;question_code&quot;: &quot;10&quot;,
-            &quot;title&quot;: &quot;Is Professional&quot;,
-            &quot;display_order&quot;: 1,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 12,
-            &quot;question_code&quot;: &quot;20&quot;,
-            &quot;title&quot;: &quot;Actively Listens&quot;,
-            &quot;display_order&quot;: 2,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 1,
-            &quot;question_code&quot;: &quot;30&quot;,
-            &quot;title&quot;: &quot;Effectively Communicates&quot;,
-            &quot;display_order&quot;: 3,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;question_code&quot;: &quot;40&quot;,
-            &quot;title&quot;: &quot;Is Responsive&quot;,
-            &quot;display_order&quot;: 4,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 15,
-            &quot;question_code&quot;: &quot;150&quot;,
-            &quot;title&quot;: &quot;Respects My Time&quot;,
-            &quot;display_order&quot;: 5,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 16,
-            &quot;question_code&quot;: &quot;160&quot;,
-            &quot;title&quot;: &quot;Offers Relevant Solutions&quot;,
-            &quot;display_order&quot;: 6,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 14,
-            &quot;question_code&quot;: &quot;70&quot;,
-            &quot;title&quot;: &quot;Is Knowledgeable&quot;,
-            &quot;display_order&quot;: 7,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 17,
-            &quot;question_code&quot;: &quot;210&quot;,
-            &quot;title&quot;: &quot;Is Accountable&quot;,
-            &quot;display_order&quot;: 8,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 18,
-            &quot;question_code&quot;: &quot;170&quot;,
-            &quot;title&quot;: &quot;Meets Deadlines&quot;,
-            &quot;display_order&quot;: 9,
-            &quot;is_required&quot;: true
-        },
-        {
-            &quot;id&quot;: 20,
-            &quot;question_code&quot;: &quot;190&quot;,
-            &quot;title&quot;: &quot;Adheres to Protocols and Safety Procedures&quot;,
-            &quot;display_order&quot;: 10,
-            &quot;is_required&quot;: true
-        }
-    ]
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-industries--industry_id--rating-questions" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-industries--industry_id--rating-questions"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-industries--industry_id--rating-questions"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-industries--industry_id--rating-questions" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-industries--industry_id--rating-questions">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-v1-industries--industry_id--rating-questions" data-method="GET"
-      data-path="api/v1/industries/{industry_id}/rating-questions"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-industries--industry_id--rating-questions', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-industries--industry_id--rating-questions"
-                    onclick="tryItOut('GETapi-v1-industries--industry_id--rating-questions');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-industries--industry_id--rating-questions"
-                    onclick="cancelTryOut('GETapi-v1-industries--industry_id--rating-questions');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-industries--industry_id--rating-questions"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/industries/{industry_id}/rating-questions</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-industries--industry_id--rating-questions"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-industries--industry_id--rating-questions"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>industry_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="industry_id"                data-endpoint="GETapi-v1-industries--industry_id--rating-questions"
-               value="1"
-               data-component="url">
-    <br>
-<p>The ID of the industry. Example: <code>1</code></p>
-            </div>
-                    </form>
-
                     <h2 id="endpoints-POSTapi-v1-auth-register">POST /api/v1/auth/register</h2>
 
 <p>
@@ -936,7 +726,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"last_name\": \"n\",
     \"email\": \"ashly64@example.com\",
     \"password\": \"pBNvYg\",
-    \"role\": \"1\",
+    \"role\": \"rater\",
     \"fcm_token\": \"architecto\",
     \"bio\": \"architecto\",
     \"company_name\": \"architecto\",
@@ -968,7 +758,7 @@ let body = {
     "last_name": "n",
     "email": "ashly64@example.com",
     "password": "pBNvYg",
-    "role": "1",
+    "role": "rater",
     "fcm_token": "architecto",
     "bio": "architecto",
     "company_name": "architecto",
@@ -1120,10 +910,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-auth-register"
-               value="1"
+               value="rater"
                data-component="body">
     <br>
-<p>Example: <code>1</code></p>
+<p>Example: <code>rater</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>rater</code></li> <li><code>rep</code></li> <li><code>manager_of_raters</code></li> <li><code>manager_of_reps</code></li></ul>
         </div>
@@ -1185,7 +975,7 @@ Must be one of:
                value="16"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the industries table. Example: <code>16</code></p>
+<p>Must match an existing stored value. Example: <code>16</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -1675,7 +1465,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: bd6829e9-c9e7-41bf-ada4-c6312a79b57d
+x-request-id: 48d55fb5-47f5-487f-b56e-65f0bee6a947
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2541,7 +2331,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9415ff41-8b47-43a3-b78e-928e75775e79
+x-request-id: 76826551-52cb-42c1-b71a-5bbbb8e592e9
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2892,7 +2682,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="16"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the industries table. Example: <code>16</code></p>
+<p>Must match an existing stored value. Example: <code>16</code></p>
         </div>
         </form>
 
@@ -2942,7 +2732,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: fef3fd79-ad80-4a9b-bab0-3b7af6188e70
+x-request-id: 12f7379f-9ae5-4a30-aa06-1546e72a9b49
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3160,7 +2950,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"position\": \"d\",
     \"address\": \"l\",
     \"industry\": \"j\",
-    \"role\": \"rep\"
+    \"role\": \"manager_of_raters\"
 }"
 </code></pre></div>
 
@@ -3183,7 +2973,7 @@ let body = {
     "position": "d",
     "address": "l",
     "industry": "j",
-    "role": "rep"
+    "role": "manager_of_raters"
 };
 
 fetch(url, {
@@ -3371,10 +3161,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-users-search"
-               value="rep"
+               value="manager_of_raters"
                data-component="body">
     <br>
-<p>Example: <code>rep</code></p>
+<p>Example: <code>manager_of_raters</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rater</code></li> <li><code>rep</code></li> <li><code>manager_of_raters</code></li> <li><code>manager_of_reps</code></li></ul>
         </div>
@@ -3397,7 +3187,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"locale\": \"pt\"
+    \"locale\": \"en\"
 }"
 </code></pre></div>
 
@@ -3413,7 +3203,7 @@ const headers = {
 };
 
 let body = {
-    "locale": "pt"
+    "locale": "en"
 };
 
 fetch(url, {
@@ -3505,10 +3295,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="locale"                data-endpoint="PUTapi-v1-users-language"
-               value="pt"
+               value="en"
                data-component="body">
     <br>
-<p>Example: <code>pt</code></p>
+<p>Example: <code>en</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>es</code></li> <li><code>pt</code></li></ul>
         </div>
@@ -3560,7 +3350,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 8c42a9f3-235d-4703-874b-83913875cb67
+x-request-id: 0de435ed-69d9-4956-9a46-93fb5fe54fc8
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3702,7 +3492,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 5c641180-cd49-4c9b-8467-b6a249bab8be
+x-request-id: 176d3a93-4677-4803-8d22-b7178bab6642
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3913,7 +3703,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
         </form>
 
@@ -4087,7 +3877,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: c62d647a-cc19-4b64-bcd3-2211864c332b
+x-request-id: c0d1d929-e90b-4773-968d-b72ca932b0b4
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4216,7 +4006,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: bfe04340-63a0-4336-9f5c-9f7163fc70a2
+x-request-id: 395299e0-55fd-42ba-b94b-eebea9d8593e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4345,7 +4135,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 055744c2-5eaa-41f2-b334-fec125b941d0
+x-request-id: fa36b4a2-445a-410c-9793-44c7b1fb93ee
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4474,7 +4264,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 0e2d2ead-3748-45b8-8772-8b1e83503399
+x-request-id: a05e05e4-fbf3-4f50-b414-e4473126a90c
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4550,135 +4340,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="Accept"                data-endpoint="GETapi-v1-connections-pending"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
-                    <h2 id="endpoints-GETapi-v1-connections-connectable">GET /api/v1/connections/connectable</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-v1-connections-connectable">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost:8000/api/v1/connections/connectable" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/connections/connectable"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-connections-connectable">
-            <blockquote>
-            <p>Example response (401):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-request-id: c23e3156-d1a4-49c6-a868-9eda8209ad7c
-access-control-allow-origin: *
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;success&quot;: false,
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-connections-connectable" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-v1-connections-connectable"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-connections-connectable"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-connections-connectable" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-connections-connectable">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-v1-connections-connectable" data-method="GET"
-      data-path="api/v1/connections/connectable"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-connections-connectable', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-connections-connectable"
-                    onclick="tryItOut('GETapi-v1-connections-connectable');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-connections-connectable"
-                    onclick="cancelTryOut('GETapi-v1-connections-connectable');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-connections-connectable"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/connections/connectable</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-connections-connectable"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-connections-connectable"
                value="application/json"
                data-component="header">
     <br>
@@ -4820,7 +4481,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>target_uids</code></b>&nbsp;&nbsp;
@@ -4834,7 +4495,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                name="target_uids[1]"                data-endpoint="POSTapi-v1-connections-request"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table.</p>
+<p>Must match an existing stored value.</p>
         </div>
         </form>
 
@@ -4972,7 +4633,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                name="target_uids[1]"                data-endpoint="POSTapi-v1-connections-request-bulk"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table.</p>
+<p>Must match an existing stored value.</p>
         </div>
         </form>
 
@@ -5106,7 +4767,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The value and <code>target_uid</code> must be different. The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>The value and <code>target_uid</code> must be different. Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>target_uid</code></b>&nbsp;&nbsp;
@@ -5118,7 +4779,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
         </form>
 
@@ -5688,7 +5349,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: ff78e012-0b60-4ca9-972e-c4ed54d8d13e
+x-request-id: 95edf0df-63ff-44db-96dc-a75ddd37aa8b
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5905,7 +5566,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>target_uids</code></b>&nbsp;&nbsp;
@@ -5919,7 +5580,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                name="target_uids[1]"                data-endpoint="POSTapi-v1-team"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table.</p>
+<p>Must match an existing stored value.</p>
         </div>
         </form>
 
@@ -6213,7 +5874,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 281dad02-75fd-4b1f-bce8-54b47e678458
+x-request-id: d575dd3e-1ef7-436a-8e07-c27ab1cbcc5c
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6342,7 +6003,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9fb921af-d7bd-4d5c-ad89-41301c18da14
+x-request-id: 38af3e40-2e3c-47b3-aa08-d344749cd8fb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6673,6 +6334,290 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="endpoints-GETapi-v1-team-members--userUid--network">Get a team member&#039;s network (connections, sent/received requests).</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-team-members--userUid--network">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/team-members/architecto/network" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/team-members/architecto/network"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-team-members--userUid--network">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-request-id: 1e1936d0-94c8-4da3-b0ff-76f75d6ef4c1
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-team-members--userUid--network" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-team-members--userUid--network"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-team-members--userUid--network"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-team-members--userUid--network" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-team-members--userUid--network">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-team-members--userUid--network" data-method="GET"
+      data-path="api/v1/team-members/{userUid}/network"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-team-members--userUid--network', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-team-members--userUid--network"
+                    onclick="tryItOut('GETapi-v1-team-members--userUid--network');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-team-members--userUid--network"
+                    onclick="cancelTryOut('GETapi-v1-team-members--userUid--network');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-team-members--userUid--network"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/team-members/{userUid}/network</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-team-members--userUid--network"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-team-members--userUid--network"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>userUid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="userUid"                data-endpoint="GETapi-v1-team-members--userUid--network"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="endpoints-GETapi-v1-team-members--userUid--ratings">Get a team member&#039;s rating activity (completed ratings + pending requests).</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-team-members--userUid--ratings">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/team-members/architecto/ratings" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/team-members/architecto/ratings"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-team-members--userUid--ratings">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-request-id: 32b1f0f1-5e52-4905-a2f2-2b03bc323b59
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-team-members--userUid--ratings" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-team-members--userUid--ratings"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-team-members--userUid--ratings"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-team-members--userUid--ratings" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-team-members--userUid--ratings">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-team-members--userUid--ratings" data-method="GET"
+      data-path="api/v1/team-members/{userUid}/ratings"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-team-members--userUid--ratings', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-team-members--userUid--ratings"
+                    onclick="tryItOut('GETapi-v1-team-members--userUid--ratings');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-team-members--userUid--ratings"
+                    onclick="cancelTryOut('GETapi-v1-team-members--userUid--ratings');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-team-members--userUid--ratings"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/team-members/{userUid}/ratings</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-team-members--userUid--ratings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-team-members--userUid--ratings"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>userUid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="userUid"                data-endpoint="GETapi-v1-team-members--userUid--ratings"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                    </form>
+
                     <h2 id="endpoints-POSTapi-v1-team-requests-accept">POST api/v1/team-requests/accept</h2>
 
 <p>
@@ -6801,7 +6746,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
                data-component="body">
     <br>
-<p>The <code>firebase_uuid</code> of an existing record in the team_requests table. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+<p>Must match an existing stored value. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
         </div>
         </form>
 
@@ -6933,7 +6878,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
                data-component="body">
     <br>
-<p>The <code>firebase_uuid</code> of an existing record in the team_requests table. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+<p>Must match an existing stored value. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
         </div>
         </form>
 
@@ -7065,7 +7010,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="6ff8f7f6-1eb3-3525-be4a-3932c805afed"
                data-component="body">
     <br>
-<p>The <code>firebase_uuid</code> of an existing record in the team_requests table. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
+<p>Must match an existing stored value. Example: <code>6ff8f7f6-1eb3-3525-be4a-3932c805afed</code></p>
         </div>
         </form>
 
@@ -7086,8 +7031,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date_from\": \"2026-06-12T06:22:39\",
-    \"date_to\": \"2052-07-05\"
+    \"date_from\": \"2026-06-18T09:20:57\",
+    \"date_to\": \"2052-07-11\"
 }"
 </code></pre></div>
 
@@ -7103,8 +7048,8 @@ const headers = {
 };
 
 let body = {
-    "date_from": "2026-06-12T06:22:39",
-    "date_to": "2052-07-05"
+    "date_from": "2026-06-18T09:20:57",
+    "date_to": "2052-07-11"
 };
 
 fetch(url, {
@@ -7125,7 +7070,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 8b41eaa3-f4fe-46c1-a09d-ad45306167a6
+x-request-id: 51ea12e7-c632-4610-9eff-a37229204686
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7214,10 +7159,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_from"                data-endpoint="GETapi-v1-ratings"
-               value="2026-06-12T06:22:39"
+               value="2026-06-18T09:20:57"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-12T06:22:39</code></p>
+<p>Must be a valid date. Example: <code>2026-06-18T09:20:57</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>date_to</code></b>&nbsp;&nbsp;
@@ -7226,10 +7171,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_to"                data-endpoint="GETapi-v1-ratings"
-               value="2052-07-05"
+               value="2052-07-11"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-05</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-11</code></p>
         </div>
         </form>
 
@@ -7279,7 +7224,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 5c8e446b-7d0c-4ece-9d5a-5a17ac687d2e
+x-request-id: 7fb3271b-b0ab-4d2f-be55-39ebb9ac9609
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7375,6 +7320,148 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="endpoints-GETapi-v1-ratings-user--userUid--questions">GET /api/v1/ratings/user/{userUid}/questions</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-ratings-user--userUid--questions">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/ratings/user/architecto/questions" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/ratings/user/architecto/questions"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-ratings-user--userUid--questions">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-request-id: bf0c9a50-8548-49b1-9c29-15b6af6e6713
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-ratings-user--userUid--questions" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-ratings-user--userUid--questions"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-ratings-user--userUid--questions"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-ratings-user--userUid--questions" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-ratings-user--userUid--questions">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-ratings-user--userUid--questions" data-method="GET"
+      data-path="api/v1/ratings/user/{userUid}/questions"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-ratings-user--userUid--questions', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-ratings-user--userUid--questions"
+                    onclick="tryItOut('GETapi-v1-ratings-user--userUid--questions');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-ratings-user--userUid--questions"
+                    onclick="cancelTryOut('GETapi-v1-ratings-user--userUid--questions');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-ratings-user--userUid--questions"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/ratings/user/{userUid}/questions</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-ratings-user--userUid--questions"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-ratings-user--userUid--questions"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>userUid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="userUid"                data-endpoint="GETapi-v1-ratings-user--userUid--questions"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                    </form>
+
                     <h2 id="endpoints-GETapi-v1-ratings-user--userUid--average-by-question">GET /api/v1/ratings/user/{userUid}/average-by-question</h2>
 
 <p>
@@ -7421,7 +7508,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 3b90710a-3eb8-476c-94a3-7cad06d4f004
+x-request-id: 95ad702e-5d9a-4765-9d07-3b5560554a9b
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7563,7 +7650,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: d10235f8-b97f-4581-8ac4-ff001b88e30d
+x-request-id: 8d6248c3-2ac3-4f31-ac2e-17e81eb14ec7
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7776,7 +7863,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The value and <code>target_uid</code> must be different. The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>The value and <code>target_uid</code> must be different. Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>target_uid</code></b>&nbsp;&nbsp;
@@ -7788,7 +7875,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
         </form>
 
@@ -7838,7 +7925,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9765f523-765d-4836-a27e-bc78ade273ed
+x-request-id: 1d9ff001-6eb7-44ff-b6ab-47bde3204d71
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7967,7 +8054,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 7bb9a587-ab3d-4a85-825c-2840b2be2a71
+x-request-id: 81258009-fb1e-4726-a9ef-bf188102da96
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -8178,7 +8265,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
         </form>
 
@@ -8328,7 +8415,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>rep_uid</code></b>&nbsp;&nbsp;
@@ -8340,7 +8427,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>rater_uid</code></b>&nbsp;&nbsp;
@@ -8352,7 +8439,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uid</code> of an existing record in the users table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -8374,7 +8461,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="16"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the rating_questions table. Example: <code>16</code></p>
+<p>Must match an existing stored value. Example: <code>16</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>score</code></b>&nbsp;&nbsp;
@@ -8400,7 +8487,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="architecto"
                data-component="body">
     <br>
-<p>The <code>firebase_uuid</code> of an existing record in the rating_requests table. Example: <code>architecto</code></p>
+<p>Must match an existing stored value. Example: <code>architecto</code></p>
         </div>
         </form>
 
@@ -8569,7 +8656,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="16"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the rating_questions table. Example: <code>16</code></p>
+<p>Must match an existing stored value. Example: <code>16</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>score</code></b>&nbsp;&nbsp;
@@ -8897,7 +8984,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: e9509e5e-b96f-4607-9e9a-aa0dcc4602e7
+x-request-id: ede700dc-0c7d-463e-ae74-0b7e92b3768f
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9137,7 +9224,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 375f698a-e81b-443c-bbed-99124e8d4386
+x-request-id: 3fefa98c-df02-403e-82d0-f45043f4213d
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9266,7 +9353,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: e2cab27d-6c3d-4e97-93eb-12eaba6bb498
+x-request-id: 9bb495a6-54e2-4c3a-b180-253ac40a4c45
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9395,7 +9482,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 1a084a4e-6a38-402c-9345-05d86f1debf3
+x-request-id: 11328663-4f71-4929-b755-23ca65118c85
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9684,7 +9771,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: f96e1702-6a65-4bb1-b1ee-9ea89dae8ae9
+x-request-id: 5a4eb21d-a5ee-491e-889e-971af833eadb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -10013,7 +10100,7 @@ Must be one of:
                value="16"
                data-component="body">
     <br>
-<p>The <code>id</code> of an existing record in the rating_questions table. Example: <code>16</code></p>
+<p>Must match an existing stored value. Example: <code>16</code></p>
                     </div>
                                                                 <div style="margin-left: 14px; clear: unset;">
                         <b style="line-height: 2;"><code>score</code></b>&nbsp;&nbsp;
@@ -10077,7 +10164,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 89866a75-3507-42d2-8bef-cab8f3281676
+x-request-id: 53c0fd38-73eb-4d2d-8471-341399f27f4f
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -11142,7 +11229,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:8000/api/v1/upload/image" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "image=@/tmp/phpu15vjb112l4e9Cm5Gnt" </code></pre></div>
+    --form "image=@/tmp/phpbgcjtnfd7vqpdBqCAD6" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -11250,7 +11337,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phpu15vjb112l4e9Cm5Gnt</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phpbgcjtnfd7vqpdBqCAD6</code></p>
         </div>
         </form>
 
@@ -11301,7 +11388,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 344dde0c-d7ad-41b7-a0cb-caa9fa5b12c5
+x-request-id: 569e0df4-6dcd-455a-826c-1be42a737834
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -11457,7 +11544,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 7a320be7-1c52-4ec7-b362-635376faaf9f
+x-request-id: 25e6ac88-4b8e-4e1e-a509-ecac998787aa
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 

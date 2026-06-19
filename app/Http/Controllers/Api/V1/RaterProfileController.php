@@ -23,6 +23,7 @@ class RaterProfileController extends Controller
 
         return (new RaterProfileResource(
             $result['rater'],
+            $result['connection_status'],
             $result['ratings'],
         ))->additional(['success' => true])->response();
     }

@@ -35,6 +35,7 @@ class RaterProfileTest extends V1TestCase
                     'position',
                     'bio',
                     'email',
+                    'connection_status',
                     'ratings' => [
                         'data',
                         'current_page',

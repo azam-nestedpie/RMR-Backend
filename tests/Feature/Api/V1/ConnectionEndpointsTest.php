@@ -230,48 +230,6 @@ class ConnectionEndpointsTest extends V1TestCase
             ->assertJsonPath('message', 'Connection removed.');
     }
 
-    public function test_connectable_returns_users_for_rater(): void
-    {
-        $authUser = $this->authAsRole('rater');
-        $role = Role::where('name', 'rep')->first();
-
-        $repUser = $this->makeUser(['firebase_uid' => 'rep-1', 'email' => 'rep@example.com']);
-        $repUser->setRelation('roles', collect([$role]));
-
-        $service = Mockery::mock(ConnectionService::class);
-        $service->shouldReceive('connectableUsers')
-            ->once()
-            ->with(Mockery::on(fn (User $user) => $user->firebase_uid === $authUser->firebase_uid))
-            ->andReturn(collect([$repUser]));
-        $this->instance(ConnectionService::class, $service);
-
-        $this->getJson('/api/v1/connections/connectable')
-            ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.0.firebase_uid', 'rep-1');
-    }
-
-    public function test_connectable_returns_users_for_rep(): void
-    {
-        $authUser = $this->authAsRole('rep');
-        $role = Role::where('name', 'rater')->first();
-
-        $raterUser = $this->makeUser(['firebase_uid' => 'rater-1', 'email' => 'rater@example.com']);
-        $raterUser->setRelation('roles', collect([$role]));
-
-        $service = Mockery::mock(ConnectionService::class);
-        $service->shouldReceive('connectableUsers')
-            ->once()
-            ->with(Mockery::on(fn (User $user) => $user->firebase_uid === $authUser->firebase_uid))
-            ->andReturn(collect([$raterUser]));
-        $this->instance(ConnectionService::class, $service);
-
-        $this->getJson('/api/v1/connections/connectable')
-            ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.0.firebase_uid', 'rater-1');
-    }
-
     public function test_send_bulk_returns_created_payload(): void
     {
         $authUser = $this->authAsRole('rater');

@@ -10,6 +10,7 @@ class RaterProfileResource extends JsonResource
 {
     public function __construct(
         mixed $resource,
+        private readonly string $connectionStatus,
         private readonly LengthAwarePaginator $ratings,
     ) {
         parent::__construct($resource);
