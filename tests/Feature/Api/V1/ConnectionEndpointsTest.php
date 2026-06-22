@@ -153,7 +153,7 @@ class ConnectionEndpointsTest extends V1TestCase
         $service->shouldReceive('pendingRequests')->once()->with($authUser->firebase_uid)->andReturn(collect([$request]));
         $this->instance(ConnectionService::class, $service);
 
-        $this->getJson('/api/v1/connections/requests/pending')
+        $this->getJson('/api/v1/connections/pending')
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.0.requester.firebase_uid', 'pending-1');

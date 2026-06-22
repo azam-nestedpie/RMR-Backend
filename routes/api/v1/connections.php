@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', 'password.set'])->prefix('connections')->name('connections.')->group(function () {
     Route::get('/', [ConnectionController::class, 'index'])->name('index');
     Route::get('requests', [ConnectionController::class, 'requests'])->name('requests.index');
-    Route::get('requests/pending', [ConnectionController::class, 'pendingRequests'])->name('pending');
-    Route::get('pending', [ConnectionController::class, 'pendingRequests'])->name('pending.alias');
+    Route::get('pending', [ConnectionController::class, 'pendingRequests'])->name('pending');
     Route::post('request', [ConnectionController::class, 'sendRequest'])->name('request');
     Route::post('request/bulk', [ConnectionController::class, 'sendBulk'])->name('request.bulk');
     Route::post('request/on-behalf', [ConnectionController::class, 'sendRequestOnBehalf'])->name('request.on-behalf');

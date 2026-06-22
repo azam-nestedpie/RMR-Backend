@@ -281,20 +281,6 @@ class AuthService
         return $user->fresh();
     }
 
-    public function me(User $user): User
-    {
-        return $user->loadMissing(['roles', 'address', 'industries', 'salesRepProfile']);
-    }
-
-    public function updateProfile(User $user, array $data): User
-    {
-        $this->users->update($user, array_merge($data, [
-            'updated_by' => $user->firebase_uid,
-        ]));
-
-        return $user->fresh(['roles', 'address', 'industries', 'salesRepProfile']);
-    }
-
     /**
      * LOGOUT
      */

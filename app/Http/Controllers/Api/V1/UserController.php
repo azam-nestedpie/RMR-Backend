@@ -120,16 +120,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * GET /api/v1/users/me/connections
-     */
-    public function myConnections(Request $request): JsonResponse
-    {
-        return UserResource::collection($this->users->myConnections($request->user()->firebase_uid))
-            ->additional(['success' => true])
-            ->response();
-    }
-
     /** PUT /api/v1/users/language */
     public function updateLanguage(UpdateLanguageRequest $request): JsonResponse
     {

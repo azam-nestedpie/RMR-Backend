@@ -167,21 +167,6 @@ class UserEndpointsTest extends V1TestCase
             ->assertJsonPath('message', 'Invalid JSON format.');
     }
 
-    public function test_my_connections_returns_collection(): void
-    {
-        $authUser = $this->authAsRole('rater');
-        $connected = $this->makeUser(['firebase_uid' => 'connected-uid', 'email' => 'connected@example.com']);
-
-        $service = Mockery::mock(UserService::class);
-        $service->shouldReceive('myConnections')->once()->with($authUser->firebase_uid)->andReturn(collect([$connected]));
-        $this->instance(UserService::class, $service);
-
-        $this->getJson('/api/v1/users/me/connections')
-            ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.0.firebase_uid', 'connected-uid');
-    }
-
     public function test_destroy_marks_user_deleted(): void
     {
         $authUser = $this->authAsRole('rater');

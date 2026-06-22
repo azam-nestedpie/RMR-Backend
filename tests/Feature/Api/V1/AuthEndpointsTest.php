@@ -3,7 +3,10 @@
 namespace Tests\Feature\Api\V1;
 
 use App\Models\User;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Services\V1\AuthService;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Mockery;
 
 class AuthEndpointsTest extends V1TestCase
@@ -77,45 +80,75 @@ class AuthEndpointsTest extends V1TestCase
             ->assertJsonPath('data.token', 'token-2');
     }
 
-    public function test_forgot_password_placeholder_is_exposed(): void
+    public function test_forgot_password_sends_reset_link(): void
     {
+        Notification::fake();
+
+        $user = $this->createUserWithRole();
+
         $this->postJson('/api/v1/auth/forgot-password', [
-            'email' => 'user@example.com',
+            'email' => $user->email,
         ])
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('message', 'Reset link sent to your email.');
+
+        Notification::assertSentTo($user, ResetPasswordNotification::class);
     }
 
-    public function test_reset_password_placeholder_is_exposed(): void
+    public function test_forgot_password_validates_email_exists(): void
     {
+        $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'nonexistent@example.com',
+        ])->assertStatus(422);
+    }
+
+    public function test_forgot_password_validates_email_format(): void
+    {
+        $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'not-an-email',
+        ])->assertStatus(422);
+    }
+
+    public function test_reset_password_with_valid_token(): void
+    {
+        $user = $this->createUserWithRole('rater', ['password' => bcrypt('oldpassword')]);
+
+        $token = Password::createToken($user);
+
         $this->postJson('/api/v1/auth/reset-password', [
-            'email' => 'user@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'email' => $user->email,
+            'token' => $token,
+            'password' => 'newpassword123',
+            'password_confirmation' => 'newpassword123',
         ])
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('message', 'Password has been reset.');
+
+        $user->refresh();
+        $this->assertTrue(password_verify('newpassword123', $user->password));
     }
 
-    public function test_me_returns_profile_resource(): void
+    public function test_reset_password_fails_with_invalid_token(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $profile = $this->makeUser([
-            'firebase_uid' => $authUser->firebase_uid,
-            'email' => $authUser->email,
-        ]);
-        $profile->setRelation('roles', collect([]));
+        $user = $this->createUserWithRole('rater', ['password' => bcrypt('oldpassword')]);
 
-        $service = Mockery::mock(AuthService::class);
-        $service->shouldReceive('me')->once()->with(Mockery::on(fn (User $user) => $user->firebase_uid === $authUser->firebase_uid))->andReturn($profile);
-        $this->instance(AuthService::class, $service);
+        $this->postJson('/api/v1/auth/reset-password', [
+            'email' => $user->email,
+            'token' => 'invalid-token',
+            'password' => 'newpassword123',
+            'password_confirmation' => 'newpassword123',
+        ])
+            ->assertStatus(400)
+            ->assertJsonPath('success', false);
+    }
 
-        $this->getJson('/api/v1/auth/me')
-            ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.firebase_uid', $authUser->firebase_uid);
+    public function test_reset_password_validates_payload(): void
+    {
+        $this->postJson('/api/v1/auth/reset-password', [
+            'email' => 'not-an-email',
+        ])->assertStatus(422);
     }
 
     public function test_logout_returns_success(): void
@@ -154,33 +187,5 @@ class AuthEndpointsTest extends V1TestCase
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('message', 'Password set successfully.');
-    }
-
-    public function test_update_profile_uses_validated_payload(): void
-    {
-        $authUser = $this->authAsRole('rater');
-        $updated = $this->makeUser([
-            'firebase_uid' => $authUser->firebase_uid,
-            'email' => $authUser->email,
-            'first_name' => 'Changed',
-        ]);
-
-        $service = Mockery::mock(AuthService::class);
-        $service->shouldReceive('updateProfile')
-            ->once()
-            ->with(Mockery::on(fn (User $user) => $user->firebase_uid === $authUser->firebase_uid), Mockery::subset([
-                'first_name' => 'Changed',
-                'bio' => 'Bio',
-            ]))
-            ->andReturn($updated);
-        $this->instance(AuthService::class, $service);
-
-        $this->putJson('/api/v1/auth/profile', [
-            'first_name' => 'Changed',
-            'bio' => 'Bio',
-        ])
-            ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('message', 'Profile updated successfully.');
     }
 }

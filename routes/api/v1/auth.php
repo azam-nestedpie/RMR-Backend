@@ -10,10 +10,8 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('reset-password');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('me', [AuthController::class, 'me'])->name('me');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::post('set-password', [AuthController::class, 'setPassword'])->name('set-password');
-        Route::put('profile', [AuthController::class, 'updateProfile'])->name('profile.update');
         Route::post('change-email', [AuthController::class, 'changeEmail'])->name('change-email');
         Route::post('change-password', [AuthController::class, 'changePassword'])->name('change-password');
     });

@@ -313,7 +313,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: June 18, 2026</li>
+        <li>Last updated: June 22, 2026</li>
     </ul>
 </div>
 
@@ -382,7 +382,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9ba5455d-4ae0-4c35-b8bf-98046fe230fc
+x-request-id: 22cf1777-9f88-43a5-8053-0810a151393c
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -533,7 +533,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 921a1282-8db2-4b36-8e99-0fe187db9872
+x-request-id: 08bd4dd9-36cb-4acb-b753-0ceb7f9acd76
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -726,7 +726,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"last_name\": \"n\",
     \"email\": \"ashly64@example.com\",
     \"password\": \"pBNvYg\",
-    \"role\": \"rater\",
+    \"role\": \"4\",
     \"fcm_token\": \"architecto\",
     \"bio\": \"architecto\",
     \"company_name\": \"architecto\",
@@ -758,7 +758,7 @@ let body = {
     "last_name": "n",
     "email": "ashly64@example.com",
     "password": "pBNvYg",
-    "role": "rater",
+    "role": "4",
     "fcm_token": "architecto",
     "bio": "architecto",
     "company_name": "architecto",
@@ -910,10 +910,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-auth-register"
-               value="rater"
+               value="4"
                data-component="body">
     <br>
-<p>Example: <code>rater</code></p>
+<p>Example: <code>4</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>rater</code></li> <li><code>rep</code></li> <li><code>manager_of_raters</code></li> <li><code>manager_of_reps</code></li></ul>
         </div>
@@ -1465,7 +1465,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 48d55fb5-47f5-487f-b56e-65f0bee6a947
+x-request-id: 36a4a1a9-1fab-4747-8324-f3baf6c9560e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2331,7 +2331,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 76826551-52cb-42c1-b71a-5bbbb8e592e9
+x-request-id: 7dbe916f-e88a-45df-b3d4-911cafc25af2
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2732,7 +2732,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 12f7379f-9ae5-4a30-aa06-1546e72a9b49
+x-request-id: 327dccdb-b8cd-402d-aace-60d71c0f3e52
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2950,7 +2950,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"position\": \"d\",
     \"address\": \"l\",
     \"industry\": \"j\",
-    \"role\": \"manager_of_raters\"
+    \"role\": \"rep\"
 }"
 </code></pre></div>
 
@@ -2973,7 +2973,7 @@ let body = {
     "position": "d",
     "address": "l",
     "industry": "j",
-    "role": "manager_of_raters"
+    "role": "rep"
 };
 
 fetch(url, {
@@ -3161,10 +3161,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-users-search"
-               value="manager_of_raters"
+               value="rep"
                data-component="body">
     <br>
-<p>Example: <code>manager_of_raters</code></p>
+<p>Example: <code>rep</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rater</code></li> <li><code>rep</code></li> <li><code>manager_of_raters</code></li> <li><code>manager_of_reps</code></li></ul>
         </div>
@@ -3350,7 +3350,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 0de435ed-69d9-4956-9a46-93fb5fe54fc8
+x-request-id: 41f674d5-f4b5-41a1-9109-1d52d70260b7
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3492,7 +3492,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 176d3a93-4677-4803-8d22-b7178bab6642
+x-request-id: 25176c22-0661-459e-baf2-c2967d49e7e8
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3877,7 +3877,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: c0d1d929-e90b-4773-968d-b72ca932b0b4
+x-request-id: b1c6731c-522d-4fd3-bc5b-87e2b473749e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4006,7 +4006,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 395299e0-55fd-42ba-b94b-eebea9d8593e
+x-request-id: 4da302be-1369-4b88-af85-cf52c6c0638e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4135,7 +4135,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: fa36b4a2-445a-410c-9793-44c7b1fb93ee
+x-request-id: 4593681e-f027-487f-80c1-bd768d3fb734
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -4264,7 +4264,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: a05e05e4-fbf3-4f50-b414-e4473126a90c
+x-request-id: 62cc9364-461c-44ff-b83c-d3608a7ba033
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5349,7 +5349,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 95edf0df-63ff-44db-96dc-a75ddd37aa8b
+x-request-id: 4dda8849-f859-4823-b7c2-4824a0b8f526
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5608,7 +5608,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"position\": \"d\",
     \"address\": \"l\",
     \"industry\": \"j\",
-    \"role\": \"manager_of_reps\"
+    \"role\": \"manager_of_raters\"
 }"
 </code></pre></div>
 
@@ -5631,7 +5631,7 @@ let body = {
     "position": "d",
     "address": "l",
     "industry": "j",
-    "role": "manager_of_reps"
+    "role": "manager_of_raters"
 };
 
 fetch(url, {
@@ -5819,10 +5819,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-team-search"
-               value="manager_of_reps"
+               value="manager_of_raters"
                data-component="body">
     <br>
-<p>Example: <code>manager_of_reps</code></p>
+<p>Example: <code>manager_of_raters</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>rater</code></li> <li><code>rep</code></li> <li><code>manager_of_raters</code></li> <li><code>manager_of_reps</code></li></ul>
         </div>
@@ -5874,7 +5874,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: d575dd3e-1ef7-436a-8e07-c27ab1cbcc5c
+x-request-id: d8c6b549-dac9-4f5d-81a2-0c4aa2def3cd
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6003,7 +6003,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 38af3e40-2e3c-47b3-aa08-d344749cd8fb
+x-request-id: a4c2614e-213e-4c2e-ab37-503c9a864931
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6380,7 +6380,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 1e1936d0-94c8-4da3-b0ff-76f75d6ef4c1
+x-request-id: 6196112d-0888-435e-954f-9bf8e223a9d5
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6522,7 +6522,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 32b1f0f1-5e52-4905-a2f2-2b03bc323b59
+x-request-id: a3e573db-a54f-43b4-8a09-5c0fbf1a480f
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7031,8 +7031,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date_from\": \"2026-06-18T09:20:57\",
-    \"date_to\": \"2052-07-11\"
+    \"date_from\": \"2026-06-22T04:51:04\",
+    \"date_to\": \"2052-07-15\"
 }"
 </code></pre></div>
 
@@ -7048,8 +7048,8 @@ const headers = {
 };
 
 let body = {
-    "date_from": "2026-06-18T09:20:57",
-    "date_to": "2052-07-11"
+    "date_from": "2026-06-22T04:51:04",
+    "date_to": "2052-07-15"
 };
 
 fetch(url, {
@@ -7070,7 +7070,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 51ea12e7-c632-4610-9eff-a37229204686
+x-request-id: 8ff96bd9-9982-4faa-a40c-8733abe470bb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7159,10 +7159,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_from"                data-endpoint="GETapi-v1-ratings"
-               value="2026-06-18T09:20:57"
+               value="2026-06-22T04:51:04"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-18T09:20:57</code></p>
+<p>Must be a valid date. Example: <code>2026-06-22T04:51:04</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>date_to</code></b>&nbsp;&nbsp;
@@ -7171,10 +7171,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_to"                data-endpoint="GETapi-v1-ratings"
-               value="2052-07-11"
+               value="2052-07-15"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-11</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-15</code></p>
         </div>
         </form>
 
@@ -7224,7 +7224,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 7fb3271b-b0ab-4d2f-be55-39ebb9ac9609
+x-request-id: 5f91c92c-25be-42ef-ad34-9c4264642244
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7366,7 +7366,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: bf0c9a50-8548-49b1-9c29-15b6af6e6713
+x-request-id: 2f0ca7da-9e6e-4372-aea1-9803f8855134
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7508,7 +7508,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 95ad702e-5d9a-4765-9d07-3b5560554a9b
+x-request-id: ced5fc96-20c5-4070-9316-9cbbbd283a88
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7650,7 +7650,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 8d6248c3-2ac3-4f31-ac2e-17e81eb14ec7
+x-request-id: af54ad2f-9bda-4ca9-89a9-099a9a36d1fd
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7925,7 +7925,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 1d9ff001-6eb7-44ff-b6ab-47bde3204d71
+x-request-id: a723f4c7-5aff-4676-89eb-50e6ba4a9344
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -8054,7 +8054,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 81258009-fb1e-4726-a9ef-bf188102da96
+x-request-id: 49c2fa4e-fde4-4870-bc53-01e07263f861
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -8984,7 +8984,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: ede700dc-0c7d-463e-ae74-0b7e92b3768f
+x-request-id: 5384b13b-dcd5-4cca-a38a-75e0400d8e10
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9224,7 +9224,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 3fefa98c-df02-403e-82d0-f45043f4213d
+x-request-id: 6266445d-fd75-41a2-aefd-fbac33931afb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9353,7 +9353,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9bb495a6-54e2-4c3a-b180-253ac40a4c45
+x-request-id: 713b8a71-cdfc-44a8-b879-020abfb3de5d
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9482,7 +9482,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 11328663-4f71-4929-b755-23ca65118c85
+x-request-id: 016b6293-b590-4800-b976-555827931f45
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9771,7 +9771,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 5a4eb21d-a5ee-491e-889e-971af833eadb
+x-request-id: ad4f7908-54bd-4c40-aba5-ae60fb8a6580
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -10164,7 +10164,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 53c0fd38-73eb-4d2d-8471-341399f27f4f
+x-request-id: aad5778c-1ead-4c75-9b63-1c8817060741
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -11229,7 +11229,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:8000/api/v1/upload/image" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "image=@/tmp/phpbgcjtnfd7vqpdBqCAD6" </code></pre></div>
+    --form "image=@/tmp/phpa1hfq6vf7ejs1BOzFMi" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -11337,7 +11337,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phpbgcjtnfd7vqpdBqCAD6</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phpa1hfq6vf7ejs1BOzFMi</code></p>
         </div>
         </form>
 
@@ -11388,7 +11388,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 569e0df4-6dcd-455a-826c-1be42a737834
+x-request-id: 25f618ee-b790-4015-8f58-390c31fea4f1
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -11544,7 +11544,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 25e6ac88-4b8e-4e1e-a509-ecac998787aa
+x-request-id: 6062ae58-ed31-4206-bbd1-fcf40820d09b
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 

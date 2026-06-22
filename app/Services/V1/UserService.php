@@ -177,14 +177,6 @@ class UserService
     }
 
     /**
-     * CONNECTIONS
-     */
-    public function myConnections(string $firebaseUid): Collection
-    {
-        return $this->users->connectedUsers($firebaseUid);
-    }
-
-    /**
      * DELETE USER (soft delete logic)
      */
     public function destroy(User $user): void

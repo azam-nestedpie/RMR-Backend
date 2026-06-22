@@ -6,15 +6,18 @@ use App\Exceptions\FirebaseTokenException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\ChangeEmailRequest;
 use App\Http\Requests\Api\V1\Auth\ChangePasswordRequest;
+use App\Http\Requests\Api\V1\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
+use App\Http\Requests\Api\V1\Auth\ResetPasswordRequest;
 use App\Http\Requests\Api\V1\Auth\SetPasswordRequest;
-use App\Http\Requests\Api\V1\Auth\UpdateProfileRequest;
 use App\Http\Resources\Api\V1\UserResource;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Services\V1\AuthService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -62,26 +65,37 @@ class AuthController extends Controller
     /**
      * POST /api/v1/auth/forgot-password
      */
-    public function forgotPassword(Request $request): JsonResponse
+    public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
     {
-        // Implement logic here
-        return $this->success(null, 'Reset link sent to your email.');
+        $status = Password::sendResetLink(
+            $request->only('email'),
+            function (object $notifiable, string $token) {
+                $notifiable->notify(new ResetPasswordNotification($token));
+            }
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? $this->success(null, 'Reset link sent to your email.')
+            : $this->error('Unable to send reset link.', 400);
     }
 
     /**
      * POST /api/v1/auth/reset-password
      */
-    public function resetPassword(Request $request): JsonResponse
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
-        // Implement logic here
-        return $this->success(null, 'Password has been reset.');
-    }
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (object $user, string $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password),
+                ])->save();
+            }
+        );
 
-    public function me(Request $request): JsonResponse
-    {
-        return (new UserResource($this->authService->me($request->user())))
-            ->additional(['success' => true])
-            ->response();
+        return $status === Password::PASSWORD_RESET
+            ? $this->success(null, 'Password has been reset.')
+            : $this->error('Invalid or expired reset token.', 400);
     }
 
     /**
@@ -107,15 +121,6 @@ class AuthController extends Controller
 
         return (new UserResource($user))
             ->additional(['success' => true, 'message' => 'Password set successfully.'])
-            ->response();
-    }
-
-    public function updateProfile(UpdateProfileRequest $request): JsonResponse
-    {
-        $user = $this->authService->updateProfile($request->user(), $request->validated());
-
-        return (new UserResource($user))
-            ->additional(['success' => true, 'message' => 'Profile updated successfully.'])
             ->response();
     }
 

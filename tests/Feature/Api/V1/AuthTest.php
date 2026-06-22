@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Api\V1;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthTest extends V1TestCase
@@ -90,47 +89,6 @@ class AuthTest extends V1TestCase
             ->assertJsonPath('success', true);
 
         $this->assertCount(0, $user->tokens()->get());
-    }
-
-    public function test_unauthenticated_request_returns_401(): void
-    {
-        $this->getJson('/api/v1/auth/me')
-            ->assertUnauthorized()
-            ->assertJsonPath('success', false);
-    }
-
-    public function test_me_returns_address_and_industries(): void
-    {
-        $user = $this->authAsRole('rater');
-
-        $user->address()->create([
-            'country' => 'Turkmenistan',
-            'state' => 'Ahal',
-            'city' => 'Ashgabat',
-            'created_by' => $user->firebase_uid,
-            'updated_by' => $user->firebase_uid,
-        ]);
-
-        DB::table('industries')->updateOrInsert(
-            ['name' => 'Healthcare'],
-            ['created_by' => $user->firebase_uid, 'updated_by' => $user->firebase_uid]
-        );
-
-        $industryId = DB::table('industries')->where('name', 'Healthcare')->value('id');
-        $user->industries()->attach($industryId, [
-            'is_primary' => true,
-            'created_by' => $user->firebase_uid,
-            'updated_by' => $user->firebase_uid,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $this->getJson('/api/v1/auth/me')
-            ->assertOk()
-            ->assertJsonPath('data.address.country', 'Turkmenistan')
-            ->assertJsonPath('data.address.city', 'Ashgabat')
-            ->assertJsonPath('data.industries.0.name', 'Healthcare')
-            ->assertJsonPath('data.industries.0.is_primary', 1);
     }
 
     public function test_migrated_user_can_set_password(): void
