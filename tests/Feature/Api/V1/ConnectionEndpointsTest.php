@@ -196,15 +196,14 @@ class ConnectionEndpointsTest extends V1TestCase
         $this->getJson('/api/v1/connections/requests')
             ->assertOk()
             ->assertJsonPath('success', true)
-            ->assertJsonCount(2, 'data')
-            ->assertJsonPath('data.0.firebase_uid', 'rep-1')
-            ->assertJsonPath('data.0.request_uuid', 'received-request-1')
-            ->assertJsonPath('data.0.status', 'pending')
-            ->assertJsonPath('data.0.direction', 'received')
-            ->assertJsonPath('data.1.firebase_uid', 'rep-2')
-            ->assertJsonPath('data.1.request_uuid', 'sent-request-1')
-            ->assertJsonPath('data.1.status', 'accepted')
-            ->assertJsonPath('data.1.direction', 'sent');
+            ->assertJsonCount(1, 'requests.received')
+            ->assertJsonCount(1, 'requests.sent')
+            ->assertJsonPath('requests.received.0.firebase_uid', 'rep-1')
+            ->assertJsonPath('requests.received.0.request_uuid', 'received-request-1')
+            ->assertJsonPath('requests.received.0.status', 'pending')
+            ->assertJsonPath('requests.sent.0.firebase_uid', 'rep-2')
+            ->assertJsonPath('requests.sent.0.request_uuid', 'sent-request-1')
+            ->assertJsonPath('requests.sent.0.status', 'accepted');
     }
 
     public function test_destroy_returns_success(): void

@@ -9,24 +9,15 @@ class CompletedRatingResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $counterparty = $this->relationLoaded('counterparty') ? $this->counterparty : null;
+
         return [
-            'firebase_uuid' => $this->firebase_uuid,
-            'average_score' => $this->average_score,
-            'rated_at' => $this->rated_at?->toIso8601String(),
-            'rater' => $this->relationLoaded('rater') && $this->rater
-                ? [
-                    'firebase_uid' => $this->rater->firebase_uid,
-                    'full_name' => trim(($this->rater->first_name ?? '').' '.($this->rater->last_name ?? '')),
-                    'image_url' => $this->rater->image_url,
-                ]
+            'firebase_uid' => $counterparty?->firebase_uid,
+            'full_name' => $counterparty
+                ? trim(($counterparty->first_name ?? '').' '.($counterparty->last_name ?? ''))
                 : null,
-            'rep' => $this->relationLoaded('rep') && $this->rep
-                ? [
-                    'firebase_uid' => $this->rep->firebase_uid,
-                    'full_name' => trim(($this->rep->first_name ?? '').' '.($this->rep->last_name ?? '')),
-                    'image_url' => $this->rep->image_url,
-                ]
-                : null,
+            'image_url' => $counterparty?->image_url,
+            'rating' => $this->average_score,
         ];
     }
 }

@@ -25,12 +25,12 @@ class RatingResource extends JsonResource
         $user->loadMissing('salesRepProfile');
 
         $data = [
-            'rating_uuid' => $this->firebase_uuid,
-            'average_score' => $this->average_score,
-            'rated_at' => $this->rated_at?->toDateTimeString(),
+            // 'rating_uuid' => $this->firebase_uuid,
+            // 'average_score' => $this->average_score,
+            // 'rated_at' => $this->rated_at?->toDateTimeString(),
             'firebase_uid' => $user->firebase_uid,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
+            // 'first_name' => $user->first_name,
+            // 'last_name' => $user->last_name,
             'full_name' => trim(($user->first_name ?? '').' '.($user->last_name ?? '')),
             'image_url' => $user->image_url,
             'company_name' => $user->company_name,

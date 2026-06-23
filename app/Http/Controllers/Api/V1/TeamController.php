@@ -159,7 +159,7 @@ class TeamController extends Controller
     }
 
     /**
-     * Get a team member's rating activity (completed ratings + pending requests).
+     * Get a team member's rating activity (pending requests + completed ratings).
      */
     public function ratings(Request $request, string $userUid): JsonResponse
     {
@@ -180,11 +180,8 @@ class TeamController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
+                'pending_requests' => RatingRequestResource::collection($ratingActivity['pendingRequests']),
                 'completed_ratings' => CompletedRatingResource::collection($ratingActivity['completedRatings']),
-                'requests' => [
-                    'sent' => RatingRequestResource::collection($ratingActivity['sentRequests']),
-                    'received' => RatingRequestResource::collection($ratingActivity['receivedRequests']),
-                ],
             ],
         ]);
     }

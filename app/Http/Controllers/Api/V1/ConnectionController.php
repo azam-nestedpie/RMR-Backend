@@ -160,11 +160,11 @@ class ConnectionController extends Controller
     public function requests(Request $request): JsonResponse
     {
         $requests = $this->connections->requests($request->user());
-        $data = collect();
+        $result = [];
 
         foreach (['received', 'sent'] as $direction) {
             $items = $requests[$direction] ?? collect();
-            $data = $data->concat($items->map(function ($req) use ($request, $direction) {
+            $result[$direction] = $items->map(function ($req) use ($request, $direction) {
                 $user = match ($direction) {
                     'received' => $req->relationLoaded('requester') ? $req->requester : null,
                     'sent' => $req->relationLoaded('target') ? $req->target : null,
@@ -173,14 +173,14 @@ class ConnectionController extends Controller
 
                 return array_merge(
                     $user ? (new ConnectableUserResource($user))->resolve($request) : [],
-                    ['request_uuid' => $req->firebase_uuid, 'status' => $req->status?->name, 'direction' => $direction]
+                    ['request_uuid' => $req->firebase_uuid, 'status' => $req->status?->name]
                 );
-            }));
+            })->values()->toArray();
         }
 
         return response()->json([
             'success' => true,
-            'data' => $data->values()->toArray(),
+            'requests' => $result,
         ]);
     }
 

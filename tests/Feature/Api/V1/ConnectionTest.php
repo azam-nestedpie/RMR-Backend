@@ -124,17 +124,17 @@ class ConnectionTest extends V1TestCase
 
         $this->getJson('/api/v1/connections/requests')
             ->assertOk()
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.status', 'pending')
-            ->assertJsonPath('data.0.direction', 'sent');
+            ->assertJsonCount(1, 'requests.sent')
+            ->assertJsonPath('requests.sent.0.status', 'pending')
+            ->assertJsonCount(0, 'requests.received');
 
         $this->actingAs($recipient);
 
         $this->getJson('/api/v1/connections/requests')
             ->assertOk()
-            ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.status', 'pending')
-            ->assertJsonPath('data.0.direction', 'received');
+            ->assertJsonCount(1, 'requests.received')
+            ->assertJsonPath('requests.received.0.status', 'pending')
+            ->assertJsonCount(0, 'requests.sent');
     }
 
     public function test_user_can_remove_connection(): void
