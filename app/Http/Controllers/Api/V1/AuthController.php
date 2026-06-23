@@ -45,6 +45,7 @@ class AuthController extends Controller
 
         $response = (new UserResource($result['user']))->resolve();
         $response['token'] = $result['token'];
+        $response['token_expires_at'] = $result['token_expires_at'];
 
         return $this->success($response, 'Login successful.');
     }
@@ -58,6 +59,7 @@ class AuthController extends Controller
 
         $response = (new UserResource($payload['user']))->resolve();
         $response['token'] = $payload['token'];
+        $response['token_expires_at'] = $payload['token_expires_at'];
 
         return $this->success($response, 'Account created successfully.', 201);
     }

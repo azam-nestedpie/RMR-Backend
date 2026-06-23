@@ -56,8 +56,11 @@ class AuthService
 
             $user = $user->fresh(['roles', 'industries', 'address', 'salesRepProfile']);
 
+            $token = $user->createToken('api-token', ['*'], now()->addDays(30));
+
             return [
-                'token' => $user->createToken('api-token')->plainTextToken,
+                'token' => $token->plainTextToken,
+                'token_expires_at' => $token->accessToken->expires_at,
                 'user' => $user,
             ];
         }
@@ -105,8 +108,11 @@ class AuthService
 
         $user = $user->fresh(['roles', 'industries', 'address', 'salesRepProfile']);
 
+        $token = $user->createToken('api-token', ['*'], now()->addDays(30));
+
         return [
-            'token' => $user->createToken('api-token')->plainTextToken,
+            'token' => $token->plainTextToken,
+            'token_expires_at' => $token->accessToken->expires_at,
             'user' => $user,
         ];
     }
@@ -211,8 +217,11 @@ class AuthService
 
         $user = $user->fresh(['roles', 'industries', 'address', 'salesRepProfile']);
 
+        $token = $user->createToken('api-token', ['*'], now()->addDays(30));
+
         return [
-            'token' => $user->createToken('api-token')->plainTextToken,
+            'token' => $token->plainTextToken,
+            'token_expires_at' => $token->accessToken->expires_at,
             'user' => $user,
         ];
     }
@@ -302,7 +311,7 @@ class AuthService
     private function buildTokenPayload(User $user): array
     {
         return [
-            'token' => $user->createToken('api-token')->plainTextToken,
+            'token' => $user->createToken('api-token', ['*'], now()->addDays(30))->plainTextToken,
 
             'firebase_uid' => $user->firebase_uid,
 

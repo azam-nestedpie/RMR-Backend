@@ -8,7 +8,7 @@ class FirebaseTokenException extends RuntimeException
 {
     public static function invalidToken(string $detail = ''): static
     {
-        return new static('Firebase token is invalid or expired.'.($detail ? " {$detail}" : ''));
+        return new static(($detail ? " {$detail}" : ''));
     }
 
     public static function serviceUnavailable(): static
