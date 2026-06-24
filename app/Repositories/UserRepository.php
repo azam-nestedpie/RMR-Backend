@@ -220,13 +220,12 @@ class UserRepository implements UserRepositoryInterface
 
         $connections = Connection::forUser($firebaseUid)
             ->active()
-            ->get();
-
-        $connectedUids = $connections->map(function ($connection) use ($firebaseUid) {
-            return $connection->user_a_firebase_uid === $firebaseUid
+            ->get()
+            ->keyBy(fn ($connection) => $connection->user_a_firebase_uid === $firebaseUid
                 ? $connection->user_b_firebase_uid
-                : $connection->user_a_firebase_uid;
-        })->unique()->values();
+                : $connection->user_a_firebase_uid);
+
+        $connectedUids = $connections->keys()->unique()->values();
 
         $users = User::whereIn('firebase_uid', $connectedUids)
             ->with(['roles', 'address', 'industries'])
@@ -238,6 +237,10 @@ class UserRepository implements UserRepositoryInterface
 
             if ($userRole === Role::REPRESENTATIVE) {
                 $user->load('salesRepProfile');
+            }
+
+            if ($connections->has($user->firebase_uid)) {
+                $user->setAttribute('connection_uuid', $connections->get($user->firebase_uid)->firebase_uuid);
             }
         }
 

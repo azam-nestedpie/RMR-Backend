@@ -15,6 +15,7 @@ class ConnectableUserResource extends JsonResource
             'image_url' => $this->image_url,
             'company_name' => $this->company_name,
             'position' => $this->position,
+            'connection_uuid' => $this->when($this->connection_uuid !== null, $this->connection_uuid),
             'connection_status' => $this->connection_status ?? null,
         ];
 
