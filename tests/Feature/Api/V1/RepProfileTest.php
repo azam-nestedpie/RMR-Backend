@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\V1;
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
 use App\Models\Rating;
+use App\Models\Role;
 use App\Models\Status;
 use Illuminate\Support\Facades\DB;
 
@@ -12,8 +13,8 @@ class RepProfileTest extends V1TestCase
 {
     public function test_rater_can_view_rep_profile(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep', [
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'company_name' => 'ABC Pharma',
@@ -63,8 +64,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_rater_gets_403_if_not_rater(): void
     {
-        $rep = $this->authAsRole('rep');
-        $targetRep = $this->createUserWithRole('rep');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $targetRep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->getJson('/api/v1/reps/'.$targetRep->firebase_uid)
             ->assertForbidden();
@@ -72,7 +73,7 @@ class RepProfileTest extends V1TestCase
 
     public function test_returns_404_if_rep_not_found(): void
     {
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
 
         $this->getJson('/api/v1/reps/non-existent-uid')
             ->assertNotFound()
@@ -82,8 +83,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_returns_connection_status_connected(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         Connection::create([
             'user_a_firebase_uid' => $rater->firebase_uid,
@@ -102,8 +103,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_returns_connection_status_pending(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $pendingStatusId = Status::idByName('pending');
 
         ConnectionRequest::create([
@@ -122,8 +123,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_returns_connection_status_rejected(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $rejectedStatusId = Status::idByName('rejected');
 
         ConnectionRequest::create([
@@ -142,8 +143,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_ratings_are_ordered_by_latest_first(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $oldRating = Rating::create([
             'firebase_uuid' => 'old-rating-uuid',
@@ -167,14 +168,14 @@ class RepProfileTest extends V1TestCase
 
         $this->getJson('/api/v1/reps/'.$rep->firebase_uid)
             ->assertOk()
-            ->assertJsonPath('data.ratings.data.0.uuid', $newRating->firebase_uuid)
-            ->assertJsonPath('data.ratings.data.1.uuid', $oldRating->firebase_uuid);
+            ->assertJsonPath('data.ratings.data.0.rating_id', $newRating->firebase_uuid)
+            ->assertJsonPath('data.ratings.data.1.rating_id', $oldRating->firebase_uuid);
     }
 
     public function test_rating_includes_rater_information(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $rating = Rating::create([
             'firebase_uuid' => 'rating-uuid-1',
@@ -188,7 +189,7 @@ class RepProfileTest extends V1TestCase
 
         $this->getJson('/api/v1/reps/'.$rep->firebase_uid)
             ->assertOk()
-            ->assertJsonPath('data.ratings.data.0.uuid', $rating->firebase_uuid)
+            ->assertJsonPath('data.ratings.data.0.rating_id', $rating->firebase_uuid)
             ->assertJsonPath('data.ratings.data.0.rating', 4)
             ->assertJsonPath('data.ratings.data.0.full_name', $rater->first_name.' '.$rater->last_name)
             ->assertJsonPath('data.ratings.data.0.company_name', $rater->company_name)
@@ -200,8 +201,8 @@ class RepProfileTest extends V1TestCase
 
     public function test_average_rating_is_null_when_no_ratings(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->getJson('/api/v1/reps/'.$rep->firebase_uid)
             ->assertOk()

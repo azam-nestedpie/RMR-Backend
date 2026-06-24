@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Repositories\Contracts\ConnectionRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -53,11 +54,11 @@ class ConnectionRepository implements ConnectionRepositoryInterface
     /**
      * @return array{received: Collection, sent: Collection}
      */
-    public function requestsForUser(string $firebaseUid, ?string $role = null): array
+    public function requestsForUser(string $firebaseUid, ?int $role = null): array
     {
         $targetRole = match ($role) {
-            'rater' => 'rep',
-            'rep' => 'rater',
+            Role::RATER => Role::REPRESENTATIVE,
+            Role::REPRESENTATIVE => Role::RATER,
             default => null,
         };
 
@@ -68,14 +69,14 @@ class ConnectionRepository implements ConnectionRepositoryInterface
             'received' => ConnectionRequest::query()
                 ->forTarget($firebaseUid)
                 ->when($pendingStatusId, fn ($query) => $query->where('status_id', $pendingStatusId))
-                ->when($targetRole, fn ($query) => $query->whereHas('requester', fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('name', $targetRole))))
+                ->when($targetRole, fn ($query) => $query->whereHas('requester', fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('role_id', $targetRole))))
                 ->with($relations)
                 ->orderByDesc('created_at')
                 ->get(),
             'sent' => ConnectionRequest::query()
                 ->forRequester($firebaseUid)
                 ->when($pendingStatusId, fn ($query) => $query->where('status_id', $pendingStatusId))
-                ->when($targetRole, fn ($query) => $query->whereHas('target', fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('name', $targetRole))))
+                ->when($targetRole, fn ($query) => $query->whereHas('target', fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('role_id', $targetRole))))
                 ->with($relations)
                 ->orderByDesc('created_at')
                 ->get(),

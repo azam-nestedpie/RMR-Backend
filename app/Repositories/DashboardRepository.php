@@ -7,6 +7,7 @@ use App\Models\DashboardExport;
 use App\Models\Rating;
 use App\Models\RatingEdit;
 use App\Models\RatingRequest;
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +28,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         return $this->averageRatingByQuestionForColumn($teamMemberUids, 'rep_firebase_uid', $locale);
     }
 
-    public function averageRatingByQuestionForRole(array $teamMemberUids, string $managerRole, string $locale = 'en'): Collection
+    public function averageRatingByQuestionForRole(array $teamMemberUids, int $managerRole, string $locale = 'en'): Collection
     {
         return $this->averageRatingByQuestionForColumn($teamMemberUids, $this->ratingColumnForManagerRole($managerRole), $locale);
     }
@@ -51,7 +52,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         return $this->ratingAverageBetweenForColumn($teamMemberUids, 'rep_firebase_uid', $from, $to);
     }
 
-    public function ratingAverageBetweenForRole(array $teamMemberUids, string $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): float
+    public function ratingAverageBetweenForRole(array $teamMemberUids, int $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): float
     {
         return $this->ratingAverageBetweenForColumn($teamMemberUids, $this->ratingColumnForManagerRole($managerRole), $from, $to);
     }
@@ -77,7 +78,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         return $this->historicalRatingsForColumn($teamMemberUids, 'rep_firebase_uid', $from, $to);
     }
 
-    public function historicalRatingsForRole(array $teamMemberUids, string $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): Collection
+    public function historicalRatingsForRole(array $teamMemberUids, int $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): Collection
     {
         return $this->historicalRatingsForColumn($teamMemberUids, $this->ratingColumnForManagerRole($managerRole), $from, $to);
     }
@@ -103,7 +104,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         return $this->recentFeedbackForColumn($teamMemberUids, 'rep_firebase_uid', $limit);
     }
 
-    public function recentFeedbackForRole(array $teamMemberUids, string $managerRole, int $limit = 10): Collection
+    public function recentFeedbackForRole(array $teamMemberUids, int $managerRole, int $limit = 10): Collection
     {
         return $this->recentFeedbackForColumn($teamMemberUids, $this->ratingColumnForManagerRole($managerRole), $limit);
     }
@@ -191,21 +192,21 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->get();
     }
 
-    public function averageTeamRatingForRole(array $teamMemberUids, string $managerRole): float
+    public function averageTeamRatingForRole(array $teamMemberUids, int $managerRole): float
     {
         return round((float) $this->ratingsForManagerRole($teamMemberUids, $managerRole)->avg('average_score'), 2);
     }
 
-    public function ratingsCountBetweenForRole(array $teamMemberUids, string $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): int
+    public function ratingsCountBetweenForRole(array $teamMemberUids, int $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): int
     {
         return $this->ratingsForManagerRole($teamMemberUids, $managerRole)
             ->whereBetween('rated_at', [$from, $to])
             ->count();
     }
 
-    public function ratingRequestsCountBetweenForRole(array $teamMemberUids, string $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): int
+    public function ratingRequestsCountBetweenForRole(array $teamMemberUids, int $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): int
     {
-        $column = $managerRole === 'manager_of_raters'
+        $column = $managerRole === Role::MANAGER_OF_RATERS
             ? 'rater_firebase_uid'
             : 'subject_rep_firebase_uid';
 
@@ -215,9 +216,9 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->count();
     }
 
-    public function teamMemberRatingStats(array $teamMemberUids, string $managerRole): Collection
+    public function teamMemberRatingStats(array $teamMemberUids, int $managerRole): Collection
     {
-        $column = $managerRole === 'manager_of_raters'
+        $column = $managerRole === Role::MANAGER_OF_RATERS
             ? 'rater_firebase_uid'
             : 'rep_firebase_uid';
 
@@ -234,7 +235,7 @@ class DashboardRepository implements DashboardRepositoryInterface
         return $this->teamMemberMonthlyRatingStatsForColumn($teamMemberUids, 'rep_firebase_uid', $from, $to);
     }
 
-    public function teamMemberMonthlyRatingStatsForRole(array $teamMemberUids, string $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): Collection
+    public function teamMemberMonthlyRatingStatsForRole(array $teamMemberUids, int $managerRole, \DateTimeInterface $from, \DateTimeInterface $to): Collection
     {
         return $this->teamMemberMonthlyRatingStatsForColumn($teamMemberUids, $this->ratingColumnForManagerRole($managerRole), $from, $to);
     }
@@ -293,9 +294,9 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->keyBy('firebase_uid');
     }
 
-    public function teamMemberClientEngagementCounts(array $teamMemberUids, string $managerRole): Collection
+    public function teamMemberClientEngagementCounts(array $teamMemberUids, int $managerRole): Collection
     {
-        $requestColumn = $managerRole === 'manager_of_raters'
+        $requestColumn = $managerRole === Role::MANAGER_OF_RATERS
             ? 'rater_firebase_uid'
             : 'subject_rep_firebase_uid';
 
@@ -319,7 +320,7 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->keyBy('firebase_uid');
     }
 
-    public function teamMemberResolutionCounts(array $teamMemberUids, string $managerRole, float $threshold = 3.0): Collection
+    public function teamMemberResolutionCounts(array $teamMemberUids, int $managerRole, float $threshold = 3.0): Collection
     {
         $column = $this->ratingColumnForManagerRole($managerRole);
 
@@ -428,14 +429,14 @@ class DashboardRepository implements DashboardRepositoryInterface
         return DashboardExport::create($attributes);
     }
 
-    private function ratingsForManagerRole(array $teamMemberUids, string $managerRole): Builder
+    private function ratingsForManagerRole(array $teamMemberUids, int $managerRole): Builder
     {
         return Rating::query()->whereIn($this->ratingColumnForManagerRole($managerRole), $teamMemberUids);
     }
 
-    private function ratingColumnForManagerRole(string $managerRole): string
+    private function ratingColumnForManagerRole(int $managerRole): string
     {
-        return $managerRole === 'manager_of_raters'
+        return $managerRole === Role::MANAGER_OF_RATERS
             ? 'rater_firebase_uid'
             : 'rep_firebase_uid';
     }

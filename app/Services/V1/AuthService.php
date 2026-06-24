@@ -90,7 +90,7 @@ class AuthService
             ]);
 
             // Default role
-            $this->assignRole($user, 'rater');
+            $this->assignRole($user, Role::RATER);
 
         } else {
 
@@ -138,6 +138,9 @@ class AuthService
                 'last_name' => $data['last_name'] ?? null,
                 'email' => strtolower($data['email']),
                 'password' => Hash::make($data['password']),
+                'bio' => $data['bio'] ?? null,
+                'company_name' => $data['company_name'] ?? null,
+                'position' => $data['position'] ?? null,
                 'fcm_token' => $data['fcm_token'] ?? null,
                 'created_by' => $uid,
                 'updated_by' => $uid,
@@ -148,25 +151,24 @@ class AuthService
             | Role Mapping
             |--------------------------------------------------------------------------
             */
-            $roles = [
-                1 => 'rater',
-                2 => 'rep',
-                3 => 'manager_of_raters',
-                4 => 'manager_of_reps',
-            ];
-
-            $roleName = $roles[$data['role']] ?? $data['role'];
+            $roleId = match ((int) $data['role']) {
+                1 => Role::RATER,
+                2 => Role::REPRESENTATIVE,
+                3 => Role::MANAGER_OF_RATERS,
+                4 => Role::MANAGER_OF_REPRESENTATIVES,
+                default => (int) $data['role'],
+            };
 
             // Assign role
-            $this->assignRole($user, $roleName);
+            $this->assignRole($user, $roleId);
 
             Log::info('Role assigned successfully', [
                 'uid' => $user->firebase_uid,
-                'role' => $roleName,
+                'role' => $roleId,
             ]);
 
             // Create sales rep profile
-            if ($roleName === 'rep') {
+            if ($roleId === Role::REPRESENTATIVE) {
                 $this->users->createSalesRepProfile($user->firebase_uid);
             }
 
@@ -229,12 +231,12 @@ class AuthService
     /**
      * ASSIGN ROLE
      */
-    private function assignRole(User $user, string $roleName): void
+    private function assignRole(User $user, int $roleId): void
     {
-        $role = Role::where('name', $roleName)->first();
+        $role = Role::find($roleId);
 
         if (! $role) {
-            throw new \RuntimeException("Role not found: {$roleName}");
+            throw new \RuntimeException("Role not found: {$roleId}");
         }
 
         $user->roles()->syncWithoutDetaching([

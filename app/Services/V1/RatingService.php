@@ -6,6 +6,7 @@ use App\Exceptions\ApiException;
 use App\Models\ExternalUser;
 use App\Models\Rating;
 use App\Models\RatingRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\ConnectionRepositoryInterface;
@@ -46,7 +47,7 @@ class RatingService
             throw ApiException::notFound('Target user not found.');
         }
 
-        if (! $rater->hasRole('rater') || ! $ratedUser->hasRole('rep')) {
+        if (! $rater->hasRole(Role::RATER) || ! $ratedUser->hasRole(Role::REPRESENTATIVE)) {
             throw ApiException::badRequest('Only rater users can submit ratings for rep users.');
         }
 
@@ -123,7 +124,7 @@ class RatingService
 
         $rep = $this->userOrFail($payload['rep_uid']);
 
-        if (! $rep->hasRole('rep')) {
+        if (! $rep->hasRole(Role::REPRESENTATIVE)) {
             throw ApiException::badRequest('External ratings are only allowed for rep users.');
         }
 
@@ -249,11 +250,11 @@ class RatingService
     {
         $requests = $this->ratings->requestsForUser($user->firebase_uid);
 
-        if ($user->hasRole('rep')) {
+        if ($user->hasRole(Role::REPRESENTATIVE)) {
             return ['sent' => $requests['sent']];
         }
 
-        if ($user->hasRole('rater')) {
+        if ($user->hasRole(Role::RATER)) {
             return ['received' => $requests['received']];
         }
 
@@ -290,11 +291,11 @@ class RatingService
 
     public function forAuthenticatedUser(User $user, array $filters = []): LengthAwarePaginator
     {
-        if ($user->hasRole('rater')) {
+        if ($user->hasRole(Role::RATER)) {
             return $this->given($user->firebase_uid);
         }
 
-        if ($user->hasRole('rep')) {
+        if ($user->hasRole(Role::REPRESENTATIVE)) {
             return $this->received($user->firebase_uid, $filters);
         }
 
@@ -386,8 +387,8 @@ class RatingService
             ?? throw new \LogicException('Role not found.');
 
         $ratingRequest = DB::transaction(function () use ($actor, $requester, $target, $manager, $pendingStatusId, $requesterRoleId, $requestUuid) {
-            $repUid = $requester->hasRole('rep') ? $requester->firebase_uid : $target->firebase_uid;
-            $raterUid = $requester->hasRole('rater') ? $requester->firebase_uid : $target->firebase_uid;
+            $repUid = $requester->hasRole(Role::REPRESENTATIVE) ? $requester->firebase_uid : $target->firebase_uid;
+            $raterUid = $requester->hasRole(Role::RATER) ? $requester->firebase_uid : $target->firebase_uid;
 
             $ratingRequest = $this->ratings->createRequest([
                 'firebase_uuid' => $requestUuid,
@@ -435,7 +436,7 @@ class RatingService
         $requester->loadMissing('roles');
         $target->loadMissing('roles');
 
-        if (! $requester->hasRole('rep') || ! $target->hasRole('rater')) {
+        if (! $requester->hasRole(Role::REPRESENTATIVE) || ! $target->hasRole(Role::RATER)) {
             throw ApiException::badRequest('Rating requests can only be sent by rep users to rater users.');
         }
     }
@@ -456,7 +457,7 @@ class RatingService
         if (
             ! $request
             || $request->status_id !== $pendingStatusId
-            || ! $user->hasRole('manager_of_raters')
+            || ! $user->hasRole(Role::MANAGER_OF_RATERS)
             || ! $user->manages($request->target_user_firebase_uid)
         ) {
             throw ApiException::notFound('Rating request not found.');
@@ -481,7 +482,7 @@ class RatingService
         if (
             ! $request
             || $request->status_id !== $pendingStatusId
-            || ! $user->hasRole('manager_of_reps')
+            || ! $user->hasRole(Role::MANAGER_OF_REPRESENTATIVES)
             || ! $user->manages($request->requester_firebase_uid)
         ) {
             throw ApiException::notFound('Rating request not found.');
@@ -558,11 +559,11 @@ class RatingService
      */
     public function teamMemberRatings(User $member): array
     {
-        $role = $member->roles->pluck('name')->first();
+        $role = $member->roles->pluck('id')->first();
 
         $query = Rating::query()->with(['rater', 'rep']);
 
-        if ($role === 'rep') {
+        if ($role === Role::REPRESENTATIVE) {
             $query->where('rep_firebase_uid', $member->firebase_uid);
         } else {
             $query->where('rater_firebase_uid', $member->firebase_uid);

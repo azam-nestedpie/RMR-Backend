@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
+
 class FavoriteEndpointsTest extends V1TestCase
 {
     public function test_user_can_add_list_and_remove_favorite_users(): void
     {
-        $user = $this->authAsRole('rater');
-        $favorite = $this->createUserWithRole('rep', [
+        $user = $this->authAsRole(Role::RATER);
+        $favorite = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Jordan',
             'last_name' => 'Miles',
         ]);
@@ -41,7 +43,7 @@ class FavoriteEndpointsTest extends V1TestCase
 
     public function test_user_cannot_favorite_themselves(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
 
         $this->postJson('/api/v1/users/favorite', [
             'firebase_uid' => $user->firebase_uid,

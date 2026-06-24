@@ -5,6 +5,7 @@ namespace App\Services\V1;
 use App\Mail\DashboardReportMail;
 use App\Models\Connection;
 use App\Models\Rating;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
@@ -63,6 +64,8 @@ class DashboardService
         $ratingByQuestion = $this->ratingByQuestionPayload($teamMemberUids, $managerRole, $locale);
 
         return [
+            'avg_team_resolution_rate' => $averageTeamResolutionRate,
+            'team_members' => $this->resolutionRateMembers($teamMembers, $resolutionCounts),
             'summary' => [
                 'avg_team_rating' => $this->dashboards->averageTeamRatingForRole($teamMemberUids, $managerRole),
                 'trend' => $this->trend($currentAverage, $lastAverage),
@@ -95,8 +98,8 @@ class DashboardService
                 'overall_rate' => $averageTeamResolutionRate,
                 'resolved_ratings' => $resolvedRatings,
                 'low_ratings' => $lowRatings,
-
-                'team_members' => $this->resolutionRateMembers($teamMembers, $resolutionCounts),            ],
+                'members' => $this->resolutionRateMembers($teamMembers, $resolutionCounts),
+            ],
             'recent_feedback' => $this->dashboards->recentFeedbackForRole($teamMemberUids, $managerRole)
                 ->map(fn (Rating $rating): array => [
                     'from' => $this->feedbackUserPayload($rating->rater),
@@ -289,7 +292,7 @@ class DashboardService
         ];
     }
 
-    private function monthlyAverageTeamRating(array $teamMemberUids, string $managerRole, CarbonInterface $from, CarbonInterface $to): array
+    private function monthlyAverageTeamRating(array $teamMemberUids, int $managerRole, CarbonInterface $from, CarbonInterface $to): array
     {
         $ratingsByMonth = $this->dashboards->historicalRatingsForRole($teamMemberUids, $managerRole, $from, $to);
         $months = [];
@@ -313,7 +316,10 @@ class DashboardService
         return [
             'firebase_uid' => $member->firebase_uid,
             'first_name' => $member->first_name,
-            // 'last_name' => $member->last_name,
+            'last_name' => $member->last_name,
+            'image_url' => $member->image_url,
+            'company_name' => $member->company_name,
+            'position' => $member->position,
             'average_rating' => round((float) ($stats->average_rating ?? 0), 2),
             'ratings_count' => (int) ($stats->ratings_count ?? 0),
             'trend' => $this->percentageTrend(
@@ -335,7 +341,7 @@ class DashboardService
         ];
     }
 
-    private function ratingByQuestionPayload(array $teamMemberUids, string $managerRole = 'manager_of_reps', string $locale = 'en'): array
+    private function ratingByQuestionPayload(array $teamMemberUids, int $managerRole = Role::MANAGER_OF_REPRESENTATIVES, string $locale = 'en'): array
     {
         $questions = $this->dashboards->averageRatingByQuestionForRole($teamMemberUids, $managerRole, $locale);
         $responseCount = (int) $questions->sum('response_count');
@@ -359,9 +365,9 @@ class DashboardService
         return $teamMembers
             ->map(fn (User $member): array => [
                 'firebase_uid' => $member->firebase_uid,
-                'name' => $member->first_name,
-                // $numeratorKey => (int) ($memberRequests->get($member->firebase_uid)?->{$numeratorKey} ?? 0),
-                // $denominatorKey => (int) ($memberRequests->get($member->firebase_uid)?->{$denominatorKey} ?? 0),
+                'name' => trim($member->first_name.' '.$member->last_name),
+                $numeratorKey => (int) ($memberRequests->get($member->firebase_uid)?->{$numeratorKey} ?? 0),
+                $denominatorKey => (int) ($memberRequests->get($member->firebase_uid)?->{$denominatorKey} ?? 0),
                 'rate' => $this->rate(
                     (int) ($memberRequests->get($member->firebase_uid)?->{$numeratorKey} ?? 0),
                     (int) ($memberRequests->get($member->firebase_uid)?->{$denominatorKey} ?? 0)
@@ -377,7 +383,13 @@ class DashboardService
             ->map(fn (User $member): array => [
                 'firebase_uid' => $member->firebase_uid,
                 'name' => trim($member->first_name.' '.$member->last_name),
+                'resolved_ratings' => (int) ($resolutionCounts->get($member->firebase_uid)?->resolved_ratings ?? 0),
+                'low_ratings' => (int) ($resolutionCounts->get($member->firebase_uid)?->low_ratings ?? 0),
                 'resolution_rate' => $this->rate(
+                    (int) ($resolutionCounts->get($member->firebase_uid)?->resolved_ratings ?? 0),
+                    (int) ($resolutionCounts->get($member->firebase_uid)?->low_ratings ?? 0)
+                ),
+                'rate' => $this->rate(
                     (int) ($resolutionCounts->get($member->firebase_uid)?->resolved_ratings ?? 0),
                     (int) ($resolutionCounts->get($member->firebase_uid)?->low_ratings ?? 0)
                 ),
@@ -399,14 +411,14 @@ class DashboardService
         ];
     }
 
-    private function managerRole(User $manager): string
+    private function managerRole(User $manager): int
     {
-        if ($manager->hasRole('manager_of_reps')) {
-            return 'manager_of_reps';
+        if ($manager->hasRole(Role::MANAGER_OF_REPRESENTATIVES)) {
+            return Role::MANAGER_OF_REPRESENTATIVES;
         }
 
-        if ($manager->hasRole('manager_of_raters')) {
-            return 'manager_of_raters';
+        if ($manager->hasRole(Role::MANAGER_OF_RATERS)) {
+            return Role::MANAGER_OF_RATERS;
         }
 
         throw new AuthorizationException;
@@ -430,7 +442,7 @@ class DashboardService
             ? $connection->userB
             : $connection->userA;
 
-        return $user?->hasRole('rep') ? $user : null;
+        return $user?->hasRole(Role::REPRESENTATIVE) ? $user : null;
     }
 
     private function userPayload(User $user): array
@@ -438,7 +450,8 @@ class DashboardService
         return [
             'firebase_uid' => $user->firebase_uid,
             'image_url' => $user->image_url,
-            'full_name' => trim($user->first_name.' '.$user->last_name),
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'company' => $user->company_name,
             'position' => $user->position,
         ];

@@ -21,7 +21,7 @@ interface ConnectionRepositoryInterface
     /**
      * @return array{received: Collection, sent: Collection}
      */
-    public function requestsForUser(string $firebaseUid, ?string $role = null): array;
+    public function requestsForUser(string $firebaseUid, ?int $role = null): array;
 
     public function findPendingRequestBetweenParticipants(string $userAUid, string $userBUid): ?ConnectionRequest;
 

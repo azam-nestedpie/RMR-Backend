@@ -6,6 +6,7 @@ use App\Mail\ExternalRatingInvitationMail;
 use App\Models\ExternalRatingRequest;
 use App\Models\ExternalUser;
 use App\Models\Rating;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -16,9 +17,11 @@ class ExternalRatingEndpointsTest extends V1TestCase
     {
         Mail::fake();
 
-        $salesRep = $this->authAsRole('rep');
+        $salesRep = $this->authAsRole(Role::REPRESENTATIVE);
 
         $this->postJson('/api/v1/external-rating-requests', [
+            'first_name' => 'External',
+            'last_name' => 'User',
             'email' => 'external@example.com',
         ])
             ->assertCreated()
@@ -44,7 +47,7 @@ class ExternalRatingEndpointsTest extends V1TestCase
 
     public function test_public_user_can_open_the_external_rating_form(): void
     {
-        $salesRep = $this->createUserWithRole('rep');
+        $salesRep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $invitation = $this->createInvitation($salesRep);
 
         $this->getJson("/api/v1/external-rating-requests/{$invitation->invite_uuid}")
@@ -58,7 +61,7 @@ class ExternalRatingEndpointsTest extends V1TestCase
 
     public function test_expired_external_rating_requests_are_blocked(): void
     {
-        $salesRep = $this->createUserWithRole('rep');
+        $salesRep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $invitation = $this->createInvitation($salesRep, [
             'expires_at' => now()->subMinute(),
         ]);
@@ -76,7 +79,7 @@ class ExternalRatingEndpointsTest extends V1TestCase
 
     public function test_public_user_can_submit_an_external_rating_once(): void
     {
-        $salesRep = $this->createUserWithRole('rep');
+        $salesRep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $invitation = $this->createInvitation($salesRep);
 
         $this->postJson("/api/v1/external-rating-requests/{$invitation->invite_uuid}/submit", $this->submissionPayload($invitation))
@@ -108,7 +111,7 @@ class ExternalRatingEndpointsTest extends V1TestCase
 
     public function test_an_external_rating_request_cannot_be_submitted_twice(): void
     {
-        $salesRep = $this->createUserWithRole('rep');
+        $salesRep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $invitation = $this->createInvitation($salesRep);
         $payload = $this->submissionPayload($invitation);
 

@@ -79,21 +79,23 @@ class User extends Authenticatable
         return $this->roles()->pluck('name')->all();
     }
 
-    public function isRole(string|array $roles): bool
+    public function isRole(int|string|array $roles): bool
     {
         return $this->hasRole($roles);
     }
 
     /**
-     * Check if user has a specific role.
+     * Check if user has a specific role (by ID or name).
      */
-    public function hasRole(string|array $roles): bool
+    public function hasRole(int|string|array $roles): bool
     {
-        if (is_array($roles)) {
-            return $this->roles()->whereIn('name', $roles)->exists();
+        $roles = is_array($roles) ? $roles : [$roles];
+
+        if (is_int($roles[0]) || (is_string($roles[0]) && ctype_digit($roles[0]))) {
+            return $this->roles()->whereIn('roles.id', array_map('intval', $roles))->exists();
         }
 
-        return $this->roles()->where('name', $roles)->exists();
+        return $this->roles()->whereIn('name', $roles)->exists();
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Http\Resources\Api\V1\ConnectableUserResource;
 use App\Http\Resources\Api\V1\RatingRequestResource;
 use App\Http\Resources\Api\V1\TeamMemberNetworkResource;
 use App\Http\Resources\Api\V1\TeamMemberResource;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\V1\RatingService;
 use App\Services\V1\TeamService;
@@ -58,12 +59,12 @@ class TeamController extends Controller
     public function requests(Request $request): JsonResponse
     {
         $user = $request->user();
-        $role = $user?->roles?->first()?->name;
+        $roleId = $user?->roles?->first()?->id;
 
         return response()->json([
             'success' => true,
-            'data' => match ($role) {
-                'manager_of_reps', 'manager_of_raters' => $this->team->requests($user)['sent']->map(function ($req) use ($request) {
+            'data' => match ($roleId) {
+                Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS => $this->team->requests($user)['sent']->map(function ($req) use ($request) {
                     $target = $req->relationLoaded('target') ? $req->target : null;
                     $target?->loadMissing('salesRepProfile');
 

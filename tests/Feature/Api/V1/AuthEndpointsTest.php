@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Services\V1\AuthService;
@@ -28,7 +29,7 @@ class AuthEndpointsTest extends V1TestCase
         $service->shouldReceive('login')
             ->once()
             ->with('john@example.com', 'secret')
-            ->andReturn(['token' => 'token-1', 'user' => $user]);
+            ->andReturn(['token' => 'token-1', 'token_expires_at' => now()->addDays(30), 'user' => $user]);
         $this->instance(AuthService::class, $service);
 
         $this->postJson('/api/v1/auth/login', [
@@ -60,8 +61,8 @@ class AuthEndpointsTest extends V1TestCase
         $service = Mockery::mock(AuthService::class);
         $service->shouldReceive('register')
             ->once()
-            ->with(Mockery::on(fn (array $data) => $data['email'] === 'new@example.com' && $data['role'] === 'rep'))
-            ->andReturn(['token' => 'token-2', 'user' => $user]);
+            ->with(Mockery::on(fn (array $data) => $data['email'] === 'new@example.com' && $data['role'] === Role::REPRESENTATIVE))
+            ->andReturn(['token' => 'token-2', 'token_expires_at' => now()->addDays(30), 'user' => $user]);
         $this->instance(AuthService::class, $service);
 
         $this->postJson('/api/v1/auth/register', [
@@ -70,7 +71,7 @@ class AuthEndpointsTest extends V1TestCase
             'email' => 'New@Example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'role' => 'rep',
+            'role' => Role::REPRESENTATIVE,
             'fcm_token' => 'fcm-1',
         ])
             ->assertCreated()
@@ -112,7 +113,7 @@ class AuthEndpointsTest extends V1TestCase
 
     public function test_reset_password_with_valid_token(): void
     {
-        $user = $this->createUserWithRole('rater', ['password' => bcrypt('oldpassword')]);
+        $user = $this->createUserWithRole(Role::RATER, ['password' => bcrypt('oldpassword')]);
 
         $token = Password::createToken($user);
 
@@ -132,7 +133,7 @@ class AuthEndpointsTest extends V1TestCase
 
     public function test_reset_password_fails_with_invalid_token(): void
     {
-        $user = $this->createUserWithRole('rater', ['password' => bcrypt('oldpassword')]);
+        $user = $this->createUserWithRole(Role::RATER, ['password' => bcrypt('oldpassword')]);
 
         $this->postJson('/api/v1/auth/reset-password', [
             'email' => $user->email,
@@ -153,7 +154,7 @@ class AuthEndpointsTest extends V1TestCase
 
     public function test_logout_returns_success(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
 
         $service = Mockery::mock(AuthService::class);
         $service->shouldReceive('logout')->once()->with(Mockery::on(fn (User $user) => $user->firebase_uid === $authUser->firebase_uid));
@@ -167,7 +168,7 @@ class AuthEndpointsTest extends V1TestCase
 
     public function test_set_password_uses_validated_payload(): void
     {
-        $authUser = $this->authAsRole('rater', ['password' => null]);
+        $authUser = $this->authAsRole(Role::RATER, ['password' => null]);
         $updated = $this->makeUser([
             'firebase_uid' => $authUser->firebase_uid,
             'email' => $authUser->email,

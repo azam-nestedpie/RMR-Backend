@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Auth;
 
 use App\Http\Requests\Api\V1\V1Request;
+use App\Models\Role;
 use Illuminate\Validation\Rule;
 
 class RegisterRequest extends V1Request
@@ -21,7 +22,7 @@ class RegisterRequest extends V1Request
             'last_name' => ['nullable', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:191', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', Rule::in([1, 2, 3, 4, '1', '2', '3', '4', 'rater', 'rep', 'manager_of_raters', 'manager_of_reps'])],
+            'role' => ['required', Rule::in([1, 2, 3, 4, '1', '2', '3', '4', Role::RATER, Role::REPRESENTATIVE, Role::MANAGER_OF_RATERS, Role::MANAGER_OF_REPRESENTATIVES])],
             'fcm_token' => ['nullable', 'string'],
             'bio' => ['nullable', 'string'],
             'company_name' => ['nullable', 'string'],

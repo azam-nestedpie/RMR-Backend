@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -10,11 +11,11 @@ class RatingResource extends JsonResource
     public function toArray(Request $request): array
     {
         $currentUser = $request->user();
-        $currentRole = $currentUser?->roles?->first()?->name;
+        $currentRoleId = $currentUser?->roles?->first()?->id;
 
-        $user = match ($currentRole) {
-            'rater' => $this->rep,
-            'rep' => $this->rater,
+        $user = match ($currentRoleId) {
+            Role::RATER => $this->rep,
+            Role::REPRESENTATIVE => $this->rater,
             default => null,
         };
 
@@ -29,8 +30,8 @@ class RatingResource extends JsonResource
             // 'average_score' => $this->average_score,
             // 'rated_at' => $this->rated_at?->toDateTimeString(),
             'firebase_uid' => $user->firebase_uid,
-            // 'first_name' => $user->first_name,
-            // 'last_name' => $user->last_name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'full_name' => trim(($user->first_name ?? '').' '.($user->last_name ?? '')),
             'image_url' => $user->image_url,
             'company_name' => $user->company_name,

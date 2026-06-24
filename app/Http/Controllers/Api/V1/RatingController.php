@@ -15,6 +15,7 @@ use App\Http\Resources\Api\V1\RatingRequestResource;
 use App\Http\Resources\Api\V1\RatingResource;
 use App\Models\RatingQuestion;
 use App\Models\RatingRequest;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\V1\RatingService;
 use App\Traits\ApiResponseTrait;
@@ -141,7 +142,7 @@ class RatingController extends Controller
     {
         $rep = User::where('firebase_uid', $userUid)->first();
 
-        if (! $rep || ! $rep->hasRole('rep')) {
+        if (! $rep || ! $rep->hasRole(Role::REPRESENTATIVE)) {
             return $this->notFound('User not found.');
         }
 

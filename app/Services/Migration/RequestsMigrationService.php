@@ -2,6 +2,7 @@
 
 namespace App\Services\Migration;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -40,8 +41,8 @@ class RequestsMigrationService extends BaseMigrationService
         $requestedAt = $this->parseFirestoreDate($doc['createdAt'] ?? $doc['dateTime'] ?? null) ?? $now;
 
         if (($doc['requestType'] ?? null) === 'Rating') {
-            $repUid = $this->userHasRole($requesterUid, 'rep') ? $requesterUid : $targetUid;
-            $raterUid = $this->userHasRole($requesterUid, 'rater') ? $requesterUid : $targetUid;
+            $repUid = $this->userHasRole($requesterUid, Role::REPRESENTATIVE) ? $requesterUid : $targetUid;
+            $raterUid = $this->userHasRole($requesterUid, Role::RATER) ? $requesterUid : $targetUid;
 
             DB::table('rating_requests')->insertOrIgnore([
                 'firebase_uuid' => $doc['requestId'] ?? $doc['_id'] ?? Str::uuid(),

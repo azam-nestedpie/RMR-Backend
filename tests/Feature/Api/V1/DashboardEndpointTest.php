@@ -3,6 +3,7 @@
 use App\Mail\DashboardReportMail;
 use App\Models\Connection;
 use App\Models\Rating;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
@@ -23,22 +24,22 @@ beforeEach(function () {
 test('manager dashboard endpoint returns summary metrics and team activity', function () {
     Carbon::setTestNow(Carbon::parse('2026-06-15 12:00:00'));
 
-    $manager = authAsDashboardRole('manager_of_reps', [
+    $manager = authAsDashboardRole(Role::MANAGER_OF_REPRESENTATIVES, [
         'first_name' => 'Maya',
         'last_name' => 'Manager',
     ]);
-    $firstRep = createDashboardUserWithRole('rep', [
+    $firstRep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Ali',
         'last_name' => 'Khan',
         'image_url' => 'https://example.com/ali.jpg',
         'company_name' => 'Rep Co',
         'position' => 'Account Executive',
     ]);
-    $secondRep = createDashboardUserWithRole('rep', [
+    $secondRep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Sara',
         'last_name' => 'Ahmed',
     ]);
-    $rater = createDashboardUserWithRole('rater', [
+    $rater = createDashboardUserWithRole(Role::RATER, [
         'first_name' => 'Nora',
         'last_name' => 'Client',
     ]);
@@ -126,17 +127,17 @@ test('manager dashboard endpoint returns summary metrics and team activity', fun
 test('manager dashboard calculates engagement and resolution from rating formulas', function () {
     Carbon::setTestNow(Carbon::parse('2026-06-15 12:00:00'));
 
-    $manager = authAsDashboardRole('manager_of_reps');
-    $rep = createDashboardUserWithRole('rep', [
+    $manager = authAsDashboardRole(Role::MANAGER_OF_REPRESENTATIVES);
+    $rep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Ali',
         'last_name' => 'Khan',
     ]);
-    $secondRep = createDashboardUserWithRole('rep', [
+    $secondRep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Sara',
         'last_name' => 'Ahmed',
     ]);
-    $rater = createDashboardUserWithRole('rater');
-    $otherRater = createDashboardUserWithRole('rater');
+    $rater = createDashboardUserWithRole(Role::RATER);
+    $otherRater = createDashboardUserWithRole(Role::RATER);
 
     attachDashboardTeamMember($manager->firebase_uid, $rep->firebase_uid);
     attachDashboardTeamMember($manager->firebase_uid, $secondRep->firebase_uid);
@@ -187,12 +188,12 @@ test('manager dashboard calculates engagement and resolution from rating formula
 test('manager dashboard calculates resolution from edited low ratings', function () {
     Carbon::setTestNow(Carbon::parse('2026-06-15 12:00:00'));
 
-    $manager = authAsDashboardRole('manager_of_reps');
-    $rep = createDashboardUserWithRole('rep', [
+    $manager = authAsDashboardRole(Role::MANAGER_OF_REPRESENTATIVES);
+    $rep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Ali',
         'last_name' => 'Khan',
     ]);
-    $rater = createDashboardUserWithRole('rater');
+    $rater = createDashboardUserWithRole(Role::RATER);
 
     attachDashboardTeamMember($manager->firebase_uid, $rep->firebase_uid);
 
@@ -215,12 +216,12 @@ test('manager dashboard calculates resolution from edited low ratings', function
 test('manager dashboard does not resolve an edited low rating with an older high rating', function () {
     Carbon::setTestNow(Carbon::parse('2026-06-15 12:00:00'));
 
-    $manager = authAsDashboardRole('manager_of_reps');
-    $rep = createDashboardUserWithRole('rep', [
+    $manager = authAsDashboardRole(Role::MANAGER_OF_REPRESENTATIVES);
+    $rep = createDashboardUserWithRole(Role::REPRESENTATIVE, [
         'first_name' => 'Ali',
         'last_name' => 'Khan',
     ]);
-    $rater = createDashboardUserWithRole('rater');
+    $rater = createDashboardUserWithRole(Role::RATER);
 
     attachDashboardTeamMember($manager->firebase_uid, $rep->firebase_uid);
 
@@ -244,7 +245,7 @@ test('manager can queue dashboard export email', function () {
     Carbon::setTestNow(Carbon::parse('2026-06-15 12:00:00'));
     Mail::fake();
 
-    $manager = authAsDashboardRole('manager_of_reps', [
+    $manager = authAsDashboardRole(Role::MANAGER_OF_REPRESENTATIVES, [
         'email' => 'manager@example.com',
     ]);
 
@@ -265,7 +266,7 @@ test('manager can queue dashboard export email', function () {
     Carbon::setTestNow();
 });
 
-function createDashboardUserWithRole(string $role, array $overrides = []): User
+function createDashboardUserWithRole(int $role, array $overrides = []): User
 {
     $user = User::factory()->create(array_merge([
         'password' => bcrypt('password'),
@@ -273,8 +274,7 @@ function createDashboardUserWithRole(string $role, array $overrides = []): User
         'is_deleted' => false,
     ], $overrides));
 
-    $roleId = DB::table('roles')->where('name', $role)->value('id');
-    $user->roles()->attach($roleId, [
+    $user->roles()->attach($role, [
         'created_by' => $user->firebase_uid,
         'updated_by' => $user->firebase_uid,
         'created_at' => now(),
@@ -284,7 +284,7 @@ function createDashboardUserWithRole(string $role, array $overrides = []): User
     return $user->fresh()->load('roles');
 }
 
-function authAsDashboardRole(string $role, array $overrides = []): User
+function authAsDashboardRole(int|string $role, array $overrides = []): User
 {
     $user = createDashboardUserWithRole($role, $overrides);
     Sanctum::actingAs($user);
@@ -297,7 +297,7 @@ function attachDashboardTeamMember(string $managerUid, string $memberUid): void
     DB::table('manager_team_members')->insert([
         'manager_firebase_uid' => $managerUid,
         'member_firebase_uid' => $memberUid,
-        'manager_type_role_id' => DB::table('roles')->where('name', 'manager_of_reps')->value('id'),
+        'manager_type_role_id' => Role::MANAGER_OF_REPRESENTATIVES,
         'active' => true,
         'joined_at' => now(),
         'created_by' => $managerUid,
@@ -371,7 +371,7 @@ function createDashboardRatingRequest(string $requesterUid, string $raterUid, st
         'target_user_firebase_uid' => $raterUid,
         'rater_firebase_uid' => $raterUid,
         'subject_rep_firebase_uid' => $repUid,
-        'requested_by_role_id' => DB::table('roles')->where('name', 'manager_of_reps')->value('id'),
+        'requested_by_role_id' => Role::MANAGER_OF_REPRESENTATIVES,
         'status_id' => DB::table('statuses')->where('name', $statusName)->value('id'),
         'requested_at' => now(),
         'completed_at' => $completed ? now() : null,

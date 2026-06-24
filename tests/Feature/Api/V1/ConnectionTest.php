@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
+use App\Models\Role;
 use App\Models\Status;
 use Illuminate\Support\Str;
 
@@ -11,8 +12,8 @@ class ConnectionTest extends V1TestCase
 {
     public function test_user_can_send_connection_request(): void
     {
-        $sender = $this->authAsRole('rater');
-        $recipient = $this->createUserWithRole('rep');
+        $sender = $this->authAsRole(Role::RATER);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/connections/request', [
             'target_uid' => $recipient->firebase_uid,
@@ -34,8 +35,8 @@ class ConnectionTest extends V1TestCase
 
     public function test_user_cannot_send_duplicate_connection_request(): void
     {
-        $sender = $this->authAsRole('rater');
-        $recipient = $this->createUserWithRole('rep');
+        $sender = $this->authAsRole(Role::RATER);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->postJson('/api/v1/connections/request', [
             'target_uid' => $recipient->firebase_uid,
@@ -50,8 +51,8 @@ class ConnectionTest extends V1TestCase
 
     public function test_recipient_can_accept_connection_request(): void
     {
-        $sender = $this->createUserWithRole('rater');
-        $recipient = $this->authAsRole('rep');
+        $sender = $this->createUserWithRole(Role::RATER);
+        $recipient = $this->authAsRole(Role::REPRESENTATIVE);
         $requestUuid = (string) Str::uuid();
         $pendingStatusId = Status::idByName('pending');
         $acceptedStatusId = Status::idByName('accepted');
@@ -85,8 +86,8 @@ class ConnectionTest extends V1TestCase
 
     public function test_sender_cannot_accept_request_not_addressed_to_them(): void
     {
-        $sender = $this->authAsRole('rater');
-        $recipient = $this->createUserWithRole('rep');
+        $sender = $this->authAsRole(Role::RATER);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE);
         $pendingStatusId = Status::idByName('pending');
         $requestUuid = (string) Str::uuid();
 
@@ -108,8 +109,8 @@ class ConnectionTest extends V1TestCase
 
     public function test_connection_requests_endpoint_only_returns_pending_requests(): void
     {
-        $sender = $this->authAsRole('rater');
-        $recipient = $this->createUserWithRole('rep');
+        $sender = $this->authAsRole(Role::RATER);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         foreach (['pending', 'accepted', 'rejected', 'cancelled'] as $status) {
             ConnectionRequest::create([
@@ -139,8 +140,8 @@ class ConnectionTest extends V1TestCase
 
     public function test_user_can_remove_connection(): void
     {
-        $userA = $this->authAsRole('rater');
-        $userB = $this->createUserWithRole('rep');
+        $userA = $this->authAsRole(Role::RATER);
+        $userB = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $connection = Connection::create([
             'user_a_firebase_uid' => $userA->firebase_uid,

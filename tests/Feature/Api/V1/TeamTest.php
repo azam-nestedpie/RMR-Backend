@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use App\Models\Status;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\Sanctum;
@@ -10,9 +11,9 @@ class TeamTest extends V1TestCase
 {
     public function test_manager_can_invite_multiple_team_members(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $firstRep = $this->createUserWithRole('rep');
-        $secondRep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $firstRep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $secondRep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uids' => [$firstRep->firebase_uid, $secondRep->firebase_uid],
@@ -39,8 +40,8 @@ class TeamTest extends V1TestCase
 
     public function test_team_member_can_accept_own_team_invitation(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -69,8 +70,8 @@ class TeamTest extends V1TestCase
 
     public function test_team_member_can_reject_own_team_invitation(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -98,8 +99,8 @@ class TeamTest extends V1TestCase
 
     public function test_manager_can_cancel_own_team_invitation(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -120,9 +121,9 @@ class TeamTest extends V1TestCase
 
     public function test_only_target_user_can_accept_team_invitation(): void
     {
-        $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $otherRep = $this->createUserWithRole('rep');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $otherRep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -139,8 +140,8 @@ class TeamTest extends V1TestCase
 
     public function test_only_manager_can_cancel_team_invitation(): void
     {
-        $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -157,8 +158,8 @@ class TeamTest extends V1TestCase
 
     public function test_user_can_view_pending_team_invitations(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -177,8 +178,8 @@ class TeamTest extends V1TestCase
 
     public function test_user_can_view_pending_team_requests(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -215,8 +216,8 @@ class TeamTest extends V1TestCase
 
     public function test_manager_can_get_and_destroy_team_member(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         DB::table('manager_team_members')->insert([
             'manager_firebase_uid' => $manager->firebase_uid,
@@ -247,8 +248,8 @@ class TeamTest extends V1TestCase
 
     public function test_member_can_leave_team(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $rep = $this->authAsRole('rep');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
 
         DB::table('manager_team_members')->insert([
             'manager_firebase_uid' => $manager->firebase_uid,
@@ -276,8 +277,8 @@ class TeamTest extends V1TestCase
 
     public function test_member_cannot_leave_team_they_do_not_belong_to(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $this->authAsRole('rep');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $this->authAsRole(Role::REPRESENTATIVE);
 
         $this->deleteJson('/api/v1/team/leave/'.$manager->firebase_uid)
             ->assertNotFound()

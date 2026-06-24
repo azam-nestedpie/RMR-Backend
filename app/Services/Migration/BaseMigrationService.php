@@ -2,6 +2,7 @@
 
 namespace App\Services\Migration;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -132,7 +133,7 @@ abstract class BaseMigrationService
             'updated_at' => $now,
         ]);
 
-        $roleId = DB::table('roles')->where('name', 'rater')->value('id');
+        $roleId = Role::RATER;
 
         if ($roleId !== null) {
             DB::table('user_roles')->insertOrIgnore([
@@ -162,16 +163,15 @@ abstract class BaseMigrationService
         return (int) (DB::table('user_roles')
             ->where('user_firebase_uid', $firebaseUid)
             ->value('role_id')
-            ?? DB::table('roles')->where('name', 'rater')->value('id')
+            ?? Role::RATER
             ?? DB::table('roles')->value('id'));
     }
 
-    protected function userHasRole(string $firebaseUid, string $role): bool
+    protected function userHasRole(string $firebaseUid, int $roleId): bool
     {
         return DB::table('user_roles')
-            ->join('roles', 'roles.id', '=', 'user_roles.role_id')
-            ->where('user_roles.user_firebase_uid', $firebaseUid)
-            ->where('roles.name', $role)
+            ->where('user_firebase_uid', $firebaseUid)
+            ->where('role_id', $roleId)
             ->exists();
     }
 

@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use App\Models\Rating;
 use App\Models\RatingRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use App\Services\V1\RatingService;
@@ -21,8 +22,8 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_store_returns_created_payload(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $authUser = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $service = Mockery::mock(RatingService::class);
         $service->shouldReceive('submit')
@@ -51,7 +52,7 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_index_returns_received_collection_for_rep(): void
     {
-        $authUser = $this->authAsRole('rep');
+        $authUser = $this->authAsRole(Role::REPRESENTATIVE);
         $rating = $this->ratingModel('rating-2', 4.0);
 
         $service = Mockery::mock(RatingService::class);
@@ -72,7 +73,7 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_index_returns_given_collection_for_rater(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
         $rating = $this->ratingModel('rating-3', 3.5);
 
         $service = Mockery::mock(RatingService::class);
@@ -90,7 +91,7 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_for_user_returns_collection(): void
     {
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
         $rating = $this->ratingModel('rating-4', 4.2);
 
         $service = Mockery::mock(RatingService::class);
@@ -107,7 +108,7 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_average_by_question_returns_stats_payload(): void
     {
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
 
         $service = Mockery::mock(RatingService::class);
         $service->shouldReceive('averageByQuestion')->once()->with('user-123', Mockery::any())->andReturn(collect([
@@ -124,7 +125,7 @@ class RatingEndpointsTest extends V1TestCase
 
     public function test_requests_returns_received_collection_for_rater(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
         $received = new RatingRequest([
             'firebase_uuid' => 'received-rating-request-1',
             'requested_at' => now(),

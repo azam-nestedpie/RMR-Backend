@@ -20,8 +20,8 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_send_request_returns_created_payload(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $target = $this->createUserWithRole('rep');
+        $authUser = $this->authAsRole(Role::RATER);
+        $target = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $service = Mockery::mock(ConnectionService::class);
         $service->shouldReceive('sendRequest')
@@ -41,8 +41,8 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_manager_cannot_send_team_request_through_connection_endpoint(): void
     {
-        $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->postJson('/api/v1/connections/request', [
             'target_uid' => $rep->firebase_uid,
@@ -53,7 +53,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_send_request_requires_target_uid_or_target_uids(): void
     {
-        $this->authAsRole('rep');
+        $this->authAsRole(Role::REPRESENTATIVE);
 
         $this->postJson('/api/v1/connections/request', [])
             ->assertUnprocessable()
@@ -63,8 +63,8 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_send_request_rejects_duplicate_targets(): void
     {
-        $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->postJson('/api/v1/connections/request', [
             'target_uids' => [$rater->firebase_uid, $rater->firebase_uid],
@@ -75,7 +75,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_accept_request_returns_success(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
 
         $service = Mockery::mock(ConnectionService::class);
         $connectionRequest = new ConnectionRequest([
@@ -99,7 +99,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_reject_request_returns_success(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
 
         $service = Mockery::mock(ConnectionService::class);
         $connectionRequest = new ConnectionRequest([
@@ -123,8 +123,8 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_index_returns_connections_collection(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $role = Role::where('name', 'rater')->first();
+        $authUser = $this->authAsRole(Role::RATER);
+        $role = Role::find(Role::RATER);
         $connectedUser = $this->makeUser(['firebase_uid' => 'connected-1', 'email' => 'connected@example.com']);
         $connectedUser->setRelation('roles', collect([$role]));
 
@@ -140,7 +140,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_pending_requests_returns_collection(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
         $request = new ConnectionRequest([
             'firebase_uuid' => 'pending-request-1',
             'created_at' => now(),
@@ -161,8 +161,8 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_requests_returns_sent_and_received_collections(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $repRole = Role::where('name', 'rep')->first();
+        $authUser = $this->authAsRole(Role::RATER);
+        $repRole = Role::find(Role::REPRESENTATIVE);
 
         $requester = $this->makeUser(['firebase_uid' => 'rep-1', 'email' => 'rep1@test.com']);
         $requester->setRelation('roles', collect([$repRole]));
@@ -208,7 +208,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_destroy_returns_success(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
 
         $service = Mockery::mock(ConnectionService::class);
         $connection = new Connection([
@@ -231,9 +231,9 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_send_bulk_returns_created_payload(): void
     {
-        $authUser = $this->authAsRole('rater');
-        $firstTarget = $this->createUserWithRole('rep');
-        $secondTarget = $this->createUserWithRole('rep');
+        $authUser = $this->authAsRole(Role::RATER);
+        $firstTarget = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $secondTarget = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $service = Mockery::mock(ConnectionService::class);
         $service->shouldReceive('sendBulkRequest')
@@ -256,7 +256,7 @@ class ConnectionEndpointsTest extends V1TestCase
 
     public function test_send_bulk_requires_target_uids(): void
     {
-        $this->authAsRole('rep');
+        $this->authAsRole(Role::REPRESENTATIVE);
 
         $this->postJson('/api/v1/connections/request/bulk', [])
             ->assertUnprocessable()

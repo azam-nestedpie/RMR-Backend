@@ -25,7 +25,7 @@ class UserRepository implements UserRepositoryInterface
         return User::where('firebase_uid', $firebaseUid)->first();
     }
 
-    public function search(array $filters, string $excludeUid, ?string $currentUserRole): LengthAwarePaginator
+    public function search(array $filters, string $excludeUid, ?int $currentUserRole): LengthAwarePaginator
     {
         $query = User::where('firebase_uid', '!=', $excludeUid)
             ->where('is_blocked', false);
@@ -61,18 +61,18 @@ class UserRepository implements UserRepositoryInterface
 
         // Cross-role search restriction
         $allowedRoles = [
-            'rater' => ['rep'],
-            'rep' => ['rater'],
-            'manager_of_reps' => ['rater', 'rep'],
-            'manager_of_raters' => ['rater', 'rep'],
+            Role::RATER => [Role::REPRESENTATIVE],
+            Role::REPRESENTATIVE => [Role::RATER],
+            Role::MANAGER_OF_REPRESENTATIVES => [Role::RATER, Role::REPRESENTATIVE],
+            Role::MANAGER_OF_RATERS => [Role::RATER, Role::REPRESENTATIVE],
         ];
 
         if (isset($allowedRoles[$currentUserRole])) {
-            $query->whereHas('roles', fn ($q) => $q->whereIn('name', $allowedRoles[$currentUserRole]));
+            $query->whereHas('roles', fn ($q) => $q->whereIn('roles.id', $allowedRoles[$currentUserRole]));
         }
 
         if (! empty($filters['role'])) {
-            $query->whereHas('roles', fn ($q) => $q->where('name', $filters['role']));
+            $query->whereHas('roles', fn ($q) => $q->where('roles.id', (int) $filters['role']));
         }
 
         $result = $query
@@ -122,9 +122,9 @@ class UserRepository implements UserRepositoryInterface
                 default => 'not_connected',
             };
 
-            $role = $user->roles->pluck('name')->first();
+            $role = $user->roles->pluck('id')->first();
 
-            if ($role === 'rep') {
+            if ($role === Role::REPRESENTATIVE) {
                 $user->load('salesRepProfile');
             }
         }
@@ -137,11 +137,11 @@ class UserRepository implements UserRepositoryInterface
         $pendingStatusId = Status::idByName('pending');
 
         $searchableRoles = [];
-        if (in_array('manager_of_reps', $managerRoles, true)) {
-            $searchableRoles[] = 'rep';
+        if (in_array(Role::MANAGER_OF_REPRESENTATIVES, $managerRoles, true)) {
+            $searchableRoles[] = Role::REPRESENTATIVE;
         }
-        if (in_array('manager_of_raters', $managerRoles, true)) {
-            $searchableRoles[] = 'rater';
+        if (in_array(Role::MANAGER_OF_RATERS, $managerRoles, true)) {
+            $searchableRoles[] = Role::RATER;
         }
 
         $query = User::where('users.firebase_uid', '!=', $excludeUid)
@@ -200,9 +200,9 @@ class UserRepository implements UserRepositoryInterface
             ->paginate(20);
 
         foreach ($result->getCollection() as $user) {
-            $role = $user->roles->pluck('name')->first();
+            $roleId = $user->roles->first()?->id;
 
-            if ($role === 'rep') {
+            if ($roleId === Role::REPRESENTATIVE) {
                 $user->load('salesRepProfile');
             }
         }
@@ -210,11 +210,11 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
-    public function connectedUsers(string $firebaseUid, ?string $role = null): Collection
+    public function connectedUsers(string $firebaseUid, ?int $role = null): Collection
     {
         $targetRole = match ($role) {
-            'rater' => 'rep',
-            'rep' => 'rater',
+            Role::RATER => Role::REPRESENTATIVE,
+            Role::REPRESENTATIVE => Role::RATER,
             default => null,
         };
 
@@ -230,13 +230,13 @@ class UserRepository implements UserRepositoryInterface
 
         $users = User::whereIn('firebase_uid', $connectedUids)
             ->with(['roles', 'address', 'industries'])
-            ->when($targetRole, fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('name', $targetRole)))
+            ->when($targetRole, fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('roles.id', $targetRole)))
             ->get();
 
         foreach ($users as $user) {
-            $userRole = $user->roles->pluck('name')->first();
+            $userRole = $user->roles->first()?->id;
 
-            if ($userRole === 'rep') {
+            if ($userRole === Role::REPRESENTATIVE) {
                 $user->load('salesRepProfile');
             }
         }
@@ -244,9 +244,9 @@ class UserRepository implements UserRepositoryInterface
         return $users;
     }
 
-    public function connectableUsers(string $firebaseUid, string $role): Collection
+    public function connectableUsers(string $firebaseUid, int $role): Collection
     {
-        $targetRole = $role === 'rater' ? 'rep' : 'rater';
+        $targetRole = $role === Role::RATER ? Role::REPRESENTATIVE : Role::RATER;
 
         $connectedUids = Connection::forUser($firebaseUid)
             ->active()
@@ -277,12 +277,12 @@ class UserRepository implements UserRepositoryInterface
 
         $users = User::whereNotIn('firebase_uid', $excludeUids)
             ->where('is_blocked', false)
-            ->whereHas('roles', fn ($q) => $q->where('name', $targetRole))
+            ->whereHas('roles', fn ($q) => $q->where('roles.id', $targetRole))
             ->with(['roles', 'address', 'industries'])
             ->get();
 
         foreach ($users as $user) {
-            if ($targetRole === 'rep') {
+            if ($targetRole === Role::REPRESENTATIVE) {
                 $user->load('salesRepProfile');
             }
         }
@@ -300,12 +300,13 @@ class UserRepository implements UserRepositoryInterface
         return $user->update($data);
     }
 
-    public function assignRole(User $user, string $roleName): void
+    public function assignRole(User $user, int $roleId): void
     {
-        $roleId = Role::idByName($roleName);
-        if ($roleId) {
+        $role = Role::find($roleId);
+
+        if ($role) {
             $user->roles()->syncWithoutDetaching([
-                $roleId => [
+                $role->id => [
                     'created_by' => $user->firebase_uid,
                     'updated_by' => $user->firebase_uid,
                     'created_at' => now(),

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Exceptions\ApiException;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\ConnectableUserResource;
+use App\Models\Role;
 use App\Models\User;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +19,7 @@ class FavoriteController extends Controller
     {
         $with = ['roles', 'address', 'industries'];
 
-        if ($request->user()->hasRole('rater')) {
+        if ($request->user()->hasRole(Role::RATER)) {
             $with[] = 'salesRepProfile';
         }
 
@@ -70,7 +71,7 @@ class FavoriteController extends Controller
         ];
 
         // Show only for rater login
-        if ($request->user()->hasRole('rater')) {
+        if ($request->user()->hasRole(Role::RATER)) {
             $data['average_rating'] = $user->salesRepProfile?->avg_rating;
             $data['ratings_count'] = $user->salesRepProfile?->ratings_count;
         }

@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use App\Models\Connection;
 use App\Models\Rating;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -11,20 +12,20 @@ class DashboardEndpointsTest extends V1TestCase
 {
     public function test_manager_of_reps_home_returns_team_dashboard_payload(): void
     {
-        $manager = $this->authAsRole('manager_of_reps', [
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES, [
             'first_name' => 'Maya',
             'last_name' => 'Manager',
         ]);
-        $rep = $this->createUserWithRole('rep', [
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Ali',
             'last_name' => 'Khan',
             'image_url' => 'https://example.com/avatar1.jpg',
         ]);
-        $secondRep = $this->createUserWithRole('rep', [
+        $secondRep = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Sara',
             'last_name' => 'Ahmed',
         ]);
-        $rater = $this->createUserWithRole('rater');
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->attachTeamMember($manager->firebase_uid, $rep->firebase_uid, 4);
         $this->attachTeamMember($manager->firebase_uid, $secondRep->firebase_uid, 4);
@@ -57,17 +58,17 @@ class DashboardEndpointsTest extends V1TestCase
 
     public function test_manager_of_raters_home_returns_given_rating_dashboard_payload(): void
     {
-        $manager = $this->authAsRole('manager_of_raters', [
+        $manager = $this->authAsRole(Role::MANAGER_OF_RATERS, [
             'first_name' => 'Rater',
             'last_name' => 'Lead',
         ]);
-        $rater = $this->createUserWithRole('rater', [
+        $rater = $this->createUserWithRole(Role::RATER, [
             'first_name' => 'Nora',
             'last_name' => 'Rater',
         ]);
-        $rep = $this->createUserWithRole('rep');
-        $otherRep = $this->createUserWithRole('rep');
-        $outsideRater = $this->createUserWithRole('rater');
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $otherRep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $outsideRater = $this->createUserWithRole(Role::RATER);
 
         $this->attachTeamMember($manager->firebase_uid, $rater->firebase_uid, 3);
 
@@ -96,7 +97,7 @@ class DashboardEndpointsTest extends V1TestCase
 
     public function test_rater_home_returns_profile_recent_connections_and_recent_ratings(): void
     {
-        $rater = $this->authAsRole('rater', [
+        $rater = $this->authAsRole(Role::RATER, [
             'first_name' => 'Nora',
             'last_name' => 'Client',
             'email' => 'nora@example.com',
@@ -104,7 +105,7 @@ class DashboardEndpointsTest extends V1TestCase
             'position' => 'Buyer',
             'image_url' => 'https://example.com/rater.jpg',
         ]);
-        $rep = $this->createUserWithRole('rep', [
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Ali',
             'last_name' => 'Khan',
             'email' => 'ali@example.com',
@@ -112,14 +113,14 @@ class DashboardEndpointsTest extends V1TestCase
             'position' => 'Sales Lead',
             'image_url' => 'https://example.com/rep.jpg',
         ]);
-        $olderRep = $this->createUserWithRole('rep', [
+        $olderRep = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Sara',
             'last_name' => 'Ahmed',
             'company_name' => 'Older Co',
             'position' => 'Account Executive',
             'image_url' => 'https://example.com/older-rep.jpg',
         ]);
-        $otherRater = $this->createUserWithRole('rater');
+        $otherRater = $this->createUserWithRole(Role::RATER);
 
         $this->createConnection($rep->firebase_uid, $rater->firebase_uid, now());
         $this->createConnection($olderRep->firebase_uid, $rater->firebase_uid, now()->subDay());
@@ -154,7 +155,7 @@ class DashboardEndpointsTest extends V1TestCase
 
     public function test_rep_home_returns_profile_rating_stats_and_recent_ratings(): void
     {
-        $rep = $this->authAsRole('rep', [
+        $rep = $this->authAsRole(Role::REPRESENTATIVE, [
             'first_name' => 'Ali',
             'last_name' => 'Khan',
             'email' => 'ali@example.com',
@@ -162,21 +163,21 @@ class DashboardEndpointsTest extends V1TestCase
             'position' => 'Sales Lead',
             'image_url' => 'https://example.com/rep.jpg',
         ]);
-        $rater = $this->createUserWithRole('rater', [
+        $rater = $this->createUserWithRole(Role::RATER, [
             'first_name' => 'Nora',
             'last_name' => 'Client',
             'company_name' => 'Client Co',
             'position' => 'Buyer',
             'image_url' => 'https://example.com/rater.jpg',
         ]);
-        $newestRater = $this->createUserWithRole('rater', [
+        $newestRater = $this->createUserWithRole(Role::RATER, [
             'first_name' => 'Omar',
             'last_name' => 'Buyer',
             'company_name' => 'Newest Co',
             'position' => 'Director',
             'image_url' => 'https://example.com/newest-rater.jpg',
         ]);
-        $otherRep = $this->createUserWithRole('rep');
+        $otherRep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->createRating($rater->firebase_uid, $rep->firebase_uid, 3, now()->subDay());
         $this->createRating($newestRater->firebase_uid, $rep->firebase_uid, 5, now());

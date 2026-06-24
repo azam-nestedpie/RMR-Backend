@@ -5,6 +5,7 @@ namespace App\Services\V1;
 use App\Exceptions\ApiException;
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\ConnectionRepositoryInterface;
@@ -148,21 +149,21 @@ class ConnectionService
     public function connectedUserList(User $user): Collection
     {
         $user->loadMissing('roles');
-        $role = $user->roles->first()?->name;
+        $roleId = $user->roles->first()?->id;
 
-        return $this->users->connectedUsers($user->firebase_uid, $role);
+        return $this->users->connectedUsers($user->firebase_uid, $roleId);
     }
 
     public function connectableUsers(User $user): Collection
     {
         $user->loadMissing('roles');
-        $role = $user->roles->first()?->name;
+        $roleId = $user->roles->first()?->id;
 
-        if (! $role || ! in_array($role, ['rater', 'rep'], true)) {
+        if (! $roleId || ! in_array($roleId, [Role::RATER, Role::REPRESENTATIVE], true)) {
             return collect();
         }
 
-        return $this->users->connectableUsers($user->firebase_uid, $role);
+        return $this->users->connectableUsers($user->firebase_uid, $roleId);
     }
 
     public function pendingRequests(string $firebaseUid): Collection
@@ -176,7 +177,7 @@ class ConnectionService
     public function requests(User $user): array
     {
         $user->loadMissing('roles');
-        $role = $user->roles->first()?->name;
+        $role = $user->roles->first()?->id;
 
         return $this->connections->requestsForUser($user->firebase_uid, $role);
     }
@@ -282,8 +283,8 @@ class ConnectionService
         $requester->loadMissing('roles');
         $target->loadMissing('roles');
 
-        $isRepToRater = $requester->hasRole('rep') && $target->hasRole('rater');
-        $isRaterToRep = $requester->hasRole('rater') && $target->hasRole('rep');
+        $isRepToRater = $requester->hasRole(Role::REPRESENTATIVE) && $target->hasRole(Role::RATER);
+        $isRaterToRep = $requester->hasRole(Role::RATER) && $target->hasRole(Role::REPRESENTATIVE);
 
         if (! $isRepToRater && ! $isRaterToRep) {
             throw ApiException::badRequest('Connections are only allowed between reps and raters.');
@@ -306,7 +307,7 @@ class ConnectionService
         if (
             ! $request
             || $request->status_id !== $pendingStatusId
-            || ! $user->hasRole(['manager_of_reps', 'manager_of_raters'])
+            || ! $user->hasRole([Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS])
             || ! $user->manages($request->target_user_firebase_uid)
         ) {
             throw ApiException::notFound('Connection request not found.');

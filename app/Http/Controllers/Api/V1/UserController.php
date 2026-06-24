@@ -65,7 +65,7 @@ class UserController extends Controller
     public function show(Request $request, string $userUid): JsonResponse
     {
         try {
-            $currentRole = $request->user()->loadMissing('roles')->roles->first()?->name;
+            $currentRole = $request->user()->loadMissing('roles')->roles->first()?->id;
 
             $user = $this->users->show($userUid, $currentRole);
 
@@ -95,7 +95,7 @@ class UserController extends Controller
     {
         try {
             $user = $request->user();
-            $currentRole = $user->loadMissing('roles')->roles->first()?->name;
+            $currentRole = $user->loadMissing('roles')->roles->first()?->id;
 
             $results = $this->users->search(
                 $request->validated(),

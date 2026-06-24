@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class AuthTest extends V1TestCase
 {
     public function test_user_can_login_with_local_password(): void
     {
-        $user = $this->createUserWithRole('rater', [
+        $user = $this->createUserWithRole(Role::RATER, [
             'email' => 'test@example.com',
             'password' => Hash::make('secret123'),
         ]);
@@ -21,14 +22,14 @@ class AuthTest extends V1TestCase
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.firebase_uid', $user->firebase_uid)
             ->assertJsonPath('data.email', 'test@example.com')
-            ->assertJsonPath('data.role.name', 'rater')
+            ->assertJsonPath('data.role.name', 'Rater')
             ->assertJsonPath('data.first_name', $user->first_name)
             ->assertJsonPath('data.token', fn ($v) => is_string($v) && strlen($v) > 0);
     }
 
     public function test_login_fails_with_wrong_password(): void
     {
-        $this->createUserWithRole('rater', [
+        $this->createUserWithRole(Role::RATER, [
             'email' => 'test@example.com',
             'password' => Hash::make('correctpass'),
         ]);
@@ -43,7 +44,7 @@ class AuthTest extends V1TestCase
 
     public function test_blocked_user_cannot_login(): void
     {
-        $this->createUserWithRole('rater', [
+        $this->createUserWithRole(Role::RATER, [
             'email' => 'blocked@example.com',
             'password' => Hash::make('password'),
             'is_blocked' => true,
@@ -59,7 +60,7 @@ class AuthTest extends V1TestCase
 
     public function test_deleted_user_cannot_login(): void
     {
-        $this->createUserWithRole('rater', [
+        $this->createUserWithRole(Role::RATER, [
             'email' => 'deleted@example.com',
             'password' => Hash::make('password'),
             'is_deleted' => true,
@@ -82,7 +83,7 @@ class AuthTest extends V1TestCase
 
     public function test_authenticated_user_can_logout(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
 
         $this->postJson('/api/v1/auth/logout')
             ->assertOk()
@@ -93,7 +94,7 @@ class AuthTest extends V1TestCase
 
     public function test_migrated_user_can_set_password(): void
     {
-        $user = $this->authAsRole('rater', ['password' => null]);
+        $user = $this->authAsRole(Role::RATER, ['password' => null]);
 
         $this->postJson('/api/v1/auth/set-password', [
             'password' => 'NewPass123!',
@@ -105,7 +106,7 @@ class AuthTest extends V1TestCase
 
     public function test_user_cannot_set_password_twice(): void
     {
-        $this->authAsRole('rater', ['password' => Hash::make('existing-password')]);
+        $this->authAsRole(Role::RATER, ['password' => Hash::make('existing-password')]);
 
         $this->postJson('/api/v1/auth/set-password', [
             'password' => 'AnotherPass123!',
@@ -117,7 +118,7 @@ class AuthTest extends V1TestCase
 
     public function test_user_can_change_password(): void
     {
-        $user = $this->authAsRole('rater', ['password' => Hash::make('current-password')]);
+        $user = $this->authAsRole(Role::RATER, ['password' => Hash::make('current-password')]);
 
         $this->postJson('/api/v1/auth/change-password', [
             'current_password' => 'current-password',
@@ -133,7 +134,7 @@ class AuthTest extends V1TestCase
 
     public function test_change_password_fails_with_wrong_current_password(): void
     {
-        $this->authAsRole('rater', ['password' => Hash::make('current-password')]);
+        $this->authAsRole(Role::RATER, ['password' => Hash::make('current-password')]);
 
         $this->postJson('/api/v1/auth/change-password', [
             'current_password' => 'wrong-password',
@@ -146,7 +147,7 @@ class AuthTest extends V1TestCase
 
     public function test_change_password_fails_when_new_password_same_as_current(): void
     {
-        $this->authAsRole('rater', ['password' => Hash::make('Str0ng!Pass')]);
+        $this->authAsRole(Role::RATER, ['password' => Hash::make('Str0ng!Pass')]);
 
         $this->postJson('/api/v1/auth/change-password', [
             'current_password' => 'Str0ng!Pass',
@@ -159,7 +160,7 @@ class AuthTest extends V1TestCase
 
     public function test_change_password_fails_without_confirmation(): void
     {
-        $this->authAsRole('rater', ['password' => Hash::make('current-password')]);
+        $this->authAsRole(Role::RATER, ['password' => Hash::make('current-password')]);
 
         $this->postJson('/api/v1/auth/change-password', [
             'current_password' => 'current-password',
@@ -181,7 +182,7 @@ class AuthTest extends V1TestCase
 
     public function test_change_password_requires_strong_password(): void
     {
-        $this->authAsRole('rater', ['password' => Hash::make('current-password')]);
+        $this->authAsRole(Role::RATER, ['password' => Hash::make('current-password')]);
 
         $this->postJson('/api/v1/auth/change-password', [
             'current_password' => 'current-password',

@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
+    public const RATER = 1;
+
+    public const REPRESENTATIVE = 2;
+
+    public const MANAGER_OF_RATERS = 3;
+
+    public const MANAGER_OF_REPRESENTATIVES = 4;
+
     protected $fillable = [
         'name',
         'description',

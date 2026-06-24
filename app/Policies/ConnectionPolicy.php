@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -54,26 +55,26 @@ class ConnectionPolicy
 
     private function isParticipant(User $user): bool
     {
-        return $user->hasRole(['rep', 'rater']);
+        return $user->hasRole([Role::REPRESENTATIVE, Role::RATER]);
     }
 
     private function isManager(User $user): bool
     {
-        return $user->hasRole(['manager_of_reps', 'manager_of_raters']);
+        return $user->hasRole([Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS]);
     }
 
     private function managerOwnsRole(User $manager, User $member): bool
     {
-        return ($manager->hasRole('manager_of_reps') && $member->hasRole('rep'))
-            || ($manager->hasRole('manager_of_raters') && $member->hasRole('rater'));
+        return ($manager->hasRole(Role::MANAGER_OF_REPRESENTATIVES) && $member->hasRole(Role::REPRESENTATIVE))
+            || ($manager->hasRole(Role::MANAGER_OF_RATERS) && $member->hasRole(Role::RATER));
     }
 
     private function isParticipantPair(User $user, User $target): bool
     {
         return $this->isParticipant($user)
             && $this->isParticipant($target)
-            && (($user->hasRole('rep') && $target->hasRole('rater'))
-                || ($user->hasRole('rater') && $target->hasRole('rep')));
+            && (($user->hasRole(Role::REPRESENTATIVE) && $target->hasRole(Role::RATER))
+                || ($user->hasRole(Role::RATER) && $target->hasRole(Role::REPRESENTATIVE)));
     }
 
     private function canRespondToRequest(User $user, ConnectionRequest $request): bool

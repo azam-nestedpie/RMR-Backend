@@ -56,15 +56,15 @@ class UserRepositoryTest extends TestCase
         $jane = User::factory()->create(['first_name' => 'Jane', 'last_name' => 'Smith']);
         $other = User::factory()->create(['first_name' => 'Alice']);
 
-        $repRoleId = Role::idByName('rep');
+        $repRoleId = Role::REPRESENTATIVE;
         $john->roles()->attach($repRoleId, ['created_at' => now(), 'updated_at' => now()]);
         $jane->roles()->attach($repRoleId, ['created_at' => now(), 'updated_at' => now()]);
 
-        $meRole = $me->loadMissing('roles')->roles->first()?->name;
+        $meRole = $me->loadMissing('roles')->roles->first()?->id;
 
         $results = $this->repo->search([
             'first_name' => 'jo',
-            'role' => 'rep',
+            'role' => (string) $repRoleId,
         ], $me->firebase_uid, $meRole);
 
         $uids = collect($results->items())->pluck('firebase_uid')->all();

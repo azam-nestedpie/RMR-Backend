@@ -25,7 +25,7 @@ class AuthorizationMiddlewareTest extends TestCase
 
     public function test_role_middleware_rejects_unauthenticated_requests(): void
     {
-        $response = (new RoleMiddleware)->handle($this->request(), fn () => response()->json(['passed' => true]), 'rater');
+        $response = (new RoleMiddleware)->handle($this->request(), fn () => response()->json(['passed' => true]), (string) Role::RATER);
 
         $this->assertSame(401, $response->getStatusCode());
         $this->assertSame('UNAUTHENTICATED', $response->getData(true)['error']);
@@ -34,9 +34,9 @@ class AuthorizationMiddlewareTest extends TestCase
     public function test_role_middleware_rejects_wrong_role(): void
     {
         $user = User::factory()->create();
-        $this->attachRole($user, 'rep');
+        $this->attachRole($user, Role::REPRESENTATIVE);
 
-        $response = (new RoleMiddleware)->handle($this->request($user), fn () => response()->json(['passed' => true]), 'rater');
+        $response = (new RoleMiddleware)->handle($this->request($user), fn () => response()->json(['passed' => true]), (string) Role::RATER);
 
         $this->assertSame(403, $response->getStatusCode());
         $this->assertSame('FORBIDDEN', $response->getData(true)['error']);
@@ -45,9 +45,9 @@ class AuthorizationMiddlewareTest extends TestCase
     public function test_role_middleware_allows_valid_role(): void
     {
         $user = User::factory()->create();
-        $this->attachRole($user, 'rater');
+        $this->attachRole($user, Role::RATER);
 
-        $response = (new RoleMiddleware)->handle($this->request($user), fn () => response()->json(['passed' => true]), 'rater');
+        $response = (new RoleMiddleware)->handle($this->request($user), fn () => response()->json(['passed' => true]), (string) Role::RATER);
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertTrue($response->getData(true)['passed']);
@@ -64,7 +64,7 @@ class AuthorizationMiddlewareTest extends TestCase
     public function test_permission_middleware_rejects_missing_permission(): void
     {
         $user = User::factory()->create();
-        $this->attachRole($user, 'rep');
+        $this->attachRole($user, Role::REPRESENTATIVE);
 
         $response = (new CheckPermission)->handle($this->request($user), fn () => response()->json(['passed' => true]), 'ratings.submit');
 
@@ -75,7 +75,7 @@ class AuthorizationMiddlewareTest extends TestCase
     public function test_permission_middleware_allows_permission(): void
     {
         $user = User::factory()->create();
-        $this->attachRole($user, 'rater');
+        $this->attachRole($user, Role::RATER);
 
         $response = (new CheckPermission)->handle($this->request($user), fn () => response()->json(['passed' => true]), 'ratings.submit');
 
@@ -110,9 +110,8 @@ class AuthorizationMiddlewareTest extends TestCase
         $this->assertTrue($response->getData(true)['passed']);
     }
 
-    private function attachRole(User $user, string $roleName): void
+    private function attachRole(User $user, int $roleId): void
     {
-        $roleId = Role::idByName($roleName);
         $user->roles()->attach($roleId, [
             'created_by' => $user->firebase_uid,
             'updated_by' => $user->firebase_uid,

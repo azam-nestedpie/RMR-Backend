@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use App\Services\Migration\ConnectionsMigrationService;
 use App\Services\Migration\ExternalUsersMigrationService;
 use App\Services\Migration\NotificationsMigrationService;
@@ -20,7 +21,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_all_dispatches_each_collection(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
 
         $this->instance(UsersMigrationService::class, $this->migrationMock(UsersMigrationService::class));
         $this->instance(ExternalUsersMigrationService::class, $this->migrationMock(ExternalUsersMigrationService::class));
@@ -46,7 +47,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_users_is_versioned_and_validation_safe(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $mock = $this->migrationMock(UsersMigrationService::class);
         $this->instance(UsersMigrationService::class, $mock);
 
@@ -60,7 +61,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_external_users_returns_success(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $this->instance(ExternalUsersMigrationService::class, $this->migrationMock(ExternalUsersMigrationService::class));
 
         $this->postJson('/api/v1/migration/external-users', [
@@ -72,7 +73,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_requests_returns_success(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $this->instance(RequestsMigrationService::class, $this->migrationMock(RequestsMigrationService::class));
 
         $this->postJson('/api/v1/migration/requests', [
@@ -84,7 +85,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_connections_returns_success(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $this->instance(ConnectionsMigrationService::class, $this->migrationMock(ConnectionsMigrationService::class));
 
         $this->postJson('/api/v1/migration/connections', [
@@ -96,7 +97,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_ratings_returns_success(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $this->instance(RatingsMigrationService::class, $this->migrationMock(RatingsMigrationService::class));
 
         $this->postJson('/api/v1/migration/ratings', [
@@ -108,7 +109,7 @@ class MigrationEndpointsTest extends V1TestCase
 
     public function test_run_notifications_returns_success(): void
     {
-        $this->authAsRole('manager_of_reps');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
         $this->instance(NotificationsMigrationService::class, $this->migrationMock(NotificationsMigrationService::class));
 
         $this->postJson('/api/v1/migration/notifications', [

@@ -11,10 +11,10 @@ class RolesPermissionsSeeder extends Seeder
     {
         // ── 1. Roles ─────────────────────────────────────────────────────────
         $roles = [
-            ['id' => 1, 'name' => 'rater',             'description' => 'Can give ratings and manage own connections.'],
-            ['id' => 2, 'name' => 'rep',                'description' => 'Can request ratings and view own feedback.'],
-            ['id' => 3, 'name' => 'manager_of_raters',  'description' => 'Manages team of raters and views rater activity.'],
-            ['id' => 4, 'name' => 'manager_of_reps',    'description' => 'Manages team of reps and requests on-behalf.'],
+            ['id' => 1, 'name' => 'Rater',                  'description' => 'Can give ratings and manage own connections.'],
+            ['id' => 2, 'name' => 'Representative',         'description' => 'Can request ratings and view own feedback.'],
+            ['id' => 3, 'name' => 'Manager of Raters',      'description' => 'Manages team of raters and views rater activity.'],
+            ['id' => 4, 'name' => 'Manager of Representatives', 'description' => 'Manages team of reps and requests on-behalf.'],
         ];
 
         foreach ($roles as $r) {

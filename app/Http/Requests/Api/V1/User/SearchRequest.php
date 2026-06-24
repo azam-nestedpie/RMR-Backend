@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\User;
 
 use App\Http\Requests\Api\V1\V1Request;
+use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator as ValidationValidator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
@@ -31,7 +32,7 @@ class SearchRequest extends V1Request
             'position' => ['sometimes', 'string',  'max:255'],
             'address' => ['sometimes', 'string',  'max:255'],
             'industry' => ['sometimes', 'string', 'min:2', 'max:100'],
-            'role' => ['nullable', 'string', Rule::in(['rater', 'rep', 'manager_of_raters', 'manager_of_reps'])],
+            'role' => ['nullable', 'integer', Rule::in([Role::RATER, Role::REPRESENTATIVE, Role::MANAGER_OF_RATERS, Role::MANAGER_OF_REPRESENTATIVES])],
         ];
     }
 

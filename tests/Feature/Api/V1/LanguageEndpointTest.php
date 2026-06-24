@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class LanguageEndpointTest extends V1TestCase
 {
     public function test_authenticated_user_can_update_language(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
 
         $this->putJson('/api/v1/users/language', ['locale' => 'es'])
             ->assertOk()
@@ -23,7 +24,7 @@ class LanguageEndpointTest extends V1TestCase
 
     public function test_user_preference_persists_in_database(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
 
         $this->putJson('/api/v1/users/language', ['locale' => 'pt']);
 
@@ -41,7 +42,7 @@ class LanguageEndpointTest extends V1TestCase
 
     public function test_invalid_locale_returns_validation_error(): void
     {
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
 
         $this->putJson('/api/v1/users/language', ['locale' => 'fr'])
             ->assertStatus(422)
@@ -50,7 +51,7 @@ class LanguageEndpointTest extends V1TestCase
 
     public function test_missing_locale_returns_validation_error(): void
     {
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
 
         $this->putJson('/api/v1/users/language', [])
             ->assertStatus(422)
@@ -59,7 +60,7 @@ class LanguageEndpointTest extends V1TestCase
 
     public function test_rating_questions_honor_user_locale(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
         $this->assignIndustry($user, 'Marketing');
 
         $this->putJson('/api/v1/users/language', ['locale' => 'es']);

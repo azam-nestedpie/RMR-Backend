@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\V1\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum', 'password.set', 'role:manager_of_reps,manager_of_raters'])
+Route::middleware(['auth:sanctum', 'password.set', 'role:3,4'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
@@ -12,14 +12,14 @@ Route::middleware(['auth:sanctum', 'password.set', 'role:manager_of_reps,manager
         Route::get('home', [DashboardController::class, 'home'])->name('home');
     });
 
-Route::middleware(['auth:sanctum', 'password.set', 'role:rater'])
+Route::middleware(['auth:sanctum', 'password.set', 'role:1'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
         Route::get('rater-home', [DashboardController::class, 'raterHome'])->name('rater-home');
     });
 
-Route::middleware(['auth:sanctum', 'password.set', 'role:rep'])
+Route::middleware(['auth:sanctum', 'password.set', 'role:2'])
     ->prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {

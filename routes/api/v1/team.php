@@ -13,7 +13,7 @@ Route::middleware(['auth:sanctum', 'password.set'])->prefix('team')->name('team.
     Route::delete('{memberUid}', [TeamController::class, 'destroy'])->name('destroy');
 });
 
-Route::middleware(['auth:sanctum', 'password.set', 'role:manager_of_reps,manager_of_raters'])
+Route::middleware(['auth:sanctum', 'password.set', 'role:3,4'])
     ->prefix('team-members')
     ->name('team-members.')
     ->group(function () {

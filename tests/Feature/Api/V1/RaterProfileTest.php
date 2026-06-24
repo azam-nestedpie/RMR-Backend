@@ -3,13 +3,14 @@
 namespace Tests\Feature\Api\V1;
 
 use App\Models\Rating;
+use App\Models\Role;
 
 class RaterProfileTest extends V1TestCase
 {
     public function test_rep_can_view_rater_profile(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater', [
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER, [
             'first_name' => 'David',
             'last_name' => 'Smith',
             'company_name' => 'XYZ Pharma',
@@ -49,8 +50,8 @@ class RaterProfileTest extends V1TestCase
 
     public function test_rep_gets_403_if_not_rep(): void
     {
-        $rater = $this->authAsRole('rater');
-        $targetRater = $this->createUserWithRole('rater');
+        $rater = $this->authAsRole(Role::RATER);
+        $targetRater = $this->createUserWithRole(Role::RATER);
 
         $this->getJson('/api/v1/raters/'.$targetRater->firebase_uid)
             ->assertForbidden();
@@ -58,7 +59,7 @@ class RaterProfileTest extends V1TestCase
 
     public function test_returns_404_if_rater_not_found(): void
     {
-        $this->authAsRole('rep');
+        $this->authAsRole(Role::REPRESENTATIVE);
 
         $this->getJson('/api/v1/raters/non-existent-uid')
             ->assertNotFound()
@@ -68,9 +69,9 @@ class RaterProfileTest extends V1TestCase
 
     public function test_returns_only_ratings_from_this_rater_to_logged_in_rep(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
-        $otherRater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
+        $otherRater = $this->createUserWithRole(Role::RATER);
 
         $ratingFromThisRater = Rating::create([
             'firebase_uuid' => 'rating-from-this-rater',
@@ -96,14 +97,14 @@ class RaterProfileTest extends V1TestCase
 
         $response->assertOk();
         $response->assertJsonPath('data.ratings.total', 1);
-        $response->assertJsonPath('data.ratings.data.0.uuid', $ratingFromThisRater->firebase_uuid);
+        $response->assertJsonPath('data.ratings.data.0.rating_id', $ratingFromThisRater->firebase_uuid);
         $response->assertJsonPath('data.ratings.data.0.rating', 4.5);
     }
 
     public function test_ratings_include_me_label(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater', [
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER, [
             'first_name' => 'David',
             'last_name' => 'Smith',
         ]);
@@ -122,15 +123,15 @@ class RaterProfileTest extends V1TestCase
             ->assertOk()
             ->assertJsonPath('data.ratings.data.0.full_name', 'David Smith (Me)')
             ->assertJsonPath('data.ratings.data.0.rating', 5)
-            ->assertJsonStructure(['data' => ['ratings' => ['data' => [0 => ['uuid', 'rating', 'rated_at', 'image_url', 'full_name']]]]])
+            ->assertJsonStructure(['data' => ['ratings' => ['data' => [0 => ['rating_id', 'rating', 'rated_at', 'image_url', 'full_name']]]]])
             ->assertJsonMissingPath('data.ratings.data.0.comment')
             ->assertJsonMissingPath('data.ratings.data.0.id');
     }
 
     public function test_ratings_ordered_by_latest_first(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $oldRating = Rating::create([
             'firebase_uuid' => 'old-rating-uuid',
@@ -154,14 +155,14 @@ class RaterProfileTest extends V1TestCase
 
         $this->getJson('/api/v1/raters/'.$rater->firebase_uid)
             ->assertOk()
-            ->assertJsonPath('data.ratings.data.0.uuid', $newRating->firebase_uuid)
-            ->assertJsonPath('data.ratings.data.1.uuid', $oldRating->firebase_uuid);
+            ->assertJsonPath('data.ratings.data.0.rating_id', $newRating->firebase_uuid)
+            ->assertJsonPath('data.ratings.data.1.rating_id', $oldRating->firebase_uuid);
     }
 
     public function test_returns_empty_ratings_when_no_ratings_from_this_rater(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->getJson('/api/v1/raters/'.$rater->firebase_uid)
             ->assertOk()

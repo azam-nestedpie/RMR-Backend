@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\V1;
 
 use App\Models\Notification;
+use App\Models\Role;
 use App\Services\V1\NotificationService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Mockery;
@@ -17,7 +18,7 @@ class NotificationEndpointsTest extends V1TestCase
 
     public function test_index_returns_notifications_and_meta(): void
     {
-        $authUser = $this->authAsRole('rater');
+        $authUser = $this->authAsRole(Role::RATER);
         $notification = new Notification([
             'firebase_uuid' => 'note-1',
             'message' => 'You received a rating',

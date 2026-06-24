@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\V1;
 
 use App\Models\ConnectionRequest;
 use App\Models\RatingRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -16,8 +17,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 {
     public function test_manager_connection_request_builds_team_when_member_accepts(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uid' => $rep->firebase_uid,
@@ -45,9 +46,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rep_manager_can_send_team_requests_to_multiple_reps(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $firstRep = $this->createUserWithRole('rep');
-        $secondRep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $firstRep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $secondRep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uids' => [$firstRep->firebase_uid, $secondRep->firebase_uid],
@@ -70,9 +71,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rater_manager_can_send_team_requests_to_multiple_raters(): void
     {
-        $manager = $this->authAsRole('manager_of_raters');
-        $firstRater = $this->createUserWithRole('rater');
-        $secondRater = $this->createUserWithRole('rater');
+        $manager = $this->authAsRole(Role::MANAGER_OF_RATERS);
+        $firstRater = $this->createUserWithRole(Role::RATER);
+        $secondRater = $this->createUserWithRole(Role::RATER);
 
         $this->postJson('/api/v1/team', [
             'target_uids' => [$firstRater->firebase_uid, $secondRater->firebase_uid],
@@ -89,8 +90,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_team_member_accepts_bulk_team_request_and_joins_manager_team(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uids' => [$rep->firebase_uid],
@@ -113,8 +114,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_team_member_can_reject_bulk_team_request(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $response = $this->postJson('/api/v1/team', [
             'target_uids' => [$rep->firebase_uid],
@@ -141,8 +142,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rep_manager_cannot_send_team_request_to_raters(): void
     {
-        $this->authAsRole('manager_of_reps');
-        $rater = $this->createUserWithRole('rater');
+        $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->postJson('/api/v1/team', [
             'target_uids' => [$rater->firebase_uid],
@@ -153,9 +154,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_manager_can_accept_connection_request_on_behalf_of_team_member(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
         $this->addTeamMember($manager, $rep);
 
         $request = ConnectionRequest::create([
@@ -182,8 +183,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_team_member_can_cancel_own_connection_request(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $response = $this->postJson('/api/v1/connections/request', [
             'target_uid' => $rater->firebase_uid,
@@ -204,9 +205,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_manager_can_send_rating_request_on_behalf_of_rep(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->addTeamMember($manager, $rep);
 
@@ -233,8 +234,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rep_can_cancel_own_pending_rating_request(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->createActiveConnection($rep->firebase_uid, $rater->firebase_uid, $rep->firebase_uid);
 
@@ -257,8 +258,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rep_can_send_rating_request_to_rater_and_rater_can_submit_rating(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->createActiveConnection($rep->firebase_uid, $rater->firebase_uid, $rep->firebase_uid);
 
@@ -300,8 +301,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rater_cannot_send_rating_request_to_rep(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         $this->createActiveConnection($rep->firebase_uid, $rater->firebase_uid, $rater->firebase_uid);
 
@@ -314,9 +315,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_pending_rating_requests_include_rep_and_rater_profiles(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->authAsRole('rater');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->authAsRole(Role::RATER);
 
         RatingRequest::create([
             'firebase_uuid' => (string) Str::uuid(),
@@ -338,13 +339,13 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
             ->assertOk()
             ->assertJsonPath('data.0.rep.firebase_uid', $rep->firebase_uid)
             ->assertJsonPath('data.0.rater.firebase_uid', $rater->firebase_uid)
-            ->assertJsonPath('data.0.rater.role.name', 'rater');
+            ->assertJsonPath('data.0.rater.role.name', 'Rater');
     }
 
     public function test_rating_requests_endpoint_only_returns_pending_requests(): void
     {
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->authAsRole('rater');
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->authAsRole(Role::RATER);
 
         foreach (['pending', 'accepted', 'rejected', 'cancelled'] as $status) {
             RatingRequest::create([
@@ -378,9 +379,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rating_request_obeys_thirty_day_rule_per_rep_and_rater(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         $this->addTeamMember($manager, $rep);
 
@@ -400,9 +401,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rater_submission_for_manager_request_is_stored_against_rep(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->authAsRole('rater');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
@@ -445,9 +446,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rater_can_submit_accepted_rating_request(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $rep = $this->createUserWithRole('rep');
-        $rater = $this->authAsRole('rater');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
@@ -485,9 +486,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rep_cannot_submit_rating_for_rater(): void
     {
-        $manager = $this->createUserWithRole('manager_of_reps');
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $manager = $this->createUserWithRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $ratingRequest = RatingRequest::create([
@@ -526,9 +527,9 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_rating_request_accept_endpoint_is_removed(): void
     {
-        $manager = $this->authAsRole('manager_of_raters');
-        $rater = $this->createUserWithRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $manager = $this->authAsRole(Role::MANAGER_OF_RATERS);
+        $rater = $this->createUserWithRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $this->addTeamMember($manager, $rater);
 
         $this->createActiveConnection($rep->firebase_uid, $rater->firebase_uid, $manager->firebase_uid);
@@ -560,12 +561,12 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_team_endpoint_returns_members_linked_with_manager(): void
     {
-        $manager = $this->authAsRole('manager_of_reps');
-        $member = $this->createUserWithRole('rep', [
+        $manager = $this->authAsRole(Role::MANAGER_OF_REPRESENTATIVES);
+        $member = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Linked',
             'last_name' => 'Member',
         ]);
-        $otherRep = $this->createUserWithRole('rep');
+        $otherRep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $this->addTeamMember($manager, $member);
 
         $this->getJson('/api/v1/team')
@@ -610,7 +611,7 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
     public function test_profile_image_upload_saves_public_url(): void
     {
         Storage::fake('public');
-        $this->authAsRole('rater');
+        $this->authAsRole(Role::RATER);
 
         $response = $this->post('/api/v1/upload/image', [
             'image' => UploadedFile::fake()->image('avatar.jpg'),
@@ -624,8 +625,8 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
     public function test_search_uses_named_dynamic_filters(): void
     {
-        $this->authAsRole('rater');
-        $target = $this->createUserWithRole('rep', [
+        $this->authAsRole(Role::RATER);
+        $target = $this->createUserWithRole(Role::REPRESENTATIVE, [
             'first_name' => 'Jordan',
             'company_name' => 'Acme Medical',
             'position' => 'Account Executive',

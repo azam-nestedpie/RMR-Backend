@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\V1;
 
 use App\Models\Rating;
+use App\Models\Role;
 use App\Models\SalesRepUser;
 use Illuminate\Support\Facades\DB;
 
@@ -10,9 +11,9 @@ class RatingTest extends V1TestCase
 {
     public function test_user_can_submit_rating(): void
     {
-        $sender = $this->authAsRole('rater');
+        $sender = $this->authAsRole(Role::RATER);
         $this->assignIndustry($sender, 'Marketing');
-        $recipient = $this->createUserWithRole('rep', ['password' => 'secret']);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $this->postJson('/api/v1/ratings', [
@@ -33,9 +34,9 @@ class RatingTest extends V1TestCase
 
     public function test_rater_can_submit_multiple_ratings_for_same_rep(): void
     {
-        $rater = $this->authAsRole('rater');
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
-        $rep = $this->createUserWithRole('rep', ['password' => 'secret']);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
         $payload = [
             'rep_uid' => $rep->firebase_uid,
@@ -55,8 +56,8 @@ class RatingTest extends V1TestCase
 
     public function test_rep_cannot_submit_rating_for_rater_with_rater_uid(): void
     {
-        $sender = $this->authAsRole('rep');
-        $recipient = $this->createUserWithRole('rater', ['password' => 'secret']);
+        $sender = $this->authAsRole(Role::REPRESENTATIVE);
+        $recipient = $this->createUserWithRole(Role::RATER, ['password' => 'secret']);
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $this->postJson('/api/v1/ratings', [
@@ -76,7 +77,7 @@ class RatingTest extends V1TestCase
 
     public function test_user_cannot_rate_themselves(): void
     {
-        $user = $this->authAsRole('rater');
+        $user = $this->authAsRole(Role::RATER);
         $this->assignIndustry($user, 'Marketing');
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
 
@@ -92,9 +93,9 @@ class RatingTest extends V1TestCase
 
     public function test_rating_recalculates_rep_profile_average(): void
     {
-        $sender = $this->authAsRole('rater');
+        $sender = $this->authAsRole(Role::RATER);
         $this->assignIndustry($sender, 'Marketing');
-        $recipient = $this->createUserWithRole('rep', ['password' => 'secret']);
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
         $questionThirtyId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
         $questionFortyId = (int) \DB::table('rating_questions')->where('question_code', 40)->value('id');
 
@@ -114,8 +115,8 @@ class RatingTest extends V1TestCase
 
     public function test_rep_can_view_received_ratings(): void
     {
-        $rep = $this->authAsRole('rep');
-        $rater = $this->createUserWithRole('rater');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $rater = $this->createUserWithRole(Role::RATER);
 
         Rating::create([
             'firebase_uuid' => (string) \Str::uuid(),
@@ -136,8 +137,8 @@ class RatingTest extends V1TestCase
 
     public function test_rater_can_view_given_ratings_from_combined_index(): void
     {
-        $rater = $this->authAsRole('rater');
-        $rep = $this->createUserWithRole('rep');
+        $rater = $this->authAsRole(Role::RATER);
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
 
         Rating::create([
             'firebase_uuid' => (string) \Str::uuid(),
@@ -158,8 +159,8 @@ class RatingTest extends V1TestCase
 
     public function test_rating_requires_valid_question_ids(): void
     {
-        $recipient = $this->createUserWithRole('rep', ['password' => 'secret']);
-        $this->authAsRole('rater');
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $this->authAsRole(Role::RATER);
 
         $this->postJson('/api/v1/ratings', [
             'rep_uid' => $recipient->firebase_uid,
@@ -171,8 +172,8 @@ class RatingTest extends V1TestCase
 
     public function test_rating_rejects_questions_that_do_not_belong_to_selected_industry(): void
     {
-        $recipient = $this->createUserWithRole('rep', ['password' => 'secret']);
-        $rater = $this->authAsRole('rater');
+        $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $contractorOnlyQuestionId = (int) DB::table('rating_questions')->where('question_code', 110)->value('id');
 
@@ -188,9 +189,9 @@ class RatingTest extends V1TestCase
 
     public function test_rater_can_edit_rating_within_twenty_four_hours(): void
     {
-        $rater = $this->authAsRole('rater');
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
-        $rep = $this->createUserWithRole('rep');
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $questionThirtyId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
         $questionFortyId = (int) DB::table('rating_questions')->where('question_code', 40)->value('id');
 
@@ -257,9 +258,9 @@ class RatingTest extends V1TestCase
 
     public function test_rater_cannot_edit_rating_after_twenty_four_hours(): void
     {
-        $rater = $this->authAsRole('rater');
+        $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
-        $rep = $this->createUserWithRole('rep');
+        $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $rating = Rating::create([

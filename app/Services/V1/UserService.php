@@ -4,6 +4,7 @@ namespace App\Services\V1;
 
 use App\Models\Connection;
 use App\Models\ConnectionRequest;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -36,9 +37,9 @@ class UserService
             'industries',
         ]);
 
-        $role = $user->roles->pluck('name')->first();
+        $role = $user->roles->pluck('id')->first();
 
-        if ($role === 'rep') {
+        if ($role === Role::REPRESENTATIVE) {
             $user->load('salesRepProfile');
         }
 
@@ -103,9 +104,9 @@ class UserService
             'industries',
         ]);
 
-        $role = $user->roles->pluck('name')->first();
+        $roleId = $user->roles->first()?->id;
 
-        if ($role === 'rep') {
+        if ($roleId === Role::REPRESENTATIVE) {
             $user->load('salesRepProfile');
         }
 
@@ -115,7 +116,7 @@ class UserService
     /**
      * SHOW USER
      */
-    public function show(string $userUid, ?string $currentUserRole): ?User
+    public function show(string $userUid, ?int $currentUserRole): ?User
     {
         $user = User::where('firebase_uid', $userUid)
             ->with([
@@ -129,30 +130,30 @@ class UserService
             return null;
         }
 
-        $targetRole = $user->roles->pluck('name')->first();
+        $targetRole = $user->roles->first()?->id;
 
         if (! $this->canViewRole($currentUserRole, $targetRole)) {
             return null;
         }
 
-        if ($targetRole === 'rep') {
+        if ($targetRole === Role::REPRESENTATIVE) {
             $user->load('salesRepProfile');
         }
 
         return $user;
     }
 
-    private function canViewRole(?string $currentUserRole, ?string $targetUserRole): bool
+    private function canViewRole(?int $currentUserRole, ?int $targetUserRole): bool
     {
         if (! $targetUserRole) {
             return true;
         }
 
         $allowedRoles = [
-            'rater' => ['rep'],
-            'rep' => ['rater'],
-            'manager_of_reps' => ['rater', 'rep'],
-            'manager_of_raters' => ['rater', 'rep'],
+            Role::RATER => [Role::REPRESENTATIVE],
+            Role::REPRESENTATIVE => [Role::RATER],
+            Role::MANAGER_OF_REPRESENTATIVES => [Role::RATER, Role::REPRESENTATIVE],
+            Role::MANAGER_OF_RATERS => [Role::RATER, Role::REPRESENTATIVE],
         ];
 
         if (! isset($allowedRoles[$currentUserRole])) {
@@ -165,7 +166,7 @@ class UserService
     /**
      * SEARCH USERS
      */
-    public function search(array $filters, string $excludeUid, ?string $currentUserRole): LengthAwarePaginator
+    public function search(array $filters, string $excludeUid, ?int $currentUserRole): LengthAwarePaginator
     {
         Log::info('User search requested', [
             'filters' => $filters,

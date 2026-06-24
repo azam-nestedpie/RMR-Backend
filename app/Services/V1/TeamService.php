@@ -4,6 +4,7 @@ namespace App\Services\V1;
 
 use App\Exceptions\ApiException;
 use App\Models\ManagerTeamMember;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\User;
@@ -23,7 +24,7 @@ class TeamService
 
     public function send(User $manager, array $targetUids): array
     {
-        if (! $manager->hasPermission('send connection request') || ! $manager->hasRole(['manager_of_reps', 'manager_of_raters'])) {
+        if (! $manager->hasPermission('send connection request') || ! $manager->hasRole([Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS])) {
             throw ApiException::forbidden('You do not have permission to perform this action.');
         }
 
@@ -170,7 +171,7 @@ class TeamService
 
     public function members(User $manager): Collection
     {
-        if (! $manager->hasRole(['manager_of_reps', 'manager_of_raters'])) {
+        if (! $manager->hasRole([Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS])) {
             throw ApiException::forbidden('Only managers can view team members.');
         }
 
@@ -183,7 +184,7 @@ class TeamService
 
     public function destroy(User $manager, string $memberUid): void
     {
-        if (! $manager->hasRole(['manager_of_reps', 'manager_of_raters'])) {
+        if (! $manager->hasRole([Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS])) {
             throw ApiException::forbidden('Only managers can remove team members.');
         }
 
@@ -242,7 +243,7 @@ class TeamService
         }
 
         $teamUuid = $this->generateUniqueUuid();
-        $managerRoleId = $manager->roles()->whereIn('name', ['manager_of_reps', 'manager_of_raters'])->value('roles.id');
+        $managerRoleId = $manager->roles()->whereIn('id', [Role::MANAGER_OF_REPRESENTATIVES, Role::MANAGER_OF_RATERS])->value('roles.id');
 
         Team::create([
             'firebase_uuid' => $teamUuid,
@@ -300,8 +301,8 @@ class TeamService
         }
 
         if (
-            ! (($manager->hasRole('manager_of_reps') && $target->hasRole('rep'))
-                || ($manager->hasRole('manager_of_raters') && $target->hasRole('rater')))
+            ! (($manager->hasRole(Role::MANAGER_OF_REPRESENTATIVES) && $target->hasRole(Role::REPRESENTATIVE))
+                || ($manager->hasRole(Role::MANAGER_OF_RATERS) && $target->hasRole(Role::RATER)))
         ) {
             throw ApiException::badRequest('Team invitations are only allowed between managers and their team role.');
         }

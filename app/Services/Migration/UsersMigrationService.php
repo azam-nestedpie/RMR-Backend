@@ -2,6 +2,7 @@
 
 namespace App\Services\Migration;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class UsersMigrationService extends BaseMigrationService
@@ -35,7 +36,7 @@ class UsersMigrationService extends BaseMigrationService
             throw new \InvalidArgumentException("User [{$firebaseUid}] missing email.");
         }
 
-        $role = ($doc['isRepresentative'] ?? false) === true ? 'rep' : 'rater';
+        $roleId = ($doc['isRepresentative'] ?? false) === true ? Role::REPRESENTATIVE : Role::RATER;
         $address = $doc['address'] ?? [];
         $now = now();
 
@@ -59,7 +60,6 @@ class UsersMigrationService extends BaseMigrationService
         ]);
 
         // Assign role in user_roles table
-        $roleId = DB::table('roles')->where('name', $role)->value('id');
         if ($roleId) {
             DB::table('user_roles')->insertOrIgnore([
                 'user_firebase_uid' => $firebaseUid,
@@ -105,7 +105,7 @@ class UsersMigrationService extends BaseMigrationService
         }
 
         // Create sales_rep_users record for reps with stats
-        if ($role === 'rep') {
+        if ($roleId === Role::REPRESENTATIVE) {
             DB::table('sales_rep_users')->insertOrIgnore([
                 'user_firebase_uid' => $firebaseUid,
                 'avg_rating' => isset($doc['avgRating']) ? (float) $doc['avgRating'] : 0.00,

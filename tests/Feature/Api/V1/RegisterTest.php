@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,19 +19,19 @@ test('register creates a local user with the requested role', function () {
         'email' => 'newuser@example.com',
         'password' => 'SecretPass123!',
         'password_confirmation' => 'SecretPass123!',
-        'role' => 'rep',
+        'role' => Role::REPRESENTATIVE,
     ]);
 
     $response->assertCreated()
         ->assertJsonPath('success', true)
         ->assertJsonPath('data.email', 'newuser@example.com')
-        ->assertJsonPath('data.role.name', 'rep');
+        ->assertJsonPath('data.role.name', 'Representative');
 
     $user = User::where('email', 'newuser@example.com')->firstOrFail();
 
     expect($user->first_name)->toBe('Azam')
         ->and(Hash::check('SecretPass123!', $user->password))->toBeTrue()
-        ->and($user->roles()->pluck('name')->all())->toBe(['rep']);
+        ->and($user->roles()->pluck('name')->all())->toBe(['Representative']);
 
     $this->assertDatabaseHas('sales_rep_users', [
         'user_firebase_uid' => $user->firebase_uid,
@@ -48,7 +49,7 @@ test('register rejects an email that already exists locally', function () {
         'email' => 'existing@example.com',
         'password' => 'SecretPass123!',
         'password_confirmation' => 'SecretPass123!',
-        'role' => 'rater',
+        'role' => Role::RATER,
     ])
         ->assertUnprocessable()
         ->assertJsonPath('success', false)

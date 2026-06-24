@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
+use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,15 +21,26 @@ abstract class V1TestCase extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
-    protected function createUserWithRole(string $role = 'rater', array $overrides = []): User
+    protected function createUserWithRole(int|string $role = Role::RATER, array $overrides = []): User
     {
+        if (is_int($role) || ctype_digit($role)) {
+            $roleId = (int) $role;
+        } else {
+            $roleId = match ($role) {
+                'rater' => Role::RATER,
+                'rep' => Role::REPRESENTATIVE,
+                'manager_of_raters' => Role::MANAGER_OF_RATERS,
+                'manager_of_reps' => Role::MANAGER_OF_REPRESENTATIVES,
+                default => DB::table('roles')->where('name', $role)->value('id'),
+            };
+        }
+
         $user = User::factory()->create(array_merge([
             'password' => bcrypt('password'),
             'is_blocked' => false,
             'is_deleted' => false,
         ], $overrides));
 
-        $roleId = DB::table('roles')->where('name', $role)->value('id');
         $user->roles()->attach($roleId, [
             'created_by' => $user->firebase_uid,
             'updated_by' => $user->firebase_uid,
@@ -39,7 +51,7 @@ abstract class V1TestCase extends TestCase
         return $user->fresh()->load('roles');
     }
 
-    protected function authAsRole(string $role = 'rater', array $overrides = []): User
+    protected function authAsRole(int|string $role = Role::RATER, array $overrides = []): User
     {
         $user = $this->createUserWithRole($role, $overrides);
         Sanctum::actingAs($user);
