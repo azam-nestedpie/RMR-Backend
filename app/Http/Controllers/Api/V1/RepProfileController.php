@@ -23,7 +23,7 @@ class RepProfileController extends Controller
 
         return (new RepProfileResource(
             $result['rep'],
-            $result['average_rating'],
+            $result['avg_rating'],
             $result['connection_status'],
             $result['ratings'],
         ))->additional(['success' => true])->response();

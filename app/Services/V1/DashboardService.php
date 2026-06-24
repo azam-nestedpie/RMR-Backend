@@ -207,7 +207,7 @@ class DashboardService
         return [
             'profile' => array_merge($this->userPayload($rep), [
                 'email' => $rep->email,
-                'average_rating' => round((float) ($stats->average_rating ?? 0), 2),
+                'avg_rating' => round((float) ($stats->average_rating ?? 0), 2),
                 'ratings_count' => (int) ($stats->ratings_count ?? 0),
             ]),
             'recent_ratings' => $this->dashboards->recentRatingsForRep($rep->firebase_uid)
@@ -320,7 +320,7 @@ class DashboardService
             'image_url' => $member->image_url,
             'company_name' => $member->company_name,
             'position' => $member->position,
-            'average_rating' => round((float) ($stats->average_rating ?? 0), 2),
+            'avg_rating' => round((float) ($stats->average_rating ?? 0), 2),
             'ratings_count' => (int) ($stats->ratings_count ?? 0),
             'trend' => $this->percentageTrend(
                 round((float) ($currentStats->average_rating ?? 0), 2),
@@ -452,7 +452,7 @@ class DashboardService
             'image_url' => $user->image_url,
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
-            'company' => $user->company_name,
+            'company_name' => $user->company_name,
             'position' => $user->position,
         ];
     }
@@ -460,7 +460,7 @@ class DashboardService
     private function connectedRepPayload(User $rep, ?object $stats): array
     {
         return array_merge($this->userPayload($rep), [
-            'average_rating' => round((float) ($stats->average_rating ?? 0), 2),
+            'avg_rating' => round((float) ($stats->average_rating ?? 0), 2),
             'ratings_count' => (int) ($stats->ratings_count ?? 0),
         ]);
     }

@@ -36,7 +36,7 @@ class RepProfileService
 
         return [
             'rep' => $rep,
-            'average_rating' => $averageRating,
+            'avg_rating' => $averageRating,
             'connection_status' => $connectionStatus,
             'ratings' => $ratings,
         ];
@@ -92,7 +92,7 @@ class RepProfileService
 
     private function getAverageRating(string $repUid): ?float
     {
-        $average = Rating::forRep($repUid)->avg('average_score');
+        $average = Rating::forRep($repUid)->avg('avg_score');
 
         return $average !== null ? round((float) $average, 2) : null;
     }

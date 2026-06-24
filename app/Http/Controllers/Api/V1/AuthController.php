@@ -40,7 +40,9 @@ class AuthController extends Controller
         } catch (FirebaseTokenException $e) {
             return $this->error($e->getMessage(), 401);
         } catch (\RuntimeException $e) {
-            return $this->error($e->getMessage(), 403);
+            $statusCode = in_array($e->getMessage(), ['Incorrect password.', 'No account found with this email.'], true) ? 401 : 403;
+
+            return $this->error($e->getMessage(), $statusCode);
         }
 
         $response = (new UserResource($result['user']))->resolve();

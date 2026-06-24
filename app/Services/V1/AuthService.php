@@ -2,6 +2,7 @@
 
 namespace App\Services\V1;
 
+use App\Exceptions\FirebaseTokenException;
 use App\Models\Address;
 use App\Models\Role;
 use App\Models\User;
@@ -65,7 +66,16 @@ class AuthService
             ];
         }
 
-        // Firebase fallback
+        // Local user exists but wrong password
+        if ($user && $user->password) {
+            Log::warning('Login failed: wrong password', [
+                'email' => $email,
+            ]);
+
+            throw new \RuntimeException('Incorrect password.');
+        }
+
+        // Firebase fallback (user may exist in Firebase but not locally yet)
         Log::info('Fallback to Firebase login', [
             'email' => $email,
         ]);
