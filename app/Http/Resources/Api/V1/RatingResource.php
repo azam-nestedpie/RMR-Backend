@@ -5,6 +5,7 @@ namespace App\Http\Resources\Api\V1;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class RatingResource extends JsonResource
 {
@@ -25,6 +26,11 @@ class RatingResource extends JsonResource
 
         $user->loadMissing('salesRepProfile');
 
+        $isFavourite = DB::table('user_favorites')
+            ->where('user_firebase_uid', $currentUser->firebase_uid)
+            ->where('favorite_user_firebase_uid', $user->firebase_uid)
+            ->exists();
+
         $data = [
             // 'rating_uuid' => $this->firebase_uuid,
             // 'average_score' => $this->average_score,
@@ -36,6 +42,7 @@ class RatingResource extends JsonResource
             'image_url' => $user->image_url,
             'company_name' => $user->company_name,
             'position' => $user->position,
+            'is_favourite' => (int) $isFavourite,
         ];
 
         if ($user->relationLoaded('salesRepProfile') && $user->salesRepProfile) {

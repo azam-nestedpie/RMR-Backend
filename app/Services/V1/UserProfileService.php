@@ -12,6 +12,7 @@ use App\Models\Status;
 use App\Models\User;
 use App\Repositories\Contracts\RatingRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class UserProfileService
 {
@@ -50,11 +51,17 @@ class UserProfileService
             ? $this->getAverageRating($targetUid)
             : null;
 
+        $isFavourite = DB::table('user_favorites')
+            ->where('user_firebase_uid', $currentUser->firebase_uid)
+            ->where('favorite_user_firebase_uid', $targetUid)
+            ->exists();
+
         return [
             'user' => $targetUser,
             'connection_status' => $connectionStatus,
             'ratings' => $ratings,
             'average_rating' => $averageRating,
+            'is_favourite' => $isFavourite,
         ];
     }
 

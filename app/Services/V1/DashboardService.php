@@ -15,6 +15,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class DashboardService
@@ -185,16 +186,22 @@ class DashboardService
             ->values();
         $repStats = $this->dashboards->repRatingStats($connectedReps->pluck('firebase_uid')->all());
 
+        $favoriteUids = DB::table('user_favorites')
+            ->where('user_firebase_uid', $rater->firebase_uid)
+            ->pluck('favorite_user_firebase_uid', 'favorite_user_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
         return [
             'profile' => array_merge($this->userPayload($rater), [
                 'email' => $rater->email,
             ]),
             'recent_connections' => $connectedReps
-                ->map(fn (User $rep): array => $this->connectedRepPayload($rep, $repStats->get($rep->firebase_uid)))
+                ->map(fn (User $rep): array => $this->connectedRepPayload($rep, $repStats->get($rep->firebase_uid), isset($favoriteUids[$rep->firebase_uid])))
                 ->values()
                 ->all(),
             'recent_ratings' => $this->dashboards->recentRatingsGivenByRater($rater->firebase_uid)
-                ->map(fn (Rating $rating): array => $this->recentRatingPayload($rating->rep, (float) $rating->average_score))
+                ->map(fn (Rating $rating): array => $this->recentRatingPayload($rating->rep, (float) $rating->average_score, isset($favoriteUids[$rating->rep->firebase_uid])))
                 ->values()
                 ->all(),
         ];
@@ -204,6 +211,12 @@ class DashboardService
     {
         $stats = $this->dashboards->repRatingStats([$rep->firebase_uid])->get($rep->firebase_uid);
 
+        $favoriteUids = DB::table('user_favorites')
+            ->where('user_firebase_uid', $rep->firebase_uid)
+            ->pluck('favorite_user_firebase_uid', 'favorite_user_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
         return [
             'profile' => array_merge($this->userPayload($rep), [
                 'email' => $rep->email,
@@ -211,7 +224,9 @@ class DashboardService
                 'ratings_count' => (int) ($stats->ratings_count ?? 0),
             ]),
             'recent_ratings' => $this->dashboards->recentRatingsForRep($rep->firebase_uid)
-                ->map(fn (Rating $rating): array => $this->recentReceivedRatingPayload($rating->rater, (float) $rating->average_score))
+                ->map(fn (Rating $rating): array => $this->recentReceivedRatingPayload(
+                    $rating->rater, (float) $rating->average_score, isset($favoriteUids[$rating->rater->firebase_uid])
+                ))
                 ->values()
                 ->all(),
         ];
@@ -455,25 +470,28 @@ class DashboardService
         ];
     }
 
-    private function connectedRepPayload(User $rep, ?object $stats): array
+    private function connectedRepPayload(User $rep, ?object $stats, bool $isFavourite = false): array
     {
         return array_merge($this->userPayload($rep), [
             'avg_rating' => round((float) ($stats->average_rating ?? 0), 2),
             'ratings_count' => (int) ($stats->ratings_count ?? 0),
+            'is_favourite' => (int) $isFavourite,
         ]);
     }
 
-    private function recentRatingPayload(User $rep, float $rating): array
+    private function recentRatingPayload(User $rep, float $rating, bool $isFavourite = false): array
     {
         return array_merge($this->userPayload($rep), [
             'avg_rating' => round($rating, 2),
+            'is_favourite' => (int) $isFavourite,
         ]);
     }
 
-    private function recentReceivedRatingPayload(User $rater, float $rating): array
+    private function recentReceivedRatingPayload(User $rater, float $rating, bool $isFavourite = false): array
     {
         return array_merge($this->userPayload($rater), [
             'avg_rating' => round($rating, 2),
+            'is_favourite' => (int) $isFavourite,
         ]);
     }
 }

@@ -105,6 +105,7 @@ class UserController extends Controller
             $result['average_rating'],
             $request->user()->firebase_uid,
             $viewerRoleName,
+            $result['is_favourite'],
         ))->additional(['success' => true])->response();
     }
 

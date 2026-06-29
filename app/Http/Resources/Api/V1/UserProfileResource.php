@@ -15,6 +15,7 @@ class UserProfileResource extends JsonResource
         private readonly ?float $averageRating,
         private readonly ?string $currentUserUid = null,
         private readonly ?string $viewerRoleName = null,
+        private readonly bool $isFavourite = false,
     ) {
         parent::__construct($resource);
     }
@@ -51,6 +52,7 @@ class UserProfileResource extends JsonResource
             'image_url' => $this->image_url,
             'role' => $targetRoleName,
             'connection_status' => $this->connectionStatus,
+            'is_favourite' => (int) $this->isFavourite,
             'ratings' => $ratingData ?? [
                 'data' => [],
                 'current_page' => 1,

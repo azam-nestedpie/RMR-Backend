@@ -235,6 +235,12 @@ class UserRepository implements UserRepositoryInterface
 
         $connectedUids = $connections->keys()->unique()->values();
 
+        $favoriteUids = DB::table('user_favorites')
+            ->where('user_firebase_uid', $firebaseUid)
+            ->pluck('favorite_user_firebase_uid', 'favorite_user_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
         $users = User::whereIn('firebase_uid', $connectedUids)
             ->with(['roles', 'address', 'industries'])
             ->when($targetRole, fn ($q) => $q->whereHas('roles', fn ($rq) => $rq->where('roles.id', $targetRole)))
@@ -250,6 +256,8 @@ class UserRepository implements UserRepositoryInterface
             if ($connections->has($user->firebase_uid)) {
                 $user->setAttribute('connection_uuid', $connections->get($user->firebase_uid)->firebase_uuid);
             }
+
+            $user->is_favorite = isset($favoriteUids[$user->firebase_uid]);
         }
 
         return $users;
