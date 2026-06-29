@@ -30,11 +30,11 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Roles fetched successfully","data":[{"id":4,"name":"Manager of Representatives","description":"Manages team of reps and requests on-behalf."},{"id":1,"name":"Rater","description":"Can give ratings and manage own connections."},{"id":2,"name":"Representative","description":"Can request ratings and view own feedback."},{"id":3,"name":"Manager of Raters","description":"Manages team of raters and views rater activity."}]}'
+        content: '{"success":true,"message":"Roles fetched successfully","data":[{"id":1,"name":"Rater","description":"Can give ratings and manage own connections."},{"id":2,"name":"Representative","description":"Can request ratings and view own feedback."},{"id":3,"name":"Manager of Raters","description":"Manages team of raters and views rater activity."},{"id":4,"name":"Manager of Representatives","description":"Manages team of reps and requests on-behalf."}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 1ae8a340-f901-4729-b848-8a9c96c9e30e
+          x-request-id: 3af105ca-eb22-4949-ac81-9450fbf794b1
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -71,11 +71,11 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"data":[{"id":1,"name":"Automotive"},{"id":2,"name":"Chemical"},{"id":3,"name":"Construction"},{"id":4,"name":"Constructor"},{"id":5,"name":"Education"},{"id":6,"name":"Energy"},{"id":7,"name":"Finance"},{"id":8,"name":"HomeImprovement"},{"id":9,"name":"Hospitality"},{"id":10,"name":"InformationTechnology"},{"id":11,"name":"Inspection"},{"id":12,"name":"Marketing"},{"id":13,"name":"Manufacturing"},{"id":14,"name":"Medical"},{"id":15,"name":"Other"},{"id":16,"name":"Pharmaceutical"},{"id":17,"name":"Retail"},{"id":18,"name":"Services"},{"id":19,"name":"Telecommunications"},{"id":20,"name":"Information Technology"},{"id":21,"name":"Financial Services"},{"id":22,"name":"Insurance"},{"id":23,"name":"Contractor"}]}'
+        content: '{"success":true,"data":[{"id":1,"name":"Automotive"},{"id":2,"name":"Chemical"},{"id":3,"name":"Construction"},{"id":4,"name":"Constructor"},{"id":5,"name":"Contractor"},{"id":6,"name":"Education"},{"id":7,"name":"Energy"},{"id":8,"name":"Finance"},{"id":9,"name":"HomeImprovement"},{"id":10,"name":"Hospitality"},{"id":11,"name":"InformationTechnology"},{"id":12,"name":"Inspection"},{"id":13,"name":"Marketing"},{"id":14,"name":"Manufacturing"},{"id":15,"name":"Medical"},{"id":16,"name":"Other"},{"id":17,"name":"Pharmaceutical"},{"id":18,"name":"Retail"},{"id":19,"name":"Services"},{"id":20,"name":"Telecommunications"},{"id":21,"name":"Information Technology"},{"id":22,"name":"Financial Services"},{"id":23,"name":"Insurance"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 9b3ff133-bce2-4fce-be26-787670483f56
+          x-request-id: ad66953f-6fe9-403f-8431-99397dd52c78
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -124,11 +124,11 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"data":[{"id":11,"question_code":"10","title":"Is Professional","display_order":1,"is_required":true},{"id":12,"question_code":"20","title":"Actively Listens","display_order":2,"is_required":true},{"id":1,"question_code":"30","title":"Effectively Communicates","display_order":3,"is_required":true},{"id":2,"question_code":"40","title":"Is Responsive","display_order":4,"is_required":true},{"id":15,"question_code":"150","title":"Respects My Time","display_order":5,"is_required":true},{"id":16,"question_code":"160","title":"Offers Relevant Solutions","display_order":6,"is_required":true},{"id":14,"question_code":"70","title":"Is Knowledgeable","display_order":7,"is_required":true},{"id":17,"question_code":"210","title":"Is Accountable","display_order":8,"is_required":true},{"id":18,"question_code":"170","title":"Meets Deadlines","display_order":9,"is_required":true},{"id":20,"question_code":"190","title":"Adheres to Protocols and Safety Procedures","display_order":10,"is_required":true}]}'
+        content: '{"success":true,"data":[{"id":1,"question_code":"10","title":"Is Professional","display_order":1,"is_required":true},{"id":2,"question_code":"20","title":"Actively Listens","display_order":2,"is_required":true},{"id":3,"question_code":"30","title":"Effectively Communicates","display_order":3,"is_required":true},{"id":4,"question_code":"40","title":"Is Responsive","display_order":4,"is_required":true},{"id":15,"question_code":"150","title":"Respects My Time","display_order":5,"is_required":true},{"id":16,"question_code":"160","title":"Offers Relevant Solutions","display_order":6,"is_required":true},{"id":7,"question_code":"70","title":"Is Knowledgeable","display_order":7,"is_required":true},{"id":21,"question_code":"210","title":"Is Accountable","display_order":8,"is_required":true},{"id":17,"question_code":"170","title":"Meets Deadlines","display_order":9,"is_required":true},{"id":19,"question_code":"190","title":"Adheres to Protocols and Safety Procedures","display_order":10,"is_required":true}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: e258c357-8205-4590-93b7-717c5b3cd938
+          x-request-id: c72b54ad-ca2a-4c91-8584-6c06b50505f6
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -208,7 +208,7 @@ endpoints:
         name: role
         description: ''
         required: true
-        example: 2
+        example: 4
         type: string
         enumValues:
           - 1
@@ -352,7 +352,7 @@ endpoints:
       last_name: 'n'
       email: ashly64@example.com
       password: pBNvYg
-      role: 2
+      role: 4
       fcm_token: architecto
       bio: architecto
       company_name: architecto
@@ -753,7 +753,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: e70634bb-e0ac-4944-8f99-979295ce3bf1
+          x-request-id: cf5b2e79-a9ac-4f9c-9ef8-83377b88883e
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1071,7 +1071,7 @@ endpoints:
         name: role
         description: ''
         required: false
-        example: 4
+        example: 3
         type: integer
         enumValues:
           - 1
@@ -1089,7 +1089,7 @@ endpoints:
       position: d
       address: l
       industry: j
-      role: 4
+      role: 3
     fileParameters: []
     responses: []
     responseFields: []
@@ -1125,7 +1125,7 @@ endpoints:
         name: locale
         description: ''
         required: true
-        example: en
+        example: pt
         type: string
         enumValues:
           - en
@@ -1135,9 +1135,62 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      locale: en
+      locale: pt
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/users/{userUid}/profile'
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'GET /api/v1/users/{userUid}/profile'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      userUid:
+        custom: []
+        name: userUid
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      userUid: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"success":false,"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-request-id: 2efd3fc2-f3d0-4da7-84f2-a8ee19fd7c95
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -1188,7 +1241,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: d362cda8-274e-4267-9071-b9a6017878c5
+          x-request-id: 6072d661-3c5e-4bd0-82ce-5ec95d13a00a
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1229,7 +1282,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: fe43bd0e-f9df-48e1-b721-ca9d98c15ec7
+          x-request-id: e2731d98-71a4-4fbe-ad6c-5f9cbf96e121
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1356,7 +1409,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: c2aa44f4-88e1-412a-a62a-10f3b25d3bf4
+          x-request-id: e2e7a0b3-8206-444f-baf8-4c9c5b339230
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1397,7 +1450,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: d613086f-f023-4c6a-b174-b0ba9357bca6
+          x-request-id: 50de78ef-e71a-41df-b539-bcd087057bbb
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1438,7 +1491,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 0eb6d08e-0f84-4a0b-be0d-f92f047c065b
+          x-request-id: 5d78b4ad-cbec-4b99-bda4-5ea71b873f7d
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1808,7 +1861,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 48456867-8277-4c2a-94bc-6443c7fb30a0
+          x-request-id: 8731430a-5653-495d-8dc2-5fb24b1d6461
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -1989,7 +2042,7 @@ endpoints:
         name: role
         description: ''
         required: false
-        example: 3
+        example: 4
         type: integer
         enumValues:
           - 1
@@ -2007,7 +2060,7 @@ endpoints:
       position: d
       address: l
       industry: j
-      role: 3
+      role: 4
     fileParameters: []
     responses: []
     responseFields: []
@@ -2048,7 +2101,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 1e3b347c-f8e3-4a99-ab66-fda38c8678bf
+          x-request-id: 7da53918-a161-43d8-b573-563f5e31e0bf
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2089,7 +2142,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: fb454b4d-3a48-4951-b85f-b818b96ae195
+          x-request-id: af047701-48d8-4402-8e8e-db436fbcddf7
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2228,7 +2281,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 72be49e2-c4b4-44c3-8f60-e446a358b336
+          x-request-id: c7b4a254-14af-44df-a309-aa2eaab0618b
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2281,7 +2334,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 515340b8-a462-4780-acd6-39154bf7d028
+          x-request-id: c4adbbcf-794a-43d4-9584-0c58dbe7cc80
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2446,7 +2499,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2026-06-23T11:55:06'
+        example: '2026-06-29T07:30:43'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2457,15 +2510,15 @@ endpoints:
         name: date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
         required: false
-        example: '2052-07-16'
+        example: '2052-07-22'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      date_from: '2026-06-23T11:55:06'
-      date_to: '2052-07-16'
+      date_from: '2026-06-29T07:30:43'
+      date_to: '2052-07-22'
     fileParameters: []
     responses:
       -
@@ -2475,7 +2528,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 02778158-9925-40d4-a9f9-d61498bb1762
+          x-request-id: bbe7cc07-1bf6-45fe-a754-8c15274cf53e
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2528,7 +2581,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 7c91c341-532b-454d-8a0f-7185a83f6d76
+          x-request-id: 41f2f49a-c0d4-4ae3-b149-ec981dac0b22
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2581,7 +2634,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 6577ee16-068b-4863-a1ff-526cfe338760
+          x-request-id: adbb39f1-2cab-4c38-943b-9b85bc770e1e
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2634,7 +2687,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: e34c1aff-6a08-4e2e-9760-a3ac664ba6bd
+          x-request-id: af80f0a0-6cdc-483b-beaf-47e7b2671adb
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2675,7 +2728,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 18e18242-ab73-4d84-9f8d-f672b1b1a25d
+          x-request-id: 3c656758-b913-41ea-808e-dddebea19179
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2771,7 +2824,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: bb79fbd7-4bd0-42f9-a310-a32231d15d1d
+          x-request-id: d93e660d-3978-484f-a590-6a83cf36c951
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -2812,7 +2865,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 65d45cce-454d-4705-b93e-c558e7bb99bc
+          x-request-id: 0f360aaf-93ad-428c-b702-4eec5af3fc09
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3179,7 +3232,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: f6623d5e-96e9-4938-b66a-0da84829205c
+          x-request-id: 80135644-156f-4f89-8c27-92b38d5632bd
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3251,7 +3304,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 79989695-6d02-4f93-94f1-f23073e68420
+          x-request-id: daac040e-a7c8-435b-849d-739d86a08dea
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3292,7 +3345,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 713ffa3d-2013-4f1c-b480-46d80c45c82e
+          x-request-id: 32fb4aea-8ada-40c1-8e09-bb2963c10329
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3333,7 +3386,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 2294a3fb-c57f-43ed-8abc-488a8be07ead
+          x-request-id: 7f9e5bb2-a0c6-4ff0-9f92-0c36f890bd4d
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3453,7 +3506,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 3ce5ff58-715d-4314-b3a1-20e8b8d5fded
+          x-request-id: 3bc34045-141e-40ed-8297-fc4825d4b9e5
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -3635,7 +3688,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 216f53e9-7a97-43c9-9c42-0ec1a5c078b5
+          x-request-id: 8f83d74a-83d5-49df-b950-b5bd52b913bb
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -4103,7 +4156,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: c0008cd8-6f8f-45db-84f0-c60e8ef1de6c
+          x-request-id: 73068959-49a2-4434-a803-0d3219aec62d
           access-control-allow-origin: '*'
         description: null
     responseFields: []
@@ -4167,7 +4220,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-request-id: 6960ae31-8ca9-4476-95ea-a4cfefbeb603
+          x-request-id: fe43f411-12eb-4ed6-b8ef-eaf1a64c9922
           access-control-allow-origin: '*'
         description: null
     responseFields: []

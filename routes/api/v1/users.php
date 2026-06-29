@@ -9,5 +9,6 @@ Route::middleware(['auth:sanctum', 'password.set'])->prefix('users')->name('user
     Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
     Route::post('search', [UserController::class, 'search'])->name('search');
     Route::put('language', [UserController::class, 'updateLanguage'])->name('language.update');
+    Route::get('{userUid}/profile', [UserController::class, 'showProfile'])->name('profile.detail');
     Route::get('{userUid}', [UserController::class, 'show'])->name('show');
 });

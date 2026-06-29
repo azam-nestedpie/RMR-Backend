@@ -2,7 +2,6 @@
 
 namespace App\Services\V1;
 
-use App\Exceptions\FirebaseTokenException;
 use App\Models\Address;
 use App\Models\Role;
 use App\Models\User;

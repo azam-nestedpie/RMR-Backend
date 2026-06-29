@@ -263,7 +263,7 @@ class RatingRepository implements RatingRepositoryInterface
 
     public function receivedFor(string $firebaseUid, array $filters = []): LengthAwarePaginator
     {
-        $query = Rating::forRep($firebaseUid)->with(['items.question', 'rater.roles', 'externalUser', 'rep.roles'])->orderByDesc('rated_at');
+        $query = Rating::forRep($firebaseUid)->with(['items.question', 'rater.roles', 'externalUser', 'rep.roles'])->has('rater')->orderByDesc('rated_at');
 
         if (! empty($filters['date_from'])) {
             $query->where('rated_at', '>=', $filters['date_from']);
@@ -280,6 +280,7 @@ class RatingRepository implements RatingRepositoryInterface
     {
         return Rating::givenBy($firebaseUid)
             ->with(['items.question', 'rater.roles', 'externalUser', 'rep.roles'])
+            ->has('rep')
             ->orderByDesc('rated_at')
             ->paginate(20);
     }

@@ -315,8 +315,7 @@ class DashboardService
     {
         return [
             'firebase_uid' => $member->firebase_uid,
-            'first_name' => $member->first_name,
-            'last_name' => $member->last_name,
+            'full_name' => trim(($member->first_name ?? '').' '.($member->last_name ?? '')),
             'image_url' => $member->image_url,
             'company_name' => $member->company_name,
             'position' => $member->position,
@@ -450,8 +449,7 @@ class DashboardService
         return [
             'firebase_uid' => $user->firebase_uid,
             'image_url' => $user->image_url,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
+            'full_name' => trim(($user->first_name ?? '').' '.($user->last_name ?? '')),
             'company_name' => $user->company_name,
             'position' => $user->position,
         ];
@@ -468,14 +466,14 @@ class DashboardService
     private function recentRatingPayload(User $rep, float $rating): array
     {
         return array_merge($this->userPayload($rep), [
-            'rating' => round($rating, 2),
+            'avg_rating' => round($rating, 2),
         ]);
     }
 
     private function recentReceivedRatingPayload(User $rater, float $rating): array
     {
         return array_merge($this->userPayload($rater), [
-            'rating' => round($rating, 2),
+            'avg_rating' => round($rating, 2),
         ]);
     }
 }

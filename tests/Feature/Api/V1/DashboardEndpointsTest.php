@@ -133,24 +133,21 @@ class DashboardEndpointsTest extends V1TestCase
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.profile.image_url', 'https://example.com/rater.jpg')
-            ->assertJsonPath('data.profile.first_name', 'Nora')
-            ->assertJsonPath('data.profile.last_name', 'Client')
-            ->assertJsonPath('data.profile.company', 'Client Co')
+            ->assertJsonPath('data.profile.full_name', 'Nora Client')
+            ->assertJsonPath('data.profile.company_name', 'Client Co')
             ->assertJsonPath('data.profile.position', 'Buyer')
             ->assertJsonPath('data.profile.email', 'nora@example.com')
             ->assertJsonPath('data.recent_connections.0.image_url', 'https://example.com/rep.jpg')
-            ->assertJsonPath('data.recent_connections.0.first_name', 'Ali')
-            ->assertJsonPath('data.recent_connections.0.last_name', 'Khan')
-            ->assertJsonPath('data.recent_connections.0.company', 'Rep Co')
+            ->assertJsonPath('data.recent_connections.0.full_name', 'Ali Khan')
+            ->assertJsonPath('data.recent_connections.0.company_name', 'Rep Co')
             ->assertJsonPath('data.recent_connections.0.position', 'Sales Lead')
-            ->assertJsonPath('data.recent_connections.0.average_rating', 3)
+            ->assertJsonPath('data.recent_connections.0.avg_rating', 3)
             ->assertJsonPath('data.recent_connections.0.ratings_count', 2)
             ->assertJsonPath('data.recent_ratings.0.image_url', 'https://example.com/older-rep.jpg')
-            ->assertJsonPath('data.recent_ratings.0.first_name', 'Sara')
-            ->assertJsonPath('data.recent_ratings.0.last_name', 'Ahmed')
+            ->assertJsonPath('data.recent_ratings.0.full_name', 'Sara Ahmed')
             ->assertJsonPath('data.recent_ratings.0.position', 'Account Executive')
-            ->assertJsonPath('data.recent_ratings.0.company', 'Older Co')
-            ->assertJsonPath('data.recent_ratings.0.rating', 5);
+            ->assertJsonPath('data.recent_ratings.0.company_name', 'Older Co')
+            ->assertJsonPath('data.recent_ratings.0.avg_rating', 5);
     }
 
     public function test_rep_home_returns_profile_rating_stats_and_recent_ratings(): void
@@ -187,19 +184,17 @@ class DashboardEndpointsTest extends V1TestCase
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.profile.image_url', 'https://example.com/rep.jpg')
-            ->assertJsonPath('data.profile.first_name', 'Ali')
-            ->assertJsonPath('data.profile.last_name', 'Khan')
-            ->assertJsonPath('data.profile.company', 'Rep Co')
+            ->assertJsonPath('data.profile.full_name', 'Ali Khan')
+            ->assertJsonPath('data.profile.company_name', 'Rep Co')
             ->assertJsonPath('data.profile.position', 'Sales Lead')
             ->assertJsonPath('data.profile.email', 'ali@example.com')
-            ->assertJsonPath('data.profile.average_rating', 4)
+            ->assertJsonPath('data.profile.avg_rating', 4)
             ->assertJsonPath('data.profile.ratings_count', 2)
             ->assertJsonPath('data.recent_ratings.0.image_url', 'https://example.com/newest-rater.jpg')
-            ->assertJsonPath('data.recent_ratings.0.first_name', 'Omar')
-            ->assertJsonPath('data.recent_ratings.0.last_name', 'Buyer')
-            ->assertJsonPath('data.recent_ratings.0.company', 'Newest Co')
+            ->assertJsonPath('data.recent_ratings.0.full_name', 'Omar Buyer')
+            ->assertJsonPath('data.recent_ratings.0.company_name', 'Newest Co')
             ->assertJsonPath('data.recent_ratings.0.position', 'Director')
-            ->assertJsonPath('data.recent_ratings.0.rating', 5);
+            ->assertJsonPath('data.recent_ratings.0.avg_rating', 5);
     }
 
     private function attachTeamMember(string $managerUid, string $memberUid, int $managerRoleId): void

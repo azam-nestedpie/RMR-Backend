@@ -112,6 +112,12 @@ class UserRepository implements UserRepositoryInterface
             ->map(fn () => true)
             ->all();
 
+        $favoriteUids = DB::table('user_favorites')
+            ->where('user_firebase_uid', $excludeUid)
+            ->pluck('favorite_user_firebase_uid')
+            ->map(fn () => true)
+            ->all();
+
         foreach ($result->getCollection() as $user) {
             $uid = $user->firebase_uid;
 
@@ -119,8 +125,10 @@ class UserRepository implements UserRepositoryInterface
                 isset($connectedMap[$uid]) => 'connected',
                 isset($pendingSentMap[$uid]) => 'pending',
                 isset($pendingReceivedMap[$uid]) => 'pending',
-                default => 'not_connected',
+                default => 'connect',
             };
+
+            $user->is_favorite = isset($favoriteUids[$uid]);
 
             $role = $user->roles->pluck('id')->first();
 

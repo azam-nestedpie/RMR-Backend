@@ -17,6 +17,7 @@ class ConnectableUserResource extends JsonResource
             'position' => $this->position,
             'connection_uuid' => $this->when($this->connection_uuid !== null, $this->connection_uuid),
             'connection_status' => $this->connection_status ?? null,
+            'is_favorite' => $this->when($this->is_favorite !== null, fn () => (int) $this->is_favorite),
         ];
 
         if ($this->relationLoaded('salesRepProfile') && $this->salesRepProfile) {

@@ -119,6 +119,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-PUTapi-v1-users-language">
                                 <a href="#endpoints-PUTapi-v1-users-language">PUT /api/v1/users/language</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-users--userUid--profile">
+                                <a href="#endpoints-GETapi-v1-users--userUid--profile">GET /api/v1/users/{userUid}/profile</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-v1-users--userUid-">
                                 <a href="#endpoints-GETapi-v1-users--userUid-">GET /api/v1/users/{userUid}</a>
                             </li>
@@ -304,7 +307,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: June 23, 2026</li>
+        <li>Last updated: June 29, 2026</li>
     </ul>
 </div>
 
@@ -373,7 +376,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 1ae8a340-f901-4729-b848-8a9c96c9e30e
+x-request-id: 3af105ca-eb22-4949-ac81-9450fbf794b1
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -381,11 +384,6 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;message&quot;: &quot;Roles fetched successfully&quot;,
     &quot;data&quot;: [
-        {
-            &quot;id&quot;: 4,
-            &quot;name&quot;: &quot;Manager of Representatives&quot;,
-            &quot;description&quot;: &quot;Manages team of reps and requests on-behalf.&quot;
-        },
         {
             &quot;id&quot;: 1,
             &quot;name&quot;: &quot;Rater&quot;,
@@ -400,6 +398,11 @@ access-control-allow-origin: *
             &quot;id&quot;: 3,
             &quot;name&quot;: &quot;Manager of Raters&quot;,
             &quot;description&quot;: &quot;Manages team of raters and views rater activity.&quot;
+        },
+        {
+            &quot;id&quot;: 4,
+            &quot;name&quot;: &quot;Manager of Representatives&quot;,
+            &quot;description&quot;: &quot;Manages team of reps and requests on-behalf.&quot;
         }
     ]
 }</code>
@@ -524,7 +527,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 9b3ff133-bce2-4fce-be26-787670483f56
+x-request-id: ad66953f-6fe9-403f-8431-99397dd52c78
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -549,79 +552,79 @@ access-control-allow-origin: *
         },
         {
             &quot;id&quot;: 5,
-            &quot;name&quot;: &quot;Education&quot;
+            &quot;name&quot;: &quot;Contractor&quot;
         },
         {
             &quot;id&quot;: 6,
-            &quot;name&quot;: &quot;Energy&quot;
+            &quot;name&quot;: &quot;Education&quot;
         },
         {
             &quot;id&quot;: 7,
-            &quot;name&quot;: &quot;Finance&quot;
+            &quot;name&quot;: &quot;Energy&quot;
         },
         {
             &quot;id&quot;: 8,
-            &quot;name&quot;: &quot;HomeImprovement&quot;
+            &quot;name&quot;: &quot;Finance&quot;
         },
         {
             &quot;id&quot;: 9,
-            &quot;name&quot;: &quot;Hospitality&quot;
+            &quot;name&quot;: &quot;HomeImprovement&quot;
         },
         {
             &quot;id&quot;: 10,
-            &quot;name&quot;: &quot;InformationTechnology&quot;
+            &quot;name&quot;: &quot;Hospitality&quot;
         },
         {
             &quot;id&quot;: 11,
-            &quot;name&quot;: &quot;Inspection&quot;
+            &quot;name&quot;: &quot;InformationTechnology&quot;
         },
         {
             &quot;id&quot;: 12,
-            &quot;name&quot;: &quot;Marketing&quot;
+            &quot;name&quot;: &quot;Inspection&quot;
         },
         {
             &quot;id&quot;: 13,
-            &quot;name&quot;: &quot;Manufacturing&quot;
+            &quot;name&quot;: &quot;Marketing&quot;
         },
         {
             &quot;id&quot;: 14,
-            &quot;name&quot;: &quot;Medical&quot;
+            &quot;name&quot;: &quot;Manufacturing&quot;
         },
         {
             &quot;id&quot;: 15,
-            &quot;name&quot;: &quot;Other&quot;
+            &quot;name&quot;: &quot;Medical&quot;
         },
         {
             &quot;id&quot;: 16,
-            &quot;name&quot;: &quot;Pharmaceutical&quot;
+            &quot;name&quot;: &quot;Other&quot;
         },
         {
             &quot;id&quot;: 17,
-            &quot;name&quot;: &quot;Retail&quot;
+            &quot;name&quot;: &quot;Pharmaceutical&quot;
         },
         {
             &quot;id&quot;: 18,
-            &quot;name&quot;: &quot;Services&quot;
+            &quot;name&quot;: &quot;Retail&quot;
         },
         {
             &quot;id&quot;: 19,
-            &quot;name&quot;: &quot;Telecommunications&quot;
+            &quot;name&quot;: &quot;Services&quot;
         },
         {
             &quot;id&quot;: 20,
-            &quot;name&quot;: &quot;Information Technology&quot;
+            &quot;name&quot;: &quot;Telecommunications&quot;
         },
         {
             &quot;id&quot;: 21,
-            &quot;name&quot;: &quot;Financial Services&quot;
+            &quot;name&quot;: &quot;Information Technology&quot;
         },
         {
             &quot;id&quot;: 22,
-            &quot;name&quot;: &quot;Insurance&quot;
+            &quot;name&quot;: &quot;Financial Services&quot;
         },
         {
             &quot;id&quot;: 23,
-            &quot;name&quot;: &quot;Contractor&quot;
+            &quot;name&quot;: &quot;Insurance&quot;
         }
     ]
 }</code>
@@ -746,7 +749,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: e258c357-8205-4590-93b7-717c5b3cd938
+x-request-id: c72b54ad-ca2a-4c91-8584-6c06b50505f6
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -754,28 +757,28 @@ access-control-allow-origin: *
     &quot;success&quot;: true,
     &quot;data&quot;: [
         {
-            &quot;id&quot;: 11,
+            &quot;id&quot;: 1,
             &quot;question_code&quot;: &quot;10&quot;,
             &quot;title&quot;: &quot;Is Professional&quot;,
             &quot;display_order&quot;: 1,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 12,
+            &quot;id&quot;: 2,
             &quot;question_code&quot;: &quot;20&quot;,
             &quot;title&quot;: &quot;Actively Listens&quot;,
             &quot;display_order&quot;: 2,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 1,
+            &quot;id&quot;: 3,
             &quot;question_code&quot;: &quot;30&quot;,
             &quot;title&quot;: &quot;Effectively Communicates&quot;,
             &quot;display_order&quot;: 3,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 2,
+            &quot;id&quot;: 4,
             &quot;question_code&quot;: &quot;40&quot;,
             &quot;title&quot;: &quot;Is Responsive&quot;,
             &quot;display_order&quot;: 4,
@@ -796,28 +799,28 @@ access-control-allow-origin: *
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 14,
+            &quot;id&quot;: 7,
             &quot;question_code&quot;: &quot;70&quot;,
             &quot;title&quot;: &quot;Is Knowledgeable&quot;,
             &quot;display_order&quot;: 7,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 17,
+            &quot;id&quot;: 21,
             &quot;question_code&quot;: &quot;210&quot;,
             &quot;title&quot;: &quot;Is Accountable&quot;,
             &quot;display_order&quot;: 8,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 18,
+            &quot;id&quot;: 17,
             &quot;question_code&quot;: &quot;170&quot;,
             &quot;title&quot;: &quot;Meets Deadlines&quot;,
             &quot;display_order&quot;: 9,
             &quot;is_required&quot;: true
         },
         {
-            &quot;id&quot;: 20,
+            &quot;id&quot;: 19,
             &quot;question_code&quot;: &quot;190&quot;,
             &quot;title&quot;: &quot;Adheres to Protocols and Safety Procedures&quot;,
             &quot;display_order&quot;: 10,
@@ -934,7 +937,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"last_name\": \"n\",
     \"email\": \"ashly64@example.com\",
     \"password\": \"pBNvYg\",
-    \"role\": 2,
+    \"role\": 4,
     \"fcm_token\": \"architecto\",
     \"bio\": \"architecto\",
     \"company_name\": \"architecto\",
@@ -966,7 +969,7 @@ let body = {
     "last_name": "n",
     "email": "ashly64@example.com",
     "password": "pBNvYg",
-    "role": 2,
+    "role": 4,
     "fcm_token": "architecto",
     "bio": "architecto",
     "company_name": "architecto",
@@ -1118,10 +1121,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="POSTapi-v1-auth-register"
-               value="2"
+               value="4"
                data-component="body">
     <br>
-<p>Example: <code>2</code></p>
+<p>Example: <code>4</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li> <li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li></ul>
         </div>
@@ -2278,7 +2281,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: e70634bb-e0ac-4944-8f99-979295ce3bf1
+x-request-id: cf5b2e79-a9ac-4f9c-9ef8-83377b88883e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -2768,7 +2771,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"position\": \"d\",
     \"address\": \"l\",
     \"industry\": \"j\",
-    \"role\": 4
+    \"role\": 3
 }"
 </code></pre></div>
 
@@ -2791,7 +2794,7 @@ let body = {
     "position": "d",
     "address": "l",
     "industry": "j",
-    "role": 4
+    "role": 3
 };
 
 fetch(url, {
@@ -2979,10 +2982,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="role"                data-endpoint="POSTapi-v1-users-search"
-               value="4"
+               value="3"
                data-component="body">
     <br>
-<p>Example: <code>4</code></p>
+<p>Example: <code>3</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li></ul>
         </div>
@@ -3005,7 +3008,7 @@ Must be one of:
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"locale\": \"en\"
+    \"locale\": \"pt\"
 }"
 </code></pre></div>
 
@@ -3021,7 +3024,7 @@ const headers = {
 };
 
 let body = {
-    "locale": "en"
+    "locale": "pt"
 };
 
 fetch(url, {
@@ -3113,14 +3116,156 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="locale"                data-endpoint="PUTapi-v1-users-language"
-               value="en"
+               value="pt"
                data-component="body">
     <br>
-<p>Example: <code>en</code></p>
+<p>Example: <code>pt</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>en</code></li> <li><code>es</code></li> <li><code>pt</code></li></ul>
         </div>
         </form>
+
+                    <h2 id="endpoints-GETapi-v1-users--userUid--profile">GET /api/v1/users/{userUid}/profile</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-v1-users--userUid--profile">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/users/architecto/profile" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/users/architecto/profile"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-users--userUid--profile">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+x-request-id: 2efd3fc2-f3d0-4da7-84f2-a8ee19fd7c95
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-users--userUid--profile" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-users--userUid--profile"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-users--userUid--profile"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-users--userUid--profile" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-users--userUid--profile">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-users--userUid--profile" data-method="GET"
+      data-path="api/v1/users/{userUid}/profile"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-users--userUid--profile', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-users--userUid--profile"
+                    onclick="tryItOut('GETapi-v1-users--userUid--profile');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-users--userUid--profile"
+                    onclick="cancelTryOut('GETapi-v1-users--userUid--profile');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-users--userUid--profile"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/users/{userUid}/profile</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-users--userUid--profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-users--userUid--profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>userUid</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="userUid"                data-endpoint="GETapi-v1-users--userUid--profile"
+               value="architecto"
+               data-component="url">
+    <br>
+<p>Example: <code>architecto</code></p>
+            </div>
+                    </form>
 
                     <h2 id="endpoints-GETapi-v1-users--userUid-">GET /api/v1/users/{userUid}</h2>
 
@@ -3168,7 +3313,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: d362cda8-274e-4267-9071-b9a6017878c5
+x-request-id: 6072d661-3c5e-4bd0-82ce-5ec95d13a00a
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3310,7 +3455,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: fe43bd0e-f9df-48e1-b721-ca9d98c15ec7
+x-request-id: e2731d98-71a4-4fbe-ad6c-5f9cbf96e121
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3695,7 +3840,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: c2aa44f4-88e1-412a-a62a-10f3b25d3bf4
+x-request-id: e2e7a0b3-8206-444f-baf8-4c9c5b339230
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3824,7 +3969,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: d613086f-f023-4c6a-b174-b0ba9357bca6
+x-request-id: 50de78ef-e71a-41df-b539-bcd087057bbb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -3953,7 +4098,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 0eb6d08e-0f84-4a0b-be0d-f92f047c065b
+x-request-id: 5d78b4ad-cbec-4b99-bda4-5ea71b873f7d
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5038,7 +5183,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 48456867-8277-4c2a-94bc-6443c7fb30a0
+x-request-id: 8731430a-5653-495d-8dc2-5fb24b1d6461
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5297,7 +5442,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"position\": \"d\",
     \"address\": \"l\",
     \"industry\": \"j\",
-    \"role\": 3
+    \"role\": 4
 }"
 </code></pre></div>
 
@@ -5320,7 +5465,7 @@ let body = {
     "position": "d",
     "address": "l",
     "industry": "j",
-    "role": 3
+    "role": 4
 };
 
 fetch(url, {
@@ -5508,10 +5653,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="role"                data-endpoint="POSTapi-v1-team-search"
-               value="3"
+               value="4"
                data-component="body">
     <br>
-<p>Example: <code>3</code></p>
+<p>Example: <code>4</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>1</code></li> <li><code>2</code></li> <li><code>3</code></li> <li><code>4</code></li></ul>
         </div>
@@ -5563,7 +5708,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 1e3b347c-f8e3-4a99-ab66-fda38c8678bf
+x-request-id: 7da53918-a161-43d8-b573-563f5e31e0bf
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -5692,7 +5837,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: fb454b4d-3a48-4951-b85f-b818b96ae195
+x-request-id: af047701-48d8-4402-8e8e-db436fbcddf7
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6069,7 +6214,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 72be49e2-c4b4-44c3-8f60-e446a358b336
+x-request-id: c7b4a254-14af-44df-a309-aa2eaab0618b
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6211,7 +6356,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 515340b8-a462-4780-acd6-39154bf7d028
+x-request-id: c4adbbcf-794a-43d4-9584-0c58dbe7cc80
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6720,8 +6865,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"date_from\": \"2026-06-23T11:55:06\",
-    \"date_to\": \"2052-07-16\"
+    \"date_from\": \"2026-06-29T07:30:43\",
+    \"date_to\": \"2052-07-22\"
 }"
 </code></pre></div>
 
@@ -6737,8 +6882,8 @@ const headers = {
 };
 
 let body = {
-    "date_from": "2026-06-23T11:55:06",
-    "date_to": "2052-07-16"
+    "date_from": "2026-06-29T07:30:43",
+    "date_to": "2052-07-22"
 };
 
 fetch(url, {
@@ -6759,7 +6904,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 02778158-9925-40d4-a9f9-d61498bb1762
+x-request-id: bbe7cc07-1bf6-45fe-a754-8c15274cf53e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -6848,10 +6993,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_from"                data-endpoint="GETapi-v1-ratings"
-               value="2026-06-23T11:55:06"
+               value="2026-06-29T07:30:43"
                data-component="body">
     <br>
-<p>Must be a valid date. Example: <code>2026-06-23T11:55:06</code></p>
+<p>Must be a valid date. Example: <code>2026-06-29T07:30:43</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>date_to</code></b>&nbsp;&nbsp;
@@ -6860,10 +7005,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="date_to"                data-endpoint="GETapi-v1-ratings"
-               value="2052-07-16"
+               value="2052-07-22"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-16</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>date_from</code>. Example: <code>2052-07-22</code></p>
         </div>
         </form>
 
@@ -6913,7 +7058,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 7c91c341-532b-454d-8a0f-7185a83f6d76
+x-request-id: 41f2f49a-c0d4-4ae3-b149-ec981dac0b22
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7055,7 +7200,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 6577ee16-068b-4863-a1ff-526cfe338760
+x-request-id: adbb39f1-2cab-4c38-943b-9b85bc770e1e
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7197,7 +7342,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: e34c1aff-6a08-4e2e-9760-a3ac664ba6bd
+x-request-id: af80f0a0-6cdc-483b-beaf-47e7b2671adb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7339,7 +7484,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 18e18242-ab73-4d84-9f8d-f672b1b1a25d
+x-request-id: 3c656758-b913-41ea-808e-dddebea19179
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7614,7 +7759,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: bb79fbd7-4bd0-42f9-a310-a32231d15d1d
+x-request-id: d93e660d-3978-484f-a590-6a83cf36c951
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -7743,7 +7888,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 65d45cce-454d-4705-b93e-c558e7bb99bc
+x-request-id: 0f360aaf-93ad-428c-b702-4eec5af3fc09
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -8673,7 +8818,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: f6623d5e-96e9-4938-b66a-0da84829205c
+x-request-id: 80135644-156f-4f89-8c27-92b38d5632bd
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -8913,7 +9058,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 79989695-6d02-4f93-94f1-f23073e68420
+x-request-id: daac040e-a7c8-435b-849d-739d86a08dea
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9042,7 +9187,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 713ffa3d-2013-4f1c-b480-46d80c45c82e
+x-request-id: 32fb4aea-8ada-40c1-8e09-bb2963c10329
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9171,7 +9316,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 2294a3fb-c57f-43ed-8abc-488a8be07ead
+x-request-id: 7f9e5bb2-a0c6-4ff0-9f92-0c36f890bd4d
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9460,7 +9605,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 3ce5ff58-715d-4314-b3a1-20e8b8d5fded
+x-request-id: 3bc34045-141e-40ed-8297-fc4825d4b9e5
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -9853,7 +9998,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 216f53e9-7a97-43c9-9c42-0ec1a5c078b5
+x-request-id: 8f83d74a-83d5-49df-b950-b5bd52b913bb
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -10918,7 +11063,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     "http://localhost:8000/api/v1/upload/image" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "image=@/tmp/php48vpsmn4do6ldPzK3KV" </code></pre></div>
+    --form "image=@/tmp/phpce2uhpcj3i602EIMCwC" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -11026,7 +11171,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/php48vpsmn4do6ldPzK3KV</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phpce2uhpcj3i602EIMCwC</code></p>
         </div>
         </form>
 
@@ -11077,7 +11222,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: c0008cd8-6f8f-45db-84f0-c60e8ef1de6c
+x-request-id: 73068959-49a2-4434-a803-0d3219aec62d
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 
@@ -11233,7 +11378,7 @@ fetch(url, {
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-request-id: 6960ae31-8ca9-4476-95ea-a4cfefbeb603
+x-request-id: fe43f411-12eb-4ed6-b8ef-eaf1a64c9922
 access-control-allow-origin: *
  </code></pre></details>         <pre>
 

@@ -7,8 +7,10 @@ use App\Http\Requests\Api\V1\User\SearchRequest;
 use App\Http\Requests\Api\V1\User\UpdateLanguageRequest;
 use App\Http\Requests\Api\V1\User\UpdateProfileRequest;
 use App\Http\Resources\Api\V1\ConnectableUserResource;
+use App\Http\Resources\Api\V1\UserProfileResource;
 use App\Http\Resources\Api\V1\UserResource;
 use App\Services\V1\LanguageService;
+use App\Services\V1\UserProfileService;
 use App\Services\V1\UserService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +25,7 @@ class UserController extends Controller
     public function __construct(
         private readonly UserService $users,
         private readonly LanguageService $languages,
+        private readonly UserProfileService $profiles,
     ) {}
 
     /** GET /api/v1/users/profile */
@@ -86,6 +89,27 @@ class UserController extends Controller
 
             return $this->error('An unexpected error occurred.', 500);
         }
+    }
+
+    /** GET /api/v1/users/{userUid}/profile */
+    public function showProfile(Request $request, string $userUid): JsonResponse
+    {
+        $result = $this->profiles->show($request->user(), $userUid);
+
+        if (empty($result)) {
+            return $this->notFound('User not found.');
+        }
+
+        $viewerRoleName = $request->user()->roles->first()?->name;
+
+        return (new UserProfileResource(
+            $result['user'],
+            $result['connection_status'],
+            $result['ratings'],
+            $result['average_rating'],
+            $request->user()->firebase_uid,
+            $viewerRoleName,
+        ))->additional(['success' => true])->response();
     }
 
     /**
