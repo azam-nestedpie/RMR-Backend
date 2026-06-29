@@ -96,10 +96,6 @@ class UserController extends Controller
     {
         $result = $this->profiles->show($request->user(), $userUid);
 
-        if (empty($result)) {
-            return $this->notFound('User not found.');
-        }
-
         $viewerRoleName = $request->user()->roles->first()?->name;
 
         return (new UserProfileResource(

@@ -114,7 +114,7 @@ class UserRepository implements UserRepositoryInterface
 
         $favoriteUids = DB::table('user_favorites')
             ->where('user_firebase_uid', $excludeUid)
-            ->pluck('favorite_user_firebase_uid')
+            ->pluck('favorite_user_firebase_uid', 'favorite_user_firebase_uid')
             ->map(fn () => true)
             ->all();
 

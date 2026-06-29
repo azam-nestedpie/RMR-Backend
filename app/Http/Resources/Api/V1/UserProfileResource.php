@@ -41,7 +41,7 @@ class UserProfileResource extends JsonResource
             ];
         }
 
-        return [
+        $response = [
             'firebase_uuid' => $this->firebase_uid,
             'full_name' => trim(($this->first_name ?? '').' '.($this->last_name ?? '')),
             'company_name' => $this->company_name,
@@ -51,7 +51,6 @@ class UserProfileResource extends JsonResource
             'image_url' => $this->image_url,
             'role' => $targetRoleName,
             'connection_status' => $this->connectionStatus,
-            'average_rating' => $this->averageRating,
             'ratings' => $ratingData ?? [
                 'data' => [],
                 'current_page' => 1,
@@ -60,5 +59,11 @@ class UserProfileResource extends JsonResource
                 'total' => 0,
             ],
         ];
+
+        if ($this->averageRating !== null) {
+            $response['avg_rating'] = $this->averageRating;
+        }
+
+        return $response;
     }
 }

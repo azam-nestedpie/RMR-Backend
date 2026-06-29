@@ -51,7 +51,7 @@ class UserProfileEndpointTest extends V1TestCase
             ->assertJsonPath('data.email', 'ali@example.com')
             ->assertJsonPath('data.image_url', 'https://example.com/rep.jpg')
             ->assertJsonPath('data.connection_status', 'connected')
-            ->assertJsonPath('data.average_rating', 4.5)
+            ->assertJsonPath('data.avg_rating', 4.5)
             ->assertJsonIsArray('data.ratings.data')
             ->assertJsonPath('data.ratings.total', 2)
             ->assertJsonPath('data.role', 'Representative');
@@ -97,7 +97,7 @@ class UserProfileEndpointTest extends V1TestCase
             ->assertJsonPath('data.email', 'nora@example.com')
             ->assertJsonPath('data.image_url', 'https://example.com/rater.jpg')
             ->assertJsonPath('data.connection_status', 'rating_request')
-            ->assertJsonPath('data.average_rating', null)
+            ->assertJsonMissingPath('data.avg_rating')
             ->assertJsonIsArray('data.ratings.data')
             ->assertJsonPath('data.ratings.total', 1)
             ->assertJsonPath('data.role', 'Rater');
@@ -205,6 +205,28 @@ class UserProfileEndpointTest extends V1TestCase
         $this->getJson('/api/v1/users/'.$rater->firebase_uid.'/profile')
             ->assertOk()
             ->assertJsonPath('data.connection_status', 'request_sent');
+    }
+
+    public function test_rep_cannot_view_another_rep_profile(): void
+    {
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+        $otherRep = $this->createUserWithRole(Role::REPRESENTATIVE);
+
+        $this->getJson('/api/v1/users/'.$otherRep->firebase_uid.'/profile')
+            ->assertForbidden()
+            ->assertJsonPath('success', false)
+            ->assertJsonPath('message', 'You do not have permission to view this profile.');
+    }
+
+    public function test_rater_cannot_view_another_rater_profile(): void
+    {
+        $rater = $this->authAsRole(Role::RATER);
+        $otherRater = $this->createUserWithRole(Role::RATER);
+
+        $this->getJson('/api/v1/users/'.$otherRater->firebase_uid.'/profile')
+            ->assertForbidden()
+            ->assertJsonPath('success', false)
+            ->assertJsonPath('message', 'You do not have permission to view this profile.');
     }
 
     public function test_rater_connected_to_rep_shows_connected(): void

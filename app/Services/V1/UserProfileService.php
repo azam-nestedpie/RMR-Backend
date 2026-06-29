@@ -38,6 +38,10 @@ class UserProfileService
         $currentUser->loadMissing('roles');
         $currentRole = $currentUser->roles->first()?->id;
 
+        if (! $this->canViewProfile($currentRole, $targetRole)) {
+            throw ApiException::forbidden('You do not have permission to view this profile.');
+        }
+
         $connectionStatus = $this->determineConnectionStatus($currentUser->firebase_uid, $targetUid, $targetRole);
 
         $ratings = $this->getRatings($currentUser, $targetUid, $targetRole);
@@ -52,6 +56,26 @@ class UserProfileService
             'ratings' => $ratings,
             'average_rating' => $averageRating,
         ];
+    }
+
+    private function canViewProfile(?int $currentRole, ?int $targetRole): bool
+    {
+        if (! $targetRole) {
+            return true;
+        }
+
+        $allowedRoles = [
+            Role::RATER => [Role::REPRESENTATIVE],
+            Role::REPRESENTATIVE => [Role::RATER],
+            Role::MANAGER_OF_REPRESENTATIVES => [Role::RATER, Role::REPRESENTATIVE],
+            Role::MANAGER_OF_RATERS => [Role::RATER, Role::REPRESENTATIVE],
+        ];
+
+        if (! isset($allowedRoles[$currentRole])) {
+            return true;
+        }
+
+        return in_array($targetRole, $allowedRoles[$currentRole]);
     }
 
     private function determineConnectionStatus(string $viewerUid, string $targetUid, ?int $targetRole): string
