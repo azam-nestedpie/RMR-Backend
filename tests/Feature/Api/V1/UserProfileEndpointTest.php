@@ -43,7 +43,7 @@ class UserProfileEndpointTest extends V1TestCase
         $this->getJson('/api/v1/users/'.$rep->firebase_uid.'/profile')
             ->assertOk()
             ->assertJsonPath('success', true)
-            ->assertJsonPath('data.firebase_uuid', $rep->firebase_uid)
+            ->assertJsonPath('data.firebase_uid', $rep->firebase_uid)
             ->assertJsonPath('data.full_name', 'Ali Khan')
             ->assertJsonPath('data.company_name', 'Rep Co')
             ->assertJsonPath('data.position', 'Sales Lead')
@@ -93,7 +93,7 @@ class UserProfileEndpointTest extends V1TestCase
         $this->getJson('/api/v1/users/'.$rater->firebase_uid.'/profile')
             ->assertOk()
             ->assertJsonPath('success', true)
-            ->assertJsonPath('data.firebase_uuid', $rater->firebase_uid)
+            ->assertJsonPath('data.firebase_uid', $rater->firebase_uid)
             ->assertJsonPath('data.full_name', 'Nora Client')
             ->assertJsonPath('data.company_name', 'Client Co')
             ->assertJsonPath('data.position', 'Buyer')
@@ -184,7 +184,7 @@ class UserProfileEndpointTest extends V1TestCase
 
         $this->getJson('/api/v1/users/'.$rater->firebase_uid.'/profile')
             ->assertOk()
-            ->assertJsonPath('data.firebase_uuid', $rater->firebase_uid)
+            ->assertJsonPath('data.firebase_uid', $rater->firebase_uid)
             ->assertJsonPath('data.role.id', Role::RATER)
             ->assertJsonPath('data.role.name', 'Rater');
     }
@@ -199,7 +199,7 @@ class UserProfileEndpointTest extends V1TestCase
 
         $this->getJson('/api/v1/users/'.$rep->firebase_uid.'/profile')
             ->assertOk()
-            ->assertJsonPath('data.firebase_uuid', $rep->firebase_uid)
+            ->assertJsonPath('data.firebase_uid', $rep->firebase_uid)
             ->assertJsonPath('data.role.id', Role::REPRESENTATIVE)
             ->assertJsonPath('data.role.name', 'Representative');
     }

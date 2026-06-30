@@ -18,6 +18,8 @@ class LoginRequest extends V1Request
         return [
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
+            'fcm_token' => ['nullable', 'string'],
+            'prefered_locale' => ['nullable', 'string', 'in:en,es,pt'],
         ];
     }
 }

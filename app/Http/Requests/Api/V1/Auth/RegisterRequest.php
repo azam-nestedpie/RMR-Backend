@@ -24,6 +24,7 @@ class RegisterRequest extends V1Request
             'password' => ['required', 'string', 'min:8'],
             'role' => ['required', Rule::in([1, 2, 3, 4, '1', '2', '3', '4', Role::RATER, Role::REPRESENTATIVE, Role::MANAGER_OF_RATERS, Role::MANAGER_OF_REPRESENTATIVES])],
             'fcm_token' => ['nullable', 'string'],
+            'prefered_locale' => ['nullable', 'string', 'in:en,es,pt'],
             'bio' => ['nullable', 'string'],
             'company_name' => ['nullable', 'string'],
             'position' => ['nullable', 'string'],

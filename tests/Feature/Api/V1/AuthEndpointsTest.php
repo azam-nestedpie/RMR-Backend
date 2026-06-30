@@ -28,7 +28,7 @@ class AuthEndpointsTest extends V1TestCase
         $service = Mockery::mock(AuthService::class);
         $service->shouldReceive('login')
             ->once()
-            ->with('john@example.com', 'secret')
+            ->with(Mockery::subset(['email' => 'john@example.com', 'password' => 'secret']))
             ->andReturn(['token' => 'token-1', 'token_expires_at' => now()->addDays(30), 'user' => $user]);
         $this->instance(AuthService::class, $service);
 

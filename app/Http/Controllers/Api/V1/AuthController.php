@@ -34,8 +34,7 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->login(
-                $request->validated('email'),
-                $request->validated('password')
+                $request->validated()
             );
         } catch (FirebaseTokenException $e) {
             return $this->error($e->getMessage(), 401);

@@ -22,8 +22,11 @@ class AuthService
     /**
      * LOGIN
      */
-    public function login(string $email, string $password): array
+    public function login(array $data): array
     {
+        $email = $data['email'];
+        $password = $data['password'];
+
         Log::info('Auth login started', [
             'email' => $email,
         ]);
@@ -53,6 +56,8 @@ class AuthService
             Log::info('Login success (local)', [
                 'uid' => $user->firebase_uid,
             ]);
+
+            $this->updateLoginFields($user, $data);
 
             $user = $user->fresh(['roles', 'industries', 'address', 'salesRepProfile']);
 
@@ -115,6 +120,8 @@ class AuthService
             ]);
         }
 
+        $this->updateLoginFields($user, $data);
+
         $user = $user->fresh(['roles', 'industries', 'address', 'salesRepProfile']);
 
         $token = $user->createToken('api-token', ['*'], now()->addDays(30));
@@ -124,6 +131,24 @@ class AuthService
             'token_expires_at' => $token->accessToken->expires_at,
             'user' => $user,
         ];
+    }
+
+    private function updateLoginFields(User $user, array $data): void
+    {
+        $updates = [];
+
+        if (isset($data['fcm_token'])) {
+            $updates['fcm_token'] = $data['fcm_token'];
+        }
+
+        if (isset($data['prefered_locale'])) {
+            $updates['prefered_locale'] = $data['prefered_locale'];
+        }
+
+        if (! empty($updates)) {
+            $updates['updated_by'] = $user->firebase_uid;
+            $this->users->update($user, $updates);
+        }
     }
 
     /**
@@ -151,6 +176,7 @@ class AuthService
                 'company_name' => $data['company_name'] ?? null,
                 'position' => $data['position'] ?? null,
                 'fcm_token' => $data['fcm_token'] ?? null,
+                'prefered_locale' => $data['prefered_locale'] ?? null,
                 'created_by' => $uid,
                 'updated_by' => $uid,
             ]);

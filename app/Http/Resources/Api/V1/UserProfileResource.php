@@ -44,7 +44,7 @@ class UserProfileResource extends JsonResource
         }
 
         $response = [
-            'firebase_uuid' => $this->firebase_uid,
+            'firebase_uid' => $this->firebase_uid,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'full_name' => trim(($this->first_name ?? '').' '.($this->last_name ?? '')),

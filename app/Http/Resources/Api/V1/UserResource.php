@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             'image_url' => $this->image_url,
             'company_name' => $this->company_name,
             'position' => $this->position,
+            'fcm_token' => $this->fcm_token,
             'prefered_locale' => $this->prefered_locale,
             'is_blocked' => $this->is_blocked,
             'is_deleted' => $this->is_deleted,
