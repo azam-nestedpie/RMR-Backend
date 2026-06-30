@@ -20,7 +20,7 @@ class UserProfileRatingResource extends JsonResource
 
         return [
             'rating_id' => $this->firebase_uuid,
-            'rating' => $this->average_score,
+            'avg_rating' => $this->average_score,
             'rated_at' => $this->rated_at?->toIso8601String(),
             'image_url' => $rater?->image_url,
             'full_name' => $rater

@@ -50,11 +50,15 @@ class UserProfileEndpointTest extends V1TestCase
             ->assertJsonPath('data.bio', 'Top rep')
             ->assertJsonPath('data.email', 'ali@example.com')
             ->assertJsonPath('data.image_url', 'https://example.com/rep.jpg')
+            ->assertJsonPath('data.first_name', 'Ali')
+            ->assertJsonPath('data.last_name', 'Khan')
             ->assertJsonPath('data.connection_status', 'connected')
             ->assertJsonPath('data.avg_rating', 4.5)
+            ->assertJsonPath('data.rating_count', 2)
             ->assertJsonIsArray('data.ratings.data')
             ->assertJsonPath('data.ratings.total', 2)
-            ->assertJsonPath('data.role', 'Representative');
+            ->assertJsonPath('data.role.id', Role::REPRESENTATIVE)
+            ->assertJsonPath('data.role.name', 'Representative');
     }
 
     public function test_rep_can_view_rater_profile(): void
@@ -94,13 +98,17 @@ class UserProfileEndpointTest extends V1TestCase
             ->assertJsonPath('data.company_name', 'Client Co')
             ->assertJsonPath('data.position', 'Buyer')
             ->assertJsonPath('data.bio', 'Veteran rater')
+            ->assertJsonPath('data.first_name', 'Nora')
+            ->assertJsonPath('data.last_name', 'Client')
             ->assertJsonPath('data.email', 'nora@example.com')
             ->assertJsonPath('data.image_url', 'https://example.com/rater.jpg')
             ->assertJsonPath('data.connection_status', 'rating_request')
             ->assertJsonMissingPath('data.avg_rating')
+            ->assertJsonMissingPath('data.rating_count')
             ->assertJsonIsArray('data.ratings.data')
             ->assertJsonPath('data.ratings.total', 1)
-            ->assertJsonPath('data.role', 'Rater');
+            ->assertJsonPath('data.role.id', Role::RATER)
+            ->assertJsonPath('data.role.name', 'Rater');
     }
 
     public function test_ratings_include_is_from_me_flag(): void
@@ -127,11 +135,11 @@ class UserProfileEndpointTest extends V1TestCase
 
         $fromMe = collect($ratings)->firstWhere('is_from_me', true);
         expect($fromMe)->not->toBeNull();
-        expect($fromMe['rating'])->toBe(4);
+        expect($fromMe['avg_rating'])->toBe(4);
 
         $notFromMe = collect($ratings)->firstWhere('is_from_me', false);
         expect($notFromMe)->not->toBeNull();
-        expect($notFromMe['rating'])->toBe(3);
+        expect($notFromMe['avg_rating'])->toBe(3);
     }
 
     public function test_returns_connect_when_not_connected(): void
@@ -177,7 +185,8 @@ class UserProfileEndpointTest extends V1TestCase
         $this->getJson('/api/v1/users/'.$rater->firebase_uid.'/profile')
             ->assertOk()
             ->assertJsonPath('data.firebase_uuid', $rater->firebase_uid)
-            ->assertJsonPath('data.role', 'Rater');
+            ->assertJsonPath('data.role.id', Role::RATER)
+            ->assertJsonPath('data.role.name', 'Rater');
     }
 
     public function test_manager_can_view_rep_profile(): void
@@ -191,7 +200,8 @@ class UserProfileEndpointTest extends V1TestCase
         $this->getJson('/api/v1/users/'.$rep->firebase_uid.'/profile')
             ->assertOk()
             ->assertJsonPath('data.firebase_uuid', $rep->firebase_uid)
-            ->assertJsonPath('data.role', 'Representative');
+            ->assertJsonPath('data.role.id', Role::REPRESENTATIVE)
+            ->assertJsonPath('data.role.name', 'Representative');
     }
 
     public function test_rep_profile_shows_request_sent_when_pending_rating_request(): void

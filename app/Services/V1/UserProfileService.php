@@ -51,6 +51,10 @@ class UserProfileService
             ? $this->getAverageRating($targetUid)
             : null;
 
+        $ratingCount = $targetRole === Role::REPRESENTATIVE
+            ? Rating::forRep($targetUid)->count()
+            : 0;
+
         $isFavourite = DB::table('user_favorites')
             ->where('user_firebase_uid', $currentUser->firebase_uid)
             ->where('favorite_user_firebase_uid', $targetUid)
@@ -61,6 +65,7 @@ class UserProfileService
             'connection_status' => $connectionStatus,
             'ratings' => $ratings,
             'average_rating' => $averageRating,
+            'rating_count' => $ratingCount,
             'is_favourite' => $isFavourite,
         ];
     }

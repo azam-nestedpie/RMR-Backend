@@ -99,6 +99,7 @@ class UserController extends Controller
             $request->user()->firebase_uid,
             $viewerRoleName,
             $result['is_favourite'],
+            $result['rating_count'],
         ))->additional(['success' => true])->response();
     }
 

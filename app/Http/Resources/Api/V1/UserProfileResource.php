@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V1;
 
+use App\Models\Role;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,6 +17,7 @@ class UserProfileResource extends JsonResource
         private readonly ?string $currentUserUid = null,
         private readonly ?string $viewerRoleName = null,
         private readonly bool $isFavourite = false,
+        private readonly ?int $ratingCount = null,
     ) {
         parent::__construct($resource);
     }
@@ -23,7 +25,6 @@ class UserProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         $targetRole = $this->roles->first();
-        $targetRoleName = $targetRole?->name;
 
         $ratingData = null;
 
@@ -32,7 +33,7 @@ class UserProfileResource extends JsonResource
                 'data' => collect($this->ratings->items())->map(
                     fn ($rating) => new UserProfileRatingResource(
                         $rating,
-                        $this->currentUserUid && $rating->rater_firebase_uid === $this->currentUserUid,
+                        $this->currentUserUid && ($rating->rater_firebase_uid === $this->currentUserUid || $rating->rep_firebase_uid === $this->currentUserUid),
                     )
                 ),
                 'current_page' => $this->ratings->currentPage(),
@@ -44,13 +45,19 @@ class UserProfileResource extends JsonResource
 
         $response = [
             'firebase_uuid' => $this->firebase_uid,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'full_name' => trim(($this->first_name ?? '').' '.($this->last_name ?? '')),
             'company_name' => $this->company_name,
             'position' => $this->position,
             'bio' => $this->bio,
             'email' => $this->email,
             'image_url' => $this->image_url,
-            'role' => $targetRoleName,
+            'role' => $targetRole ? [
+                'id' => $targetRole->id,
+                'name' => $targetRole->name,
+                'description' => $targetRole->description,
+            ] : null,
             'connection_status' => $this->connectionStatus,
             'is_favourite' => (int) $this->isFavourite,
             'ratings' => $ratingData ?? [
@@ -62,8 +69,9 @@ class UserProfileResource extends JsonResource
             ],
         ];
 
-        if ($this->averageRating !== null) {
+        if ($targetRole && $targetRole->id === Role::REPRESENTATIVE) {
             $response['avg_rating'] = $this->averageRating;
+            $response['rating_count'] = $this->ratingCount ?? 0;
         }
 
         return $response;
