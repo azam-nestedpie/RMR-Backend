@@ -71,7 +71,7 @@ class UserProfileResource extends JsonResource
 
         if ($targetRole && $targetRole->id === Role::REPRESENTATIVE) {
             $response['avg_rating'] = $this->averageRating;
-            $response['rating_count'] = $this->ratingCount ?? 0;
+            $response['ratings_count'] = $this->ratingCount ?? 0;
         }
 
         return $response;
