@@ -42,14 +42,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        $addressFields = Arr::only($validated, ['postal_code', 'address_line_1']);
-
-        if (! empty($validated['address'])) {
-            $parts = array_map('trim', explode(',', $validated['address'], 3));
-            $addressFields['city'] = $parts[0] ?? null;
-            $addressFields['state'] = $parts[1] ?? null;
-            $addressFields['country'] = $parts[2] ?? null;
-        }
+        $addressFields = $validated['address'] ?? [];
 
         $user = $this->users->updateProfile(
             $request->user(),

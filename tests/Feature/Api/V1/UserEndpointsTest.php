@@ -52,7 +52,7 @@ class UserEndpointsTest extends V1TestCase
         $this->putJson('/api/v1/users/profile', [
             'first_name' => 'Changed',
             'bio' => 'Bio',
-            'address' => 'Ashgabat',
+            'address' => ['city' => 'Ashgabat'],
         ])
             ->assertOk()
             ->assertJsonPath('success', true)

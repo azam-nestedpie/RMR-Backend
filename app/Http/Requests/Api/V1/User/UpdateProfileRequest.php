@@ -21,9 +21,12 @@ class UpdateProfileRequest extends V1Request
             'company_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'position' => ['sometimes', 'nullable', 'string', 'max:255'],
             'fcm_token' => ['sometimes', 'nullable', 'string'],
-            'address' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'postal_code' => ['sometimes', 'nullable', 'string', 'max:20'],
-            'address_line_1' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'address' => ['sometimes', 'nullable', 'array'],
+            'address.country' => ['nullable', 'string', 'max:100'],
+            'address.state' => ['nullable', 'string', 'max:100'],
+            'address.city' => ['nullable', 'string', 'max:100'],
+            'address.postal_code' => ['nullable', 'string', 'max:20'],
+            'address.address_line_1' => ['nullable', 'string', 'max:255'],
             'industry' => ['sometimes', 'nullable', 'integer', 'exists:industries,id'],
         ];
     }
