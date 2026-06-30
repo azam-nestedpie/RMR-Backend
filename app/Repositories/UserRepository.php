@@ -125,7 +125,7 @@ class UserRepository implements UserRepositoryInterface
                 isset($connectedMap[$uid]) => 'connected',
                 isset($pendingSentMap[$uid]) => 'pending',
                 isset($pendingReceivedMap[$uid]) => 'pending',
-                default => 'connect',
+                default => 'not_connected',
             };
 
             $user->is_favorite = isset($favoriteUids[$uid]);

@@ -95,20 +95,16 @@ class UserProfileService
         $activeConnectionExists = Connection::between($viewerUid, $targetUid)->active()->exists();
 
         if ($activeConnectionExists) {
-            if ($targetRole === Role::RATER) {
-                $pendingStatusId = Status::idByName('pending');
+            $pendingStatusId = Status::idByName('pending');
 
-                $pendingRatingRequest = RatingRequest::query()
-                    ->where('requester_firebase_uid', $viewerUid)
-                    ->where('target_user_firebase_uid', $targetUid)
-                    ->when($pendingStatusId, fn ($q) => $q->where('status_id', $pendingStatusId))
-                    ->exists();
+            $pendingRatingRequest = RatingRequest::query()
+                ->where('requester_firebase_uid', $viewerUid)
+                ->where('target_user_firebase_uid', $targetUid)
+                ->when($pendingStatusId, fn ($q) => $q->where('status_id', $pendingStatusId))
+                ->exists();
 
-                if ($pendingRatingRequest) {
-                    return 'request_sent';
-                }
-
-                return 'rating_request';
+            if ($pendingRatingRequest) {
+                return 'request_sent';
             }
 
             return 'connected';
@@ -126,19 +122,7 @@ class UserProfileService
             return 'request_sent';
         }
 
-        $rejectedStatusId = Status::idByName('rejected');
-
-        $viewerRequestRejected = ConnectionRequest::query()
-            ->where('requester_firebase_uid', $viewerUid)
-            ->where('target_user_firebase_uid', $targetUid)
-            ->when($rejectedStatusId, fn ($q) => $q->where('status_id', $rejectedStatusId))
-            ->exists();
-
-        if ($viewerRequestRejected) {
-            return 'connect';
-        }
-
-        return 'connect';
+        return 'not_connected';
     }
 
     private function getRatings(User $currentUser, string $targetUid, ?int $targetRole): ?LengthAwarePaginator

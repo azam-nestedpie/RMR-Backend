@@ -102,7 +102,7 @@ class UserProfileEndpointTest extends V1TestCase
             ->assertJsonPath('data.last_name', 'Client')
             ->assertJsonPath('data.email', 'nora@example.com')
             ->assertJsonPath('data.image_url', 'https://example.com/rater.jpg')
-            ->assertJsonPath('data.connection_status', 'rating_request')
+            ->assertJsonPath('data.connection_status', 'connected')
             ->assertJsonMissingPath('data.avg_rating')
             ->assertJsonMissingPath('data.rating_count')
             ->assertJsonIsArray('data.ratings.data')
@@ -149,7 +149,7 @@ class UserProfileEndpointTest extends V1TestCase
 
         $this->getJson('/api/v1/users/'.$rep->firebase_uid.'/profile')
             ->assertOk()
-            ->assertJsonPath('data.connection_status', 'connect');
+            ->assertJsonPath('data.connection_status', 'not_connected');
     }
 
     public function test_returns_request_sent_when_pending_connection_request(): void
