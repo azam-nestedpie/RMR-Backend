@@ -61,7 +61,9 @@ class RatingController extends Controller
 
         $items = $this->ratings->ratingItems($ratingUuid, $locale);
 
-        $isEditable = $rating->rated_at && $rating->rated_at->gte(now()->subHours(24));
+        $isEditable = $rating->rated_at
+            && $rating->rater_firebase_uid === $request->user()?->firebase_uid
+            && $rating->rated_at->gte(now()->subHours(24));
 
         return $this->success([
             'is_editable' => (int) $isEditable,

@@ -119,7 +119,31 @@ class UserRatingsEndpointTest extends V1TestCase
             ->assertJsonPath('data.is_editable', 0);
     }
 
-    public function test_is_editable_1_when_rated_just_under_24_hours_ago(): void
+    public function test_is_editable_0_when_viewed_by_non_rater(): void
+    {
+        $rater = $this->createUserWithRole(Role::RATER);
+        $this->assignIndustry($rater, 'Marketing');
+        $rep = $this->authAsRole(Role::REPRESENTATIVE);
+
+        $ratingUuid = (string) Str::uuid();
+
+        Rating::create([
+            'firebase_uuid' => $ratingUuid,
+            'rater_firebase_uid' => $rater->firebase_uid,
+            'rep_firebase_uid' => $rep->firebase_uid,
+            'average_score' => 4.0,
+            'rated_at' => now(),
+            'created_by' => $rater->firebase_uid,
+            'updated_by' => $rater->firebase_uid,
+        ]);
+
+        $response = $this->getJson("/api/v1/ratings/{$ratingUuid}/items");
+
+        $response->assertSuccessful()
+            ->assertJsonPath('data.is_editable', 0);
+    }
+
+    public function test_is_editable_1_when_rater_views_own_rating_within_24_hours(): void
     {
         $rater = $this->authAsRole(Role::RATER);
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
