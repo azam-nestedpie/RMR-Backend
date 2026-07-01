@@ -24,6 +24,8 @@ class RatingEndpointsTest extends V1TestCase
     {
         $authUser = $this->authAsRole(Role::RATER);
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $this->assignIndustry($authUser, 'Marketing');
+        $this->assignIndustry($rep, 'Marketing');
 
         $service = Mockery::mock(RatingService::class);
         $service->shouldReceive('submit')
@@ -35,8 +37,6 @@ class RatingEndpointsTest extends V1TestCase
         $this->instance(RatingService::class, $service);
 
         $questionId = (int) DB::table('rating_questions')->value('id');
-
-        $this->assignIndustry($authUser, 'Marketing');
 
         $this->postJson('/api/v1/ratings', [
             'rep_uid' => $rep->firebase_uid,

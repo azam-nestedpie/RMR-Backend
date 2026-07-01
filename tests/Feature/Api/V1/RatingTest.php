@@ -14,6 +14,7 @@ class RatingTest extends V1TestCase
         $sender = $this->authAsRole(Role::RATER);
         $this->assignIndustry($sender, 'Marketing');
         $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $this->assignIndustry($recipient, 'Marketing');
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $this->postJson('/api/v1/ratings', [
@@ -37,6 +38,7 @@ class RatingTest extends V1TestCase
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $this->assignIndustry($rep, 'Marketing');
         $questionId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
         $payload = [
             'rep_uid' => $rep->firebase_uid,
@@ -96,6 +98,7 @@ class RatingTest extends V1TestCase
         $sender = $this->authAsRole(Role::RATER);
         $this->assignIndustry($sender, 'Marketing');
         $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $this->assignIndustry($recipient, 'Marketing');
         $questionThirtyId = (int) \DB::table('rating_questions')->where('question_code', 30)->value('id');
         $questionFortyId = (int) \DB::table('rating_questions')->where('question_code', 40)->value('id');
 
@@ -173,6 +176,7 @@ class RatingTest extends V1TestCase
     public function test_rating_rejects_questions_that_do_not_belong_to_selected_industry(): void
     {
         $recipient = $this->createUserWithRole(Role::REPRESENTATIVE, ['password' => 'secret']);
+        $this->assignIndustry($recipient, 'Marketing');
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $contractorOnlyQuestionId = (int) DB::table('rating_questions')->where('question_code', 110)->value('id');
@@ -192,6 +196,7 @@ class RatingTest extends V1TestCase
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $this->assignIndustry($rep, 'Marketing');
         $questionThirtyId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
         $questionFortyId = (int) DB::table('rating_questions')->where('question_code', 40)->value('id');
 
@@ -261,6 +266,7 @@ class RatingTest extends V1TestCase
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
+        $this->assignIndustry($rep, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $rating = Rating::create([

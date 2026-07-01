@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Rating;
 
 use App\Http\Requests\Api\V1\V1Request;
+use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Validator;
 
@@ -36,12 +37,22 @@ class UpdateRequest extends V1Request
                     return;
                 }
 
+                $ratingUuid = $this->route('ratingUuid');
+                $rating = Rating::where('firebase_uuid', $ratingUuid)->first();
+                $repUid = $rating?->rep_firebase_uid;
+
+                if (! $repUid) {
+                    $validator->errors()->add('rating', 'Rating not found.');
+
+                    return;
+                }
+
                 $industryId = DB::table('user_industries')
-                    ->where('user_firebase_uid', $this->user()?->firebase_uid)
+                    ->where('user_firebase_uid', $repUid)
                     ->value('industry_id');
 
                 if (! $industryId) {
-                    $validator->errors()->add('industry', 'User has no assigned industry.');
+                    $validator->errors()->add('industry', 'Representative does not have an industry assigned.');
 
                     return;
                 }

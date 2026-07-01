@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Rating;
 
 use App\Http\Requests\Api\V1\V1Request;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Validator;
 
@@ -43,11 +44,12 @@ class StoreRequest extends V1Request
                     return;
                 }
 
-                $user = $this->user();
-                $industryId = $user?->industries()?->first()?->id;
+                $receiverUid = $this->input('rated_user_uid');
+                $receiver = User::where('firebase_uid', $receiverUid)->first();
+                $industryId = $receiver?->industries()?->first()?->id;
 
                 if (! $industryId) {
-                    $validator->errors()->add('industry', 'User does not have an industry assigned.');
+                    $validator->errors()->add('industry', 'Receiver does not have an industry assigned.');
 
                     return;
                 }

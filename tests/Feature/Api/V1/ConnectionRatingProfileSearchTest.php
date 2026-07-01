@@ -271,6 +271,7 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
 
         Sanctum::actingAs($rater);
         $this->assignIndustry($rater, 'Marketing');
+        $this->assignIndustry($rep, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $this->postJson('/api/v1/ratings', [
@@ -405,6 +406,7 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
+        $this->assignIndustry($rep, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $ratingRequest = RatingRequest::create([
@@ -450,6 +452,7 @@ class ConnectionRatingProfileSearchTest extends V1TestCase
         $rep = $this->createUserWithRole(Role::REPRESENTATIVE);
         $rater = $this->authAsRole(Role::RATER);
         $this->assignIndustry($rater, 'Marketing');
+        $this->assignIndustry($rep, 'Marketing');
         $questionId = (int) DB::table('rating_questions')->where('question_code', 30)->value('id');
 
         $ratingRequest = RatingRequest::create([
