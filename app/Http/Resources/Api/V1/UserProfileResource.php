@@ -29,11 +29,16 @@ class UserProfileResource extends JsonResource
         $ratingData = null;
 
         if ($this->ratings) {
+            $viewerRep = $this->viewerRoleName === 'Representative'
+                ? ($request->user()?->relationLoaded('roles') ? $request->user() : $request->user()?->load('roles'))
+                : null;
+
             $ratingData = [
                 'data' => collect($this->ratings->items())->map(
                     fn ($rating) => new UserProfileRatingResource(
                         $rating,
                         $this->currentUserUid && ($rating->rater_firebase_uid === $this->currentUserUid || $rating->rep_firebase_uid === $this->currentUserUid),
+                        $viewerRep,
                     )
                 ),
                 'current_page' => $this->ratings->currentPage(),
