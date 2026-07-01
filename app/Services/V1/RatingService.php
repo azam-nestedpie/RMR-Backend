@@ -316,6 +316,13 @@ class RatingService
         return $this->ratings->receivedFor($firebaseUid);
     }
 
+    public function ratingItems(string $ratingUuid, string $locale = 'en'): Collection
+    {
+        Log::info('Rating items requested', ['rating_uuid' => $ratingUuid, 'locale' => $locale]);
+
+        return $this->ratings->ratingItems($ratingUuid, $locale);
+    }
+
     public function update(User $rater, string $ratingUuid, array $payload): array
     {
         $rating = $this->ratings->findByUuidForRater($ratingUuid, $rater->firebase_uid)

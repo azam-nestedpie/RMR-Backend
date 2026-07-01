@@ -13,6 +13,7 @@ use App\Http\Resources\Api\V1\ConnectableUserResource;
 use App\Http\Resources\Api\V1\RatingQuestionResource;
 use App\Http\Resources\Api\V1\RatingRequestResource;
 use App\Http\Resources\Api\V1\RatingResource;
+use App\Models\Rating;
 use App\Models\RatingQuestion;
 use App\Models\RatingRequest;
 use App\Models\Role;
@@ -46,6 +47,26 @@ class RatingController extends Controller
         $payload = $this->ratings->update($request->user(), $ratingUuid, $request->validated());
 
         return response()->json(['success' => true, 'message' => 'Rating updated successfully.', 'data' => $payload]);
+    }
+
+    public function items(Request $request, string $ratingUuid): JsonResponse
+    {
+        $rating = Rating::where('firebase_uuid', $ratingUuid)->first();
+
+        if (! $rating) {
+            return $this->notFound('Rating not found.');
+        }
+
+        $locale = $request->user()?->prefered_locale ?? 'en';
+
+        $items = $this->ratings->ratingItems($ratingUuid, $locale);
+
+        $isEditable = $rating->rated_at && $rating->rated_at->gte(now()->subHours(24));
+
+        return $this->success([
+            'is_editable' => (int) $isEditable,
+            'rating_details' => $items,
+        ], 'Rating details fetched successfully.');
     }
 
     /** POST /api/v1/ratings/requests */

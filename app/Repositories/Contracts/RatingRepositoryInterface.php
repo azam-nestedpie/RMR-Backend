@@ -61,4 +61,6 @@ interface RatingRepositoryInterface
     public function averageByQuestion(string $firebaseUid, string $locale = 'en'): Collection;
 
     public function recalculateRepStats(string $repUid): void;
+
+    public function ratingItems(string $ratingUuid, string $locale = 'en'): Collection;
 }

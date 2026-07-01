@@ -12,6 +12,7 @@ Route::middleware(['auth:sanctum', 'password.set'])->prefix('ratings')->name('ra
     Route::post('request/on-behalf', [RatingController::class, 'sendRequestOnBehalf'])->name('request.on-behalf');
     Route::get('pending', [RatingController::class, 'pendingRequests'])->name('pending');
     Route::get('team', [RatingController::class, 'teamRatings'])->name('team');
+    Route::get('{ratingUuid}/items', [RatingController::class, 'items'])->name('items');
     Route::post('requests', [RatingController::class, 'sendRequest'])->name('requests.store');
 
     Route::middleware('permission:ratings.submit')->group(function () {

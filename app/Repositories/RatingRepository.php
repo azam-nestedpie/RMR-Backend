@@ -298,6 +298,28 @@ class RatingRepository implements RatingRepositoryInterface
             ->get();
     }
 
+    public function ratingItems(string $ratingUuid, string $locale = 'en'): Collection
+    {
+        $titleColumn = in_array($locale, ['en', 'es', 'pt']) ? "title_{$locale}" : 'title_en';
+
+        $rating = Rating::where('firebase_uuid', $ratingUuid)->first();
+
+        if (! $rating) {
+            return collect();
+        }
+
+        return RatingItem::where('rating_id', $rating->id)
+            ->whereHas('question')
+            ->with('question')
+            ->orderBy('question_id')
+            ->get()
+            ->map(fn (RatingItem $item) => [
+                'id' => $item->question->id,
+                'title' => $item->question->{$titleColumn},
+                'rating' => (int) round($item->score),
+            ]);
+    }
+
     public function recalculateRepStats(string $repUid): void
     {
         $result = Rating::where('rep_firebase_uid', $repUid)
